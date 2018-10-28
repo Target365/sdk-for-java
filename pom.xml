@@ -18,6 +18,14 @@
       <url>http://www.opensource.org/licenses/mit-license.php</url>
     </license>
   </licenses>
+  <developers>
+    <developer>
+      <name>Hans Olav Stjernholm</name>
+      <email>support@target365.no</email>
+      <organization>Target365</organization>
+      <organizationUrl>http://www.target365.no</organizationUrl>
+    </developer>
+  </developers>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
