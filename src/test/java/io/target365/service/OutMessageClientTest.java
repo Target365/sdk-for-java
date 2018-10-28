@@ -46,8 +46,8 @@ public class OutMessageClientTest extends ClientTest {
             .setRecipient("+4798079008").setContent("OutMessage 0001")
             .setSendTime(ZonedDateTime.now().plus(1, ChronoUnit.DAYS));
 
-//        assertThat(outMessage.getPriority()).isEqualTo(OutMessage.Priority.Normal);
-//        assertThat(outMessage.getDeliveryMode()).isEqualTo(OutMessage.DeliveryMode.AtMostOnce);
+        assertThat(outMessage.getPriority()).isEqualTo(OutMessage.Priority.Normal);
+        assertThat(outMessage.getDeliveryMode()).isEqualTo(OutMessage.DeliveryMode.AtMostOnce);
 
         // Prepare msisdns
         outMessageClient.prepareMsisdns(ImmutableList.of(msisdn)).get();
