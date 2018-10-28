@@ -9,7 +9,7 @@
   <version>1.0-SNAPSHOT</version>
 
   <name>Target365 SDK</name>
-
+  <description>Enables integration with Target365 online services.</description>
   <url>https://github.com/Target365/sdk-for-java</url>
 
   <properties>
