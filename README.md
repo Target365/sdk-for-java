@@ -5,7 +5,7 @@
 To get started please register at <http://www.target365.no> and follow the instructions. Registration is free!
 
 ### Authors and maintainers
-
+Hans Olav <https://github.com/HansOlavS>
 Target365 <support@target365.no>
 
 ### Issues / Bugs / Questions
