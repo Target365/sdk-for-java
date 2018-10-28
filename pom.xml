@@ -18,6 +18,7 @@
       <url>http://www.opensource.org/licenses/mit-license.php</url>
     </license>
   </licenses>
+
   <developers>
     <developer>
       <name>Hans Olav Stjernholm</name>
@@ -26,6 +27,12 @@
       <organizationUrl>http://www.target365.no</organizationUrl>
     </developer>
   </developers>
+
+  <scm>
+    <connection>scm:git:git://github.com/target365/sdk-for-java.git</connection>
+    <developerConnection>scm:git:ssh://github.com/target365/sdk-for-java.git</developerConnection>
+    <url>http://github.com/target365/sdk-for-java/tree/master</url>
+  </scm>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
