@@ -2,6 +2,7 @@ package io.target365.service;
 
 import io.target365.client.StrexClient;
 import io.target365.client.Target365Client;
+import io.target365.dto.OneTimePassword;
 import io.target365.dto.StrexMerchantId;
 import io.target365.exception.InvalidInputException;
 import io.target365.util.Util;
@@ -9,6 +10,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowableOfType;
@@ -27,7 +30,15 @@ public class StrexClientTest extends ClientTest {
     @Test
     public void test() throws Exception {
         final StrexMerchantId strexMerchantId = new StrexMerchantId()
-            .setMerchantId("10000001").setShortNumberId("NO-0000").setPassword("test");
+                .setMerchantId("10000001")
+                .setShortNumberId("NO-0000")
+                .setPassword("test");
+
+        final OneTimePassword oneTimePassword = new OneTimePassword()
+                .setTransactionId(UUID.randomUUID().toString())
+                .setMerchantId("10000001")
+                .setRecipient("+4798079008")
+                .setRecurring(false);
 
         // Delete strex merchant id if it exists (data cleanup)
         strexClient.getMerchantIds().get().stream().filter(smid -> smid.getMerchantId().equals(strexMerchantId.getMerchantId()))
@@ -35,6 +46,9 @@ public class StrexClientTest extends ClientTest {
 
         // Create strex merchant id
         strexClient.putMerchantId(strexMerchantId.getMerchantId(), strexMerchantId).get();
+
+        // Create one-time password
+        strexClient.postOneTimePassword(oneTimePassword).get();
 
         // Read strex merchant id
         final StrexMerchantId created = strexClient.getMerchantId(strexMerchantId.getMerchantId()).get();

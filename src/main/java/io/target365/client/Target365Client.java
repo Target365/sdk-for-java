@@ -4,11 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import io.target365.dto.Keyword;
-import io.target365.dto.LookupResult;
-import io.target365.dto.OutMessage;
-import io.target365.dto.OutMessageBatch;
-import io.target365.dto.StrexMerchantId;
+import io.target365.dto.*;
 import io.target365.handler.CreatedResponseParser;
 import io.target365.handler.InvalidResponseHandler;
 import io.target365.handler.NotFoundResponseParser;
@@ -227,6 +223,15 @@ public class Target365Client implements Client {
 
         return doDelete("api/strex/merchants/" + merchantId, Status.NO_CONTENT)
             .thenApplyAsync(response -> VOID);
+    }
+
+    @Override
+    public Future<Void> postOneTimePassword(final OneTimePassword oneTimePassword) {
+        validationService.validate(NotNullValidator.of("oneTimePassword", oneTimePassword),
+                ValidValidator.of("oneTimePassword", oneTimePassword));
+
+        return doPost("api/strex/one-time-passwords", objectMappingService.toString(oneTimePassword), Status.NO_CONTENT)
+                .thenApplyAsync(response -> VOID);
     }
 
     @Override

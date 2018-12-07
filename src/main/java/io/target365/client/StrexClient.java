@@ -1,5 +1,6 @@
 package io.target365.client;
 
+import io.target365.dto.OneTimePassword;
 import io.target365.dto.StrexMerchantId;
 
 import javax.validation.Valid;
@@ -42,4 +43,11 @@ public interface StrexClient {
      */
     Future<Void> deleteMerchantId(@NotBlank final String merchantId);
 
+    /**
+     * Updates or creates a new merchant id.
+     *
+     * @param oneTimePassword One-time password object.
+     * @return Void
+     */
+    Future<Void> postOneTimePassword(@NotNull @Valid final OneTimePassword oneTimePassword);
 }
