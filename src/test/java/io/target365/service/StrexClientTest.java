@@ -2,8 +2,8 @@ package io.target365.service;
 
 import io.target365.client.StrexClient;
 import io.target365.client.Target365Client;
-import io.target365.dto.OneTimePassword;
 import io.target365.dto.StrexMerchantId;
+import io.target365.dto.StrexOneTimePassword;
 import io.target365.exception.InvalidInputException;
 import io.target365.util.Util;
 import org.junit.Before;
@@ -34,7 +34,7 @@ public class StrexClientTest extends ClientTest {
                 .setShortNumberId("NO-0000")
                 .setPassword("test");
 
-        final OneTimePassword oneTimePassword = new OneTimePassword()
+        final StrexOneTimePassword strexOneTimePassword = new StrexOneTimePassword()
                 .setTransactionId(UUID.randomUUID().toString())
                 .setMerchantId("10000001")
                 .setRecipient("+4798079008")
@@ -48,7 +48,7 @@ public class StrexClientTest extends ClientTest {
         strexClient.putMerchantId(strexMerchantId.getMerchantId(), strexMerchantId).get();
 
         // Create one-time password
-        strexClient.postOneTimePassword(oneTimePassword).get();
+        strexClient.postOneTimePassword(strexOneTimePassword).get();
 
         // Read strex merchant id
         final StrexMerchantId created = strexClient.getMerchantId(strexMerchantId.getMerchantId()).get();

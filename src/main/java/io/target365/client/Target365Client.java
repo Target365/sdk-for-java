@@ -226,11 +226,11 @@ public class Target365Client implements Client {
     }
 
     @Override
-    public Future<Void> postOneTimePassword(final OneTimePassword oneTimePassword) {
-        validationService.validate(NotNullValidator.of("oneTimePassword", oneTimePassword),
-                ValidValidator.of("oneTimePassword", oneTimePassword));
+    public Future<Void> postOneTimePassword(final StrexOneTimePassword strexOneTimePassword) {
+        validationService.validate(NotNullValidator.of("strexOneTimePassword", strexOneTimePassword),
+                ValidValidator.of("strexOneTimePassword", strexOneTimePassword));
 
-        return doPost("api/strex/one-time-passwords", objectMappingService.toString(oneTimePassword), Status.NO_CONTENT)
+        return doPost("api/strex/one-time-passwords", objectMappingService.toString(strexOneTimePassword), Status.NO_CONTENT)
                 .thenApplyAsync(response -> VOID);
     }
 

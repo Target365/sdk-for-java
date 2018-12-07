@@ -20,7 +20,7 @@ public class LookupClientTest extends ClientTest {
     @Before
     public void before() throws Exception {
         this.lookupClient = Target365Client.getInstance(getPrivateKeyAsString(),
-            new Target365Client.Parameters("https://test.target365.io/", "JavaSdkTest"));
+                new Target365Client.Parameters("https://test.target365.io/", "JavaSdkTest"));
     }
 
     @Test
@@ -30,20 +30,19 @@ public class LookupClientTest extends ClientTest {
         // Lookup client
         final LookupResult lookupResult = lookupClient.addressLookup(msisdn).get();
         assertThat(lookupResult).isNotNull();
-        assertThat(lookupResult.getMsisdn()).isEqualTo(msisdn);
+        assertThat(lookupResult.getMsisdn()).isEqualTo("98079008");
         assertThat(lookupResult.getFirstName()).isEqualTo("Hans");
         assertThat(lookupResult.getMiddleName()).isEqualTo("Olav");
         assertThat(lookupResult.getLastName()).isEqualTo("Stjernholm");
         assertThat(lookupResult.getGender()).isEqualTo(LookupResult.Gender.M);
-        assertThat(lookupResult.getAge()).isEqualTo(40);
     }
 
     @Test
     public void validation() {
         assertThat(catchThrowableOfType(() -> lookupClient.addressLookup(null), InvalidInputException.class).getViolations())
-            .containsExactlyInAnyOrder("msisdn must not be blank");
+                .containsExactlyInAnyOrder("msisdn must not be blank");
 
         assertThat(catchThrowableOfType(() -> lookupClient.addressLookup(""), InvalidInputException.class).getViolations())
-            .containsExactlyInAnyOrder("msisdn must not be blank");
+                .containsExactlyInAnyOrder("msisdn must not be blank");
     }
 }

@@ -19,9 +19,9 @@ import java.io.Serializable;
 @Accessors(chain = true)
 @EqualsAndHashCode
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class OneTimePassword implements Serializable {
+public class StrexOneTimePassword implements Serializable {
 
-    private static final long serialVersionUID = -38411;
+    private static final long serialVersionUID = -3889243124621221411L;
 
     /**
      * Transaction id.
@@ -30,7 +30,7 @@ public class OneTimePassword implements Serializable {
     private String transactionId;
 
     /**
-     * Strex merchant id.
+     * Merchant id.
      */
     @NotBlank
     private String merchantId;
@@ -42,14 +42,14 @@ public class OneTimePassword implements Serializable {
     private String recipient;
 
     /**
-     * Whether one-time password is for recurring payment.
-     */
-    private boolean recurring;
-
-    /**
-     * Short number id.
+     * SMS Sender (originator).
      */
     private String sender;
+
+    /**
+     * Whether one-time password is for recurring payment.
+     */
+    private Boolean recurring;
 
     /**
      * One-time password message. This is prefixed to the generated password message.
@@ -59,5 +59,5 @@ public class OneTimePassword implements Serializable {
     /**
      * Whether one-time password sms has been delivered. Null means unknown.
      */
-    private Boolean delivered;
+    private String delivered;
 }
