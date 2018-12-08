@@ -30,7 +30,8 @@ public class VerificationClientTest extends ClientTest {
     @Ignore("Need to have a message encrypted with a private key, which could be verified by a server public key")
     public void test() throws Exception {
         // Reverse payment
-        verificationClient.verifySignature(null, null, null, null).get();
+        final Boolean verify = verificationClient.verifySignature(null, null, null, null).get();
+        assertThat(verify).isNotNull();
     }
 
     @Test

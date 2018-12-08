@@ -3,27 +3,28 @@ package io.target365.service;
 import io.target365.client.Client;
 import io.target365.client.OutMessageClient;
 import io.target365.client.ReversePaymentClient;
-import io.target365.client.StrexClient;
 import io.target365.client.Target365Client;
 import io.target365.dto.OutMessage;
 import io.target365.dto.StrexData;
-import io.target365.dto.StrexMerchantId;
 import io.target365.exception.InvalidInputException;
+import org.awaitility.Duration;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.time.ZonedDateTime;
+import java.util.Objects;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowableOfType;
+import static org.awaitility.Awaitility.given;
 
 @RunWith(JUnit4.class)
 public class ReversePaymentClientTest extends ClientTest {
 
     private ReversePaymentClient reversePaymentClient;
     private OutMessageClient outMessageClient;
-    private StrexClient strexClient;
 
     @Before
     public void before() throws Exception {
@@ -32,28 +33,26 @@ public class ReversePaymentClientTest extends ClientTest {
 
         this.reversePaymentClient = client;
         this.outMessageClient = client;
-        this.strexClient = client;
     }
 
     @Test
-    @Ignore("System.NullReferenceException: Object reference not set to an instance of an object")
     public void test() throws Exception {
-        final StrexMerchantId strexMerchantId = new StrexMerchantId()
-                .setMerchantId("10000002").setShortNumberId("NO-0000").setPassword("test");
-
-        // Create strex merchant id
-        strexClient.putMerchantId(strexMerchantId.getMerchantId(), strexMerchantId).get();
-
         final OutMessage outMessage = new OutMessage().setSender("OutMessage Sender")
                 .setRecipient("+4798079008").setContent("OutMessage 0001")
-                .setStrex(new StrexData().setMerchantId(strexMerchantId.getMerchantId())
-                        .setPrice(1000d).setServiceCode("10001").setInvoiceText("Test Invoice Text"));
+                .setSendTime(ZonedDateTime.now())
+                .setStrex(new StrexData().setMerchantId("10000001").setPrice(1000d)
+                        .setServiceCode("10001").setInvoiceText("Test Invoice Text"));
 
-        // Create out message payment
+        // Create out message
         final String outMessageTransactionId = outMessageClient.postOutMessage(outMessage).get();
 
         // Reverse payment
-        final String reversePaymentTransactionId = reversePaymentClient.reversePayment(outMessageTransactionId).get();
+        final String reversedOutMessageTransactionId = given().ignoreExceptions()
+                .pollInterval(Duration.ONE_SECOND).atMost(Duration.TEN_SECONDS).await("Until out-message is billed/processed")
+                .until(() -> reversePaymentClient.reversePayment(outMessageTransactionId).get(), Objects::nonNull);
+
+        assertThat(reversedOutMessageTransactionId).isNotNull();
+        assertThat(reversedOutMessageTransactionId).isEqualTo("-" + outMessageTransactionId);
     }
 
     @Test

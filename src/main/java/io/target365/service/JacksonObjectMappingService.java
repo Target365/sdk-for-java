@@ -31,8 +31,8 @@ public class JacksonObjectMappingService implements ObjectMappingService {
 
     public static JacksonObjectMappingService getInstance() {
         return new JacksonObjectMappingService(new ObjectMapper()
-            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-            .registerModule(new JavaTimeModule())
-            .setSerializationInclusion(JsonInclude.Include.NON_NULL));
+                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+                .registerModule(new JavaTimeModule())
+                .setSerializationInclusion(JsonInclude.Include.NON_NULL));
     }
 }

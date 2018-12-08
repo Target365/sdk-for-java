@@ -185,6 +185,5 @@ public class OutMessageClientTest extends ClientTest {
         assertThat(catchThrowableOfType(() -> outMessageClient.postOutMessage(outMessageWithStrexDataWithBlanks), InvalidInputException.class).getViolations())
                 .containsExactlyInAnyOrder("outMessage.strex.merchantId must not be blank", "outMessage.strex.serviceCode must not be blank",
                         "outMessage.strex.invoiceText must not be blank");
-
     }
 }

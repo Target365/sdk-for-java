@@ -1,7 +1,5 @@
 package io.target365.service;
 
-import io.target365.client.Client;
-import io.target365.client.OutMessageClient;
 import io.target365.client.StrexClient;
 import io.target365.client.Target365Client;
 import io.target365.dto.StrexMerchantId;
@@ -9,8 +7,8 @@ import io.target365.dto.StrexOneTimePassword;
 import io.target365.dto.StrexTransaction;
 import io.target365.exception.InvalidInputException;
 import io.target365.util.Util;
+import org.assertj.core.data.Percentage;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -24,15 +22,11 @@ import static org.assertj.core.api.Assertions.catchThrowableOfType;
 public class StrexClientTest extends ClientTest {
 
     private StrexClient strexClient;
-    private OutMessageClient outMessageClient;
 
     @Before
     public void before() throws Exception {
-        final Client client = Target365Client.getInstance(getPrivateKeyAsString(),
+        this.strexClient = Target365Client.getInstance(getPrivateKeyAsString(),
                 new Target365Client.Parameters("https://test.target365.io/", "JavaSdkTest"));
-
-        this.strexClient = client;
-        this.outMessageClient = client;
     }
 
     @Test
@@ -69,31 +63,29 @@ public class StrexClientTest extends ClientTest {
     }
 
     @Test
-    @Ignore("Waitig for implementation to be ready")
     public void testOneTimePassword() throws Exception {
-        final String transactionId = UUID.randomUUID().toString();
-
         final StrexOneTimePassword strexOneTimePassword = new StrexOneTimePassword()
-                .setTransactionId(transactionId)
-                .setMerchantId("10000001")
+                .setTransactionId(UUID.randomUUID().toString())
+                .setMerchantId("10000002")
                 .setRecipient("+4798079008")
-                .setRecurring(false);
+                .setRecurring(Boolean.FALSE);
 
         // Create one-time password
         strexClient.postStrexOneTimePassword(strexOneTimePassword).get();
 
         // Read one-time password
-        final StrexOneTimePassword createdStrexOneTimePassword = strexClient.getStrexOneTimePassword(transactionId).get();
+        final StrexOneTimePassword createdStrexOneTimePassword = strexClient.getStrexOneTimePassword(strexOneTimePassword.getTransactionId()).get();
         assertThat(createdStrexOneTimePassword).isNotNull();
+        assertThat(createdStrexOneTimePassword.getTransactionId()).isEqualTo(strexOneTimePassword.getTransactionId());
+        assertThat(createdStrexOneTimePassword.getMerchantId()).isEqualTo(strexOneTimePassword.getMerchantId());
+        assertThat(createdStrexOneTimePassword.getRecipient()).isEqualTo(strexOneTimePassword.getRecipient());
+        assertThat(createdStrexOneTimePassword.getRecurring()).isEqualTo(strexOneTimePassword.getRecurring());
     }
 
     @Test
-    @Ignore("Waitig for implementation to be ready")
     public void testTransaction() throws Exception {
-        final String transactionId = UUID.randomUUID().toString();
-
         final StrexTransaction strexTransaction = new StrexTransaction()
-                .setTransactionId(transactionId)
+                .setTransactionId(UUID.randomUUID().toString())
                 .setMerchantId("10000001")
                 .setShortNumber("NO-0000")
                 .setRecipient("+4798079008")
@@ -105,15 +97,29 @@ public class StrexClientTest extends ClientTest {
         strexClient.postStrexTransaction(strexTransaction).get();
 
         // Read strex transaction
-        final StrexTransaction createdStrexTransaction = strexClient.getStrexTransaction(transactionId).get();
+        final StrexTransaction createdStrexTransaction = strexClient.getStrexTransaction(strexTransaction.getTransactionId()).get();
         assertThat(createdStrexTransaction).isNotNull();
+        assertThat(createdStrexTransaction.getTransactionId()).isEqualTo(strexTransaction.getTransactionId());
+        assertThat(createdStrexTransaction.getMerchantId()).isEqualTo(strexTransaction.getMerchantId());
+        assertThat(createdStrexTransaction.getShortNumber()).isEqualTo(strexTransaction.getShortNumber());
+        assertThat(createdStrexTransaction.getRecipient()).isEqualTo(strexTransaction.getRecipient());
+        assertThat(createdStrexTransaction.getPrice()).isCloseTo(strexTransaction.getPrice(), Percentage.withPercentage(1));
+        assertThat(createdStrexTransaction.getServiceCode()).isEqualTo(strexTransaction.getServiceCode());
+        assertThat(createdStrexTransaction.getInvoiceText()).isEqualTo(strexTransaction.getInvoiceText());
 
         // Reverse strex transaction
-        strexClient.reverseStrexTransaction(transactionId).get();
+        strexClient.reverseStrexTransaction(strexTransaction.getTransactionId()).get();
 
-        // Read strex transaction
-        final StrexTransaction reversedStrexTransaction = strexClient.getStrexTransaction(transactionId).get();
+        // Read reversed strex transaction
+        final StrexTransaction reversedStrexTransaction = strexClient.getStrexTransaction("-" + strexTransaction.getTransactionId()).get();
         assertThat(reversedStrexTransaction).isNotNull();
+        assertThat(reversedStrexTransaction.getTransactionId()).isEqualTo("-" + strexTransaction.getTransactionId());
+        assertThat(reversedStrexTransaction.getMerchantId()).isEqualTo(strexTransaction.getMerchantId());
+        assertThat(reversedStrexTransaction.getShortNumber()).isEqualTo(strexTransaction.getShortNumber());
+        assertThat(reversedStrexTransaction.getRecipient()).isEqualTo(strexTransaction.getRecipient());
+        assertThat(reversedStrexTransaction.getPrice()).isCloseTo(-1 * strexTransaction.getPrice(), Percentage.withPercentage(1));
+        assertThat(reversedStrexTransaction.getServiceCode()).isEqualTo(strexTransaction.getServiceCode());
+        assertThat(reversedStrexTransaction.getInvoiceText()).isEqualTo(strexTransaction.getInvoiceText());
     }
 
     @Test
