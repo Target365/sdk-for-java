@@ -262,7 +262,6 @@ public class Target365Client implements Client {
     }
 
     @Override
-    // TODO Test
     public Future<Void> postStrexTransaction(final StrexTransaction transaction) {
         validationService.validate(NotNullValidator.of("transaction", transaction),
                 ValidValidator.of("transaction", transaction));
@@ -272,7 +271,6 @@ public class Target365Client implements Client {
     }
 
     @Override
-    // TODO Test
     public Future<StrexTransaction> getStrexTransaction(final String transactionId) {
         validationService.validate(NotBlankValidator.of("transactionId", transactionId));
 
@@ -282,7 +280,6 @@ public class Target365Client implements Client {
     }
 
     @Override
-    // TODO Test
     public Future<Void> reverseStrexTransaction(final String transactionId) {
         validationService.validate(NotBlankValidator.of("transactionId", transactionId));
 
