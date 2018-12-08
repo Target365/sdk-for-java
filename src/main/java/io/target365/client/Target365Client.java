@@ -201,7 +201,6 @@ public class Target365Client implements Client {
     }
 
     @Override
-    // TODO Test
     public Future<InMessage> getInMessage(final String shortNumberId, final String transactionId) {
         validationService.validate(NotBlankValidator.of("shortNumberId", shortNumberId), NotBlankValidator.of("transactionId", transactionId));
 
@@ -245,7 +244,6 @@ public class Target365Client implements Client {
     }
 
     @Override
-    // TODO Test
     public Future<Void> postStrexOneTimePassword(final StrexOneTimePassword oneTimePassword) {
         validationService.validate(NotNullValidator.of("oneTimePassword", oneTimePassword),
                 ValidValidator.of("oneTimePassword", oneTimePassword));
@@ -255,7 +253,6 @@ public class Target365Client implements Client {
     }
 
     @Override
-    // TODO Test
     public Future<StrexOneTimePassword> getStrexOneTimePassword(final String transactionId) {
         validationService.validate(NotBlankValidator.of("transactionId", transactionId));
 
@@ -326,7 +323,6 @@ public class Target365Client implements Client {
     }
 
     @Override
-    // TODO Test
     public Future<PublicKey> getServerPublicKey(final String keyName) {
         validationService.validate(NotBlankValidator.of("keyName", keyName));
 
@@ -336,7 +332,6 @@ public class Target365Client implements Client {
     }
 
     @Override
-    // TODO Test
     public Future<List<PublicKey>> getClientPublicKeys() {
         return doGet("api/client/public-keys", Status.OK)
                 .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response))
@@ -344,7 +339,6 @@ public class Target365Client implements Client {
     }
 
     @Override
-    // TODO Test
     public Future<PublicKey> getClientPublicKey(final String keyName) {
         validationService.validate(NotBlankValidator.of("keyName", keyName));
 
@@ -354,7 +348,6 @@ public class Target365Client implements Client {
     }
 
     @Override
-    // TODO Test
     public Future<Void> deleteClientPublicKey(final String keyName) {
         validationService.validate(NotBlankValidator.of("keyName", keyName));
 

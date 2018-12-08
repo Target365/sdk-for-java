@@ -1,6 +1,10 @@
 package io.target365.service;
 
-import io.target365.client.*;
+import io.target365.client.Client;
+import io.target365.client.OutMessageClient;
+import io.target365.client.ReversePaymentClient;
+import io.target365.client.StrexClient;
+import io.target365.client.Target365Client;
 import io.target365.dto.OutMessage;
 import io.target365.dto.StrexData;
 import io.target365.dto.StrexMerchantId;
@@ -32,7 +36,7 @@ public class ReversePaymentClientTest extends ClientTest {
     }
 
     @Test
-    @Ignore("Message reverse fail with message {\"Message\":\"transaction id 'be1a1806-960a-45cc-98a2-fad6c8d7c2d8' hasn't been billed/processed and can't be reversed.\"}")
+    @Ignore("System.NullReferenceException: Object reference not set to an instance of an object")
     public void test() throws Exception {
         final StrexMerchantId strexMerchantId = new StrexMerchantId()
                 .setMerchantId("10000002").setShortNumberId("NO-0000").setPassword("test");

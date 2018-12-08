@@ -8,6 +8,7 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.Range;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
@@ -63,6 +64,7 @@ public class OutMessage implements Serializable {
     /**
      * Strex data
      */
+    @Valid
     private StrexData strex;
 
     /**
@@ -73,7 +75,7 @@ public class OutMessage implements Serializable {
     /**
      * Message Time-To-Live (TTL) in minutes. Must be between 5 and 1440. Default value is 120.
      */
-    @Range(min = 5, max = 1440) // TODO Add validation here
+    @Range(min = 5, max = 1440)
     private Integer timeToLive = 120;
 
     /**

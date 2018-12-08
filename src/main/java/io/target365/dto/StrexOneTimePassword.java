@@ -8,6 +8,7 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -49,6 +50,7 @@ public class StrexOneTimePassword implements Serializable {
     /**
      * Whether one-time password is for recurring payment.
      */
+    @NotNull
     private Boolean recurring;
 
     /**
