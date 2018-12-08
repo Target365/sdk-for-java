@@ -5,7 +5,6 @@ import io.target365.client.Target365Client;
 import io.target365.dto.InMessage;
 import io.target365.exception.InvalidInputException;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -25,11 +24,16 @@ public class InMessageClientTest extends ClientTest {
     }
 
     @Test
-    @Ignore("Need to know shortNumberId and transactionId of in-message in order to get it")
     public void test() throws Exception {
         // Read in message
-        final InMessage inMessage = inMessageClient.getInMessage(null, null).get();
+        final InMessage inMessage = inMessageClient.getInMessage("NO-0000", "79f35793-6d70-423c-a7f7-ae9fb1024f3b").get();
         assertThat(inMessage).isNotNull();
+        assertThat(inMessage.getTransactionId()).isEqualTo("79f35793-6d70-423c-a7f7-ae9fb1024f3b");
+        assertThat(inMessage.getKeywordId()).isEqualTo("102");
+        assertThat(inMessage.getSender()).isEqualTo("+4798079008");
+        assertThat(inMessage.getRecipient()).isEqualTo("0000");
+        assertThat(inMessage.getContent()).isEqualTo("Test");
+        assertThat(inMessage.getIsStopMessage()).isEqualTo(Boolean.FALSE);
     }
 
     @Test
