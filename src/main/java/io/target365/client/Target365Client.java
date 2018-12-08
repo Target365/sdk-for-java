@@ -4,7 +4,15 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import io.target365.dto.*;
+import io.target365.dto.InMessage;
+import io.target365.dto.Keyword;
+import io.target365.dto.LookupResult;
+import io.target365.dto.OutMessage;
+import io.target365.dto.OutMessageBatch;
+import io.target365.dto.PublicKey;
+import io.target365.dto.StrexMerchantId;
+import io.target365.dto.StrexOneTimePassword;
+import io.target365.dto.StrexTransaction;
 import io.target365.handler.CreatedResponseParser;
 import io.target365.handler.InvalidResponseHandler;
 import io.target365.handler.NotFoundResponseParser;
@@ -72,8 +80,8 @@ public class Target365Client implements Client {
     @Override
     public Future<String> getPing() {
         return doGet("api/ping", Status.OK)
-            .thenApplyAsync(response -> Util.wrap(response::body))
-            .thenApplyAsync(body -> Util.wrap(body::string));
+                .thenApplyAsync(response -> Util.wrap(response::body))
+                .thenApplyAsync(body -> Util.wrap(body::string));
     }
 
     @Override
@@ -83,16 +91,16 @@ public class Target365Client implements Client {
 
     @Override
     public Future<List<Keyword>> getKeywords(
-        final String shortNumberId, final String keywordText, final Keyword.Mode mode, final String tag
+            final String shortNumberId, final String keywordText, final Keyword.Mode mode, final String tag
     ) {
         final List<Param> params = ImmutableList.of(
-            new Param("shortNumberId", shortNumberId), new Param("keywordText", keywordText),
-            new Param("mode", Optional.ofNullable(mode).map(Keyword.Mode::toString).orElse(null)), new Param("tag", tag)
+                new Param("shortNumberId", shortNumberId), new Param("keywordText", keywordText),
+                new Param("mode", Optional.ofNullable(mode).map(Keyword.Mode::toString).orElse(null)), new Param("tag", tag)
         );
 
         return doGet("api/keywords", params, Status.OK)
-            .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response))
-            .thenApplyAsync(string -> objectMappingService.toObject(string, Type.LIST_OF_KEYWORDS));
+                .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response))
+                .thenApplyAsync(string -> objectMappingService.toObject(string, Type.LIST_OF_KEYWORDS));
     }
 
     @Override
@@ -100,33 +108,33 @@ public class Target365Client implements Client {
         validationService.validate(NotNullValidator.of("keyword", keyword), ValidValidator.of("keyword", keyword));
 
         return doPost("api/keywords", objectMappingService.toString(keyword), Status.CREATED)
-            .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response));
+                .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response));
     }
 
     @Override
     public Future<Keyword> getKeyword(final String keywordId) {
         validationService.validate(NotBlankValidator.of("keywordId", keywordId));
 
-        return doGet("api/keywords/" + keywordId, ImmutableList.of(Status.OK, Status.NOT_FOUND))
-            .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response))
-            .thenApplyAsync(string -> objectMappingService.toObject(string, Keyword.class));
+        return doGet("api/keywords/" + Util.safeEncode(keywordId), ImmutableList.of(Status.OK, Status.NOT_FOUND))
+                .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response))
+                .thenApplyAsync(string -> objectMappingService.toObject(string, Keyword.class));
     }
 
     @Override
     public Future<Void> putKeyword(final Keyword keyword) {
         validationService.validate(NotNullValidator.of("keyword", keyword), NotNullValidator.of("keyword.keywordId", keyword.getKeywordId()),
-            ValidValidator.of("keyword", keyword));
+                ValidValidator.of("keyword", keyword));
 
-        return doPut("api/keywords/" + keyword.getKeywordId(), objectMappingService.toString(keyword), Status.NO_CONTENT)
-            .thenApplyAsync(response -> VOID);
+        return doPut("api/keywords/" + Util.safeEncode(keyword.getKeywordId()), objectMappingService.toString(keyword), Status.NO_CONTENT)
+                .thenApplyAsync(response -> VOID);
     }
 
     @Override
     public Future<Void> deleteKeyword(final String keywordId) {
         validationService.validate(NotBlankValidator.of("keywordId", keywordId));
 
-        return doDelete("api/keywords/" + keywordId, Status.NO_CONTENT)
-            .thenApplyAsync(response -> VOID);
+        return doDelete("api/keywords/" + Util.safeEncode(keywordId), Status.NO_CONTENT)
+                .thenApplyAsync(response -> VOID);
     }
 
     @Override
@@ -134,8 +142,8 @@ public class Target365Client implements Client {
         validationService.validate(NotBlankValidator.of("msisdn", msisdn));
 
         return doGet("api/lookup", ImmutableList.of(new Param("msisdn", msisdn)), Status.OK)
-            .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response))
-            .thenApplyAsync(string -> objectMappingService.toObject(string, LookupResult.class));
+                .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response))
+                .thenApplyAsync(string -> objectMappingService.toObject(string, LookupResult.class));
     }
 
     @Override
@@ -143,7 +151,7 @@ public class Target365Client implements Client {
         validationService.validate(NotEmptyValidator.of("msisdns", msisdns), NoBlanksValidator.of("msisdns", msisdns));
 
         return doPost("api/prepare-msisdns", objectMappingService.toString(msisdns), Status.NO_CONTENT)
-            .thenApplyAsync(response -> VOID);
+                .thenApplyAsync(response -> VOID);
     }
 
     @Override
@@ -151,11 +159,11 @@ public class Target365Client implements Client {
         validationService.validate(NotNullValidator.of("outMessageBatch", outMessageBatch), ValidValidator.of("outMessageBatch", outMessageBatch));
 
         return doPost("api/out-messages/batch", objectMappingService.toString(outMessageBatch.getItems()), Status.CREATED)
-            /*
-             * Normally batch creation of out-messages returns nothing, so we manually create locations
-             * for all created out-messages using transaction ids provided in the request
-             */
-            .thenApplyAsync(location -> outMessageBatch.getItems().stream().map(OutMessage::getTransactionId).collect(Collectors.toList()));
+                /*
+                 * Normally batch creation of out-messages returns nothing, so we manually create locations
+                 * for all created out-messages using transaction ids provided in the request
+                 */
+                .thenApplyAsync(location -> outMessageBatch.getItems().stream().map(OutMessage::getTransactionId).collect(Collectors.toList()));
     }
 
     @Override
@@ -163,7 +171,7 @@ public class Target365Client implements Client {
         validationService.validate(NotNullValidator.of("outMessage", outMessage), ValidValidator.of("outMessage", outMessage));
 
         return doPost("api/out-messages", objectMappingService.toString(outMessage), Status.CREATED)
-            .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response));
+                .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response));
     }
 
     @Override
@@ -171,8 +179,8 @@ public class Target365Client implements Client {
         validationService.validate(NotBlankValidator.of("transactionId", transactionId));
 
         return doGet("api/out-messages/" + Util.safeEncode(transactionId), ImmutableList.of(Status.OK, Status.NOT_FOUND))
-            .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response))
-            .thenApplyAsync(string -> objectMappingService.toObject(string, OutMessage.class));
+                .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response))
+                .thenApplyAsync(string -> objectMappingService.toObject(string, OutMessage.class));
     }
 
     @Override
@@ -181,7 +189,7 @@ public class Target365Client implements Client {
                 NotBlankValidator.of("outMessage.transactionId", outMessage != null ? outMessage.getTransactionId() : null));
 
         return doPut("api/out-messages/" + Util.safeEncode(outMessage.getTransactionId()), objectMappingService.toString(outMessage), Status.NO_CONTENT)
-            .thenApplyAsync(response -> VOID);
+                .thenApplyAsync(response -> VOID);
     }
 
     @Override
@@ -189,14 +197,25 @@ public class Target365Client implements Client {
         validationService.validate(NotBlankValidator.of("transactionId", transactionId));
 
         return doDelete("api/out-messages/" + Util.safeEncode(transactionId), Status.NO_CONTENT)
-            .thenApplyAsync(response -> VOID);
+                .thenApplyAsync(response -> VOID);
+    }
+
+    @Override
+    // TODO Test
+    public Future<InMessage> getInMessage(final String shortNumberId, final String transactionId) {
+        validationService.validate(NotBlankValidator.of("shortNumberId", shortNumberId), NotBlankValidator.of("transactionId", transactionId));
+
+        final String url = "api/in-messages/" + Util.safeEncode(shortNumberId) + "/" + Util.safeEncode(transactionId);
+        return doGet(url, ImmutableList.of(Status.OK, Status.NOT_FOUND))
+                .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response))
+                .thenApplyAsync(string -> objectMappingService.toObject(string, InMessage.class));
     }
 
     @Override
     public Future<List<StrexMerchantId>> getMerchantIds() {
         return doGet("api/strex/merchants", Status.OK)
-            .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response))
-            .thenApplyAsync(string -> objectMappingService.toObject(string, Type.LIST_OF_MERCHANTS));
+                .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response))
+                .thenApplyAsync(string -> objectMappingService.toObject(string, Type.LIST_OF_MERCHANTS));
     }
 
     @Override
@@ -204,33 +223,73 @@ public class Target365Client implements Client {
         validationService.validate(NotBlankValidator.of("merchantId", merchantId));
 
         return doGet("api/strex/merchants/" + Util.safeEncode(merchantId), ImmutableList.of(Status.OK, Status.NOT_FOUND))
-            .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response))
-            .thenApplyAsync(string -> objectMappingService.toObject(string, StrexMerchantId.class));
+                .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response))
+                .thenApplyAsync(string -> objectMappingService.toObject(string, StrexMerchantId.class));
     }
 
     @Override
     public Future<Void> putMerchantId(final String merchantId, final StrexMerchantId strexMerchantId) {
         validationService.validate(NotBlankValidator.of("merchantId", merchantId), NotNullValidator.of("strexMerchantId", strexMerchantId),
-            ValidValidator.of("strexMerchantId", strexMerchantId));
+                ValidValidator.of("strexMerchantId", strexMerchantId));
 
         return doPut("api/strex/merchants/" + Util.safeEncode(merchantId), objectMappingService.toString(strexMerchantId), Status.NO_CONTENT)
-            .thenApplyAsync(response -> VOID);
+                .thenApplyAsync(response -> VOID);
     }
 
     @Override
     public Future<Void> deleteMerchantId(final String merchantId) {
         validationService.validate(NotBlankValidator.of("merchantId", merchantId));
 
-        return doDelete("api/strex/merchants/" + merchantId, Status.NO_CONTENT)
-            .thenApplyAsync(response -> VOID);
+        return doDelete("api/strex/merchants/" + Util.safeEncode(merchantId), Status.NO_CONTENT)
+                .thenApplyAsync(response -> VOID);
     }
 
     @Override
-    public Future<Void> postOneTimePassword(final StrexOneTimePassword strexOneTimePassword) {
-        validationService.validate(NotNullValidator.of("strexOneTimePassword", strexOneTimePassword),
-                ValidValidator.of("strexOneTimePassword", strexOneTimePassword));
+    // TODO Test
+    public Future<Void> postStrexOneTimePassword(final StrexOneTimePassword oneTimePassword) {
+        validationService.validate(NotNullValidator.of("oneTimePassword", oneTimePassword),
+                ValidValidator.of("oneTimePassword", oneTimePassword));
 
-        return doPost("api/strex/one-time-passwords", objectMappingService.toString(strexOneTimePassword), Status.NO_CONTENT)
+        return doPost("api/strex/one-time-passwords", objectMappingService.toString(oneTimePassword), Status.CREATED)
+                .thenApplyAsync(response -> VOID);
+    }
+
+    @Override
+    // TODO Test
+    public Future<StrexOneTimePassword> getStrexOneTimePassword(final String transactionId) {
+        validationService.validate(NotBlankValidator.of("transactionId", transactionId));
+
+        return doGet("api/strex/one-time-passwords/" + Util.safeEncode(transactionId), ImmutableList.of(Status.OK, Status.NOT_FOUND))
+                .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response))
+                .thenApplyAsync(string -> objectMappingService.toObject(string, StrexOneTimePassword.class));
+    }
+
+    @Override
+    // TODO Test
+    public Future<Void> postStrexTransaction(final StrexTransaction transaction) {
+        validationService.validate(NotNullValidator.of("transaction", transaction),
+                ValidValidator.of("transaction", transaction));
+
+        return doPost("api/strex/transactions", objectMappingService.toString(transaction), Status.CREATED)
+                .thenApplyAsync(response -> VOID);
+    }
+
+    @Override
+    // TODO Test
+    public Future<StrexTransaction> getStrexTransaction(final String transactionId) {
+        validationService.validate(NotBlankValidator.of("transactionId", transactionId));
+
+        return doGet("api/strex/transactions/" + Util.safeEncode(transactionId), ImmutableList.of(Status.OK, Status.NOT_FOUND))
+                .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response))
+                .thenApplyAsync(string -> objectMappingService.toObject(string, StrexTransaction.class));
+    }
+
+    @Override
+    // TODO Test
+    public Future<Void> reverseStrexTransaction(final String transactionId) {
+        validationService.validate(NotBlankValidator.of("transactionId", transactionId));
+
+        return doDelete("api/strex/transactions/" + Util.safeEncode(transactionId), Status.NO_CONTENT)
                 .thenApplyAsync(response -> VOID);
     }
 
@@ -239,16 +298,16 @@ public class Target365Client implements Client {
         validationService.validate(NotBlankValidator.of("transactionId", transactionId));
 
         return doGet("api/reverse-payment", ImmutableList.of(new Param("transactionId", transactionId)), Status.CREATED)
-            .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response));
+                .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response));
     }
 
     @Override
     public Future<Boolean> verifySignature(
-        final String method, final String uri, final String content, final String xEcdsaSignatureString
+            final String method, final String uri, final String content, final String xEcdsaSignatureString
     ) {
         validationService.validate(NotBlankValidator.of("method", method), NotBlankValidator.of("uri", uri),
-            NotNullValidator.of("content", content), NotBlankValidator.of("xEcdsaSignatureString", xEcdsaSignatureString),
-            PatternValidator.of("xEcdsaSignatureString", xEcdsaSignatureString, X_ECDSA_SIGNATURE_PATTERN));
+                NotNullValidator.of("content", content), NotBlankValidator.of("xEcdsaSignatureString", xEcdsaSignatureString),
+                PatternValidator.of("xEcdsaSignatureString", xEcdsaSignatureString, X_ECDSA_SIGNATURE_PATTERN));
 
         final String[] parts = xEcdsaSignatureString.split(":");
         final String keyName = parts[0];
@@ -257,13 +316,50 @@ public class Target365Client implements Client {
         final String sign = parts[3];
 
         validationService.validate(NotBlankValidator.of("keyName", keyName), TimestampValidator.of("timestamp", timestamp, 5 * 60),
-            NotBlankValidator.of("nonce", nonce), NotBlankValidator.of("sign", sign));
+                NotBlankValidator.of("nonce", nonce), NotBlankValidator.of("sign", sign));
 
         return doGet("api/public-key/" + Util.safeEncode(keyName), Status.OK)
-            .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response))
-            .thenApplyAsync(json -> Util.wrap(() -> new ObjectMapper().readTree(json).get("publicKeyString").asText()))
-            .thenApplyAsync(ecPrivateKeyAsString -> authorizationService.verifyHeader(EcdsaVerifier.getInstance(ecPrivateKeyAsString),
-                method, uri, timestamp, nonce, content, sign));
+                .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response))
+                .thenApplyAsync(json -> Util.wrap(() -> new ObjectMapper().readTree(json).get("publicKeyString").asText()))
+                .thenApplyAsync(ecPrivateKeyAsString -> authorizationService.verifyHeader(EcdsaVerifier.getInstance(ecPrivateKeyAsString),
+                        method, uri, timestamp, nonce, content, sign));
+    }
+
+    @Override
+    // TODO Test
+    public Future<PublicKey> getServerPublicKey(final String keyName) {
+        validationService.validate(NotBlankValidator.of("keyName", keyName));
+
+        return doGet("api/server/public-keys/" + Util.safeEncode(keyName), ImmutableList.of(Status.OK, Status.NOT_FOUND))
+                .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response))
+                .thenApplyAsync(string -> objectMappingService.toObject(string, PublicKey.class));
+    }
+
+    @Override
+    // TODO Test
+    public Future<List<PublicKey>> getClientPublicKeys() {
+        return doGet("api/client/public-keys", Status.OK)
+                .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response))
+                .thenApplyAsync(string -> objectMappingService.toObject(string, Type.LIST_OF_PUBLIC_KEYS));
+    }
+
+    @Override
+    // TODO Test
+    public Future<PublicKey> getClientPublicKey(final String keyName) {
+        validationService.validate(NotBlankValidator.of("keyName", keyName));
+
+        return doGet("api/client/public-keys/" + Util.safeEncode(keyName), ImmutableList.of(Status.OK, Status.NOT_FOUND))
+                .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response))
+                .thenApplyAsync(string -> objectMappingService.toObject(string, PublicKey.class));
+    }
+
+    @Override
+    // TODO Test
+    public Future<Void> deleteClientPublicKey(final String keyName) {
+        validationService.validate(NotBlankValidator.of("keyName", keyName));
+
+        return doDelete("api/client/public-keys/" + Util.safeEncode(keyName), Status.NO_CONTENT)
+                .thenApplyAsync(response -> VOID);
     }
 
     /**
@@ -311,19 +407,19 @@ public class Target365Client implements Client {
      */
     private CompletableFuture<Response> doGet(final String path, final List<Param> params, final List<Integer> codes) {
         final String uri = parameters.getBaseUrl() + path + params.stream()
-            .filter(p -> !Objects.isNull(p.getValue()))
-            .map(Param::toQueryParam).reduce((s1, s2) -> s1 + "&" + s2)
-            .map(p -> "?" + p).orElse("");
+                .filter(p -> !Objects.isNull(p.getValue()))
+                .map(Param::toQueryParam).reduce((s1, s2) -> s1 + "&" + s2)
+                .map(p -> "?" + p).orElse("");
 
         final String authorization = authorizationService.signHeader(signer, parameters.getKeyName(), Method.GET, uri, "");
 
         final Request request = new Request.Builder().url(uri).get()
-            .header(Header.AUTHORIZATION, authorization).build();
+                .header(Header.AUTHORIZATION, authorization).build();
 
         final Call call = okHttpClient.newCall(request);
 
         return CompletableFuture.supplyAsync(() -> Util.wrap(call::execute))
-            .thenApplyAsync(response -> Util.wrap(() -> responseHandler.handle(response, codes)));
+                .thenApplyAsync(response -> Util.wrap(() -> responseHandler.handle(response, codes)));
     }
 
     /**
@@ -351,13 +447,13 @@ public class Target365Client implements Client {
         final String authorization = authorizationService.signHeader(signer, parameters.getKeyName(), Method.POST, uri, content);
 
         final Request request = new Request.Builder()
-            .url(uri).post(RequestBody.create(MediaType.APPLICATION_JSON, content))
-            .header(Header.AUTHORIZATION, authorization).build();
+                .url(uri).post(RequestBody.create(MediaType.APPLICATION_JSON, content))
+                .header(Header.AUTHORIZATION, authorization).build();
 
         final Call call = okHttpClient.newCall(request);
 
         return CompletableFuture.supplyAsync(() -> Util.wrap(call::execute))
-            .thenApplyAsync(response -> Util.wrap(() -> responseHandler.handle(response, codes)));
+                .thenApplyAsync(response -> Util.wrap(() -> responseHandler.handle(response, codes)));
     }
 
     /**
@@ -385,13 +481,13 @@ public class Target365Client implements Client {
         final String authorization = authorizationService.signHeader(signer, parameters.getKeyName(), Method.PUT, uri, content);
 
         final Request request = new Request.Builder()
-            .url(uri).put(RequestBody.create(MediaType.APPLICATION_JSON, content))
-            .header(Header.AUTHORIZATION, authorization).build();
+                .url(uri).put(RequestBody.create(MediaType.APPLICATION_JSON, content))
+                .header(Header.AUTHORIZATION, authorization).build();
 
         final Call call = okHttpClient.newCall(request);
 
         return CompletableFuture.supplyAsync(() -> Util.wrap(call::execute))
-            .thenApplyAsync(response -> Util.wrap(() -> responseHandler.handle(response, codes)));
+                .thenApplyAsync(response -> Util.wrap(() -> responseHandler.handle(response, codes)));
     }
 
     /**
@@ -417,12 +513,12 @@ public class Target365Client implements Client {
         final String authorization = authorizationService.signHeader(signer, parameters.getKeyName(), Method.DELETE, uri, "");
 
         final Request request = new Request.Builder().url(uri).delete()
-            .header(Header.AUTHORIZATION, authorization).build();
+                .header(Header.AUTHORIZATION, authorization).build();
 
         final Call call = okHttpClient.newCall(request);
 
         return CompletableFuture.supplyAsync(() -> Util.wrap(call::execute))
-            .thenApplyAsync(response -> Util.wrap(() -> responseHandler.handle(response, codes)));
+                .thenApplyAsync(response -> Util.wrap(() -> responseHandler.handle(response, codes)));
     }
 
     /**
@@ -434,20 +530,20 @@ public class Target365Client implements Client {
      */
     public static Target365Client getInstance(final String ecPrivateKeyAsString, final Parameters parameters) {
         final OkHttpClient okHttpClient = new OkHttpClient.Builder()
-            .connectTimeout(parameters.getConnectTimeout(), TimeUnit.MILLISECONDS)
-            .readTimeout(parameters.getReadTimeout(), TimeUnit.MILLISECONDS)
-            .writeTimeout(parameters.getWriteTimeout(), TimeUnit.MILLISECONDS).build();
+                .connectTimeout(parameters.getConnectTimeout(), TimeUnit.MILLISECONDS)
+                .readTimeout(parameters.getReadTimeout(), TimeUnit.MILLISECONDS)
+                .writeTimeout(parameters.getWriteTimeout(), TimeUnit.MILLISECONDS).build();
 
         final Map<Integer, ResponseParser> responseParsers = ImmutableMap.of(
-            Status.OK, new OkResponseParser(),
-            Status.NOT_FOUND, new NotFoundResponseParser(),
-            Status.CREATED, new CreatedResponseParser()
+                Status.OK, new OkResponseParser(),
+                Status.NOT_FOUND, new NotFoundResponseParser(),
+                Status.CREATED, new CreatedResponseParser()
         );
 
         return new Target365Client(parameters, okHttpClient, new InvalidResponseHandler(),
-            EcdsaSigner.getInstance(ecPrivateKeyAsString), new EcdsaAuthorizationService(),
-            JacksonObjectMappingService.getInstance(), new Jsr303ValidationService(),
-            responseParsers);
+                EcdsaSigner.getInstance(ecPrivateKeyAsString), new EcdsaAuthorizationService(),
+                JacksonObjectMappingService.getInstance(), new Jsr303ValidationService(),
+                responseParsers);
     }
 
     @Getter
@@ -545,6 +641,9 @@ public class Target365Client implements Client {
         };
 
         private static final TypeReference<List<StrexMerchantId>> LIST_OF_MERCHANTS = new TypeReference<List<StrexMerchantId>>() {
+        };
+
+        private static final TypeReference<List<PublicKey>> LIST_OF_PUBLIC_KEYS = new TypeReference<List<PublicKey>>() {
         };
     }
 }

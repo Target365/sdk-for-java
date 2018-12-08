@@ -12,7 +12,7 @@ public class CreatedResponseParser implements ResponseParser {
 
     public String parse(final Response response) {
         return Optional.of(response).map(r -> r.header(Target365Client.Header.LOCATION))
-            .map(l -> Util.getLast(l.split("/"))).orElse("");
+                .map(l -> Util.getLast(l.split("/"))).orElse("");
     }
 
 }
