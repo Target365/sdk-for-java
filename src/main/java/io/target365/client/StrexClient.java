@@ -1,7 +1,8 @@
 package io.target365.client;
 
-import io.target365.dto.OneTimePassword;
 import io.target365.dto.StrexMerchantId;
+import io.target365.dto.StrexOneTimePassword;
+import io.target365.dto.StrexTransaction;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -44,10 +45,43 @@ public interface StrexClient {
     Future<Void> deleteMerchantId(@NotBlank final String merchantId);
 
     /**
-     * Updates or creates a new merchant id.
+     * Creates a new one-time password.
      *
-     * @param oneTimePassword One-time password object.
+     * @param oneTimePassword Strex one-time password.
      * @return Void
      */
-    Future<Void> postOneTimePassword(@NotNull @Valid final OneTimePassword oneTimePassword);
+    Future<Void> postStrexOneTimePassword(@NotNull @Valid final StrexOneTimePassword oneTimePassword);
+
+    /**
+     * Gets a strex one-time password.
+     *
+     * @param transactionId Transaction id.
+     * @return A strex one-time password.
+     */
+    Future<StrexOneTimePassword> getStrexOneTimePassword(@NotBlank final String transactionId);
+
+    /**
+     * Creates a new strex transaction.
+     *
+     * @param transaction Strex transaction.
+     * @return Void
+     */
+    Future<Void> postStrexTransaction(@NotNull @Valid final StrexTransaction transaction);
+
+    /**
+     * Gets a strex transaction.
+     *
+     * @param transactionId Transaction id.
+     * @return A strex transaction.
+     */
+    Future<StrexTransaction> getStrexTransaction(@NotBlank final String transactionId);
+
+    /**
+     * Reverses a previous strex transaction.
+     *
+     * @param transactionId Transaction id.
+     * @return Resource uri of reversed transaction.
+     */
+    Future<String> reverseStrexTransaction(@NotBlank final String transactionId);
+
 }

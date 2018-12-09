@@ -15,7 +15,7 @@ public class InvalidResponseHandler implements ResponseHandler {
     public Response handle(final Response response, final List<Integer> codes) throws InvalidResponseException {
         if (!codes.contains(response.code())) {
             throw new InvalidResponseException(response.code(), response.message(),
-                Optional.ofNullable(response.body()).map(rb -> Util.suppress(rb::string)).orElse(""));
+                    Optional.ofNullable(response.body()).map(rb -> Util.suppress(rb::string)).orElse(""));
         }
 
         return response;

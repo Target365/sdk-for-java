@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.concurrent.Future;
 
 public interface OutMessageClient {
+
     /**
      * Prepare MSISDNs for later sendings. This can greatly improve routing performance.
      *
@@ -46,7 +47,7 @@ public interface OutMessageClient {
     /**
      * Updates a future scheduled out-message.
      *
-     * @param outMessage    Text message to post.
+     * @param outMessage Text message to post.
      * @return Void
      */
     Future<Void> putOutMessage(@NotNull @Valid final OutMessage outMessage);
@@ -58,4 +59,5 @@ public interface OutMessageClient {
      * @return Void
      */
     Future<Void> deleteOutMessage(@NotBlank final String transactionId);
+
 }

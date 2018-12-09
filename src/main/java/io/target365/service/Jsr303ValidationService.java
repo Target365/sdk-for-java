@@ -21,7 +21,7 @@ public class Jsr303ValidationService implements ValidationService {
     @Override
     public void validate(final Validator... validators) {
         final List<String> violations = (Arrays.stream(validators).map(Validator::valid)
-            .flatMap(List::stream).collect(Collectors.toList()));
+                .flatMap(List::stream).collect(Collectors.toList()));
 
         if (!violations.isEmpty()) {
             throw new InvalidInputException(violations);
@@ -59,7 +59,7 @@ public class Jsr303ValidationService implements ValidationService {
         @Override
         public List<String> valid() {
             return !NotNullValidator.of(field, list).valid().isEmpty() || list.isEmpty()
-                ? ImmutableList.of(field + " must not be empty") : ImmutableList.of();
+                    ? ImmutableList.of(field + " must not be empty") : ImmutableList.of();
         }
 
         public static Validator of(final String field, final List<?> list) {
@@ -79,7 +79,7 @@ public class Jsr303ValidationService implements ValidationService {
         @Override
         public List<String> valid() {
             return !NotNullValidator.of(field, value).valid().isEmpty() || value.isEmpty()
-                ? ImmutableList.of(field + " must not be blank") : ImmutableList.of();
+                    ? ImmutableList.of(field + " must not be blank") : ImmutableList.of();
         }
 
         public static Validator of(final String field, final String string) {
@@ -99,8 +99,8 @@ public class Jsr303ValidationService implements ValidationService {
         @Override
         public List<String> valid() {
             return Optional.ofNullable(list).map(l -> IntStream.range(0, list.size())
-                .mapToObj(i -> NotBlankValidator.of(field + ".[" + i + "]", list.get(i)).valid())
-                .flatMap(List::stream).collect(Collectors.toList())).orElse(ImmutableList.of());
+                    .mapToObj(i -> NotBlankValidator.of(field + ".[" + i + "]", list.get(i)).valid())
+                    .flatMap(List::stream).collect(Collectors.toList())).orElse(ImmutableList.of());
         }
 
         public static Validator of(final String field, final List<String> strings) {
@@ -121,10 +121,10 @@ public class Jsr303ValidationService implements ValidationService {
         @Override
         public List<String> valid() {
             final Boolean result = Optional.ofNullable(value).map(v -> Pattern.compile(regexp).matcher(value).matches())
-                .orElse(Boolean.FALSE);
+                    .orElse(Boolean.FALSE);
 
             return NotBlankValidator.of(field, value).valid().isEmpty() && result
-                ? ImmutableList.of() : ImmutableList.of(field + " must conform to the pattern " + regexp);
+                    ? ImmutableList.of() : ImmutableList.of(field + " must conform to the pattern " + regexp);
         }
 
         public static Validator of(final String field, final String value, final String regexp) {
@@ -177,7 +177,7 @@ public class Jsr303ValidationService implements ValidationService {
         @Override
         public List<String> valid() {
             return Optional.ofNullable(object).map(o -> validator.validate(o)).orElse(ImmutableSet.of()).stream()
-                .map(cv -> field + "." + cv.getPropertyPath() + " " + cv.getMessage()).collect(Collectors.toList());
+                    .map(cv -> field + "." + cv.getPropertyPath() + " " + cv.getMessage()).collect(Collectors.toList());
         }
 
         public static Validator of(final String field, final Object value) {

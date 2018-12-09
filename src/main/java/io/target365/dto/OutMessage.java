@@ -1,13 +1,20 @@
 package io.target365.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
+import io.target365.dto.enums.Priority;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
+import org.hibernate.validator.constraints.Range;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Out-message.
@@ -56,6 +63,12 @@ public class OutMessage implements Serializable {
     private String content;
 
     /**
+     * Strex data
+     */
+    @Valid
+    private StrexData strex;
+
+    /**
      * Send time, in UTC. If omitted the send time is set to ASAP.
      */
     private ZonedDateTime sendTime;
@@ -63,37 +76,19 @@ public class OutMessage implements Serializable {
     /**
      * Message Time-To-Live (TTL) in minutes. Must be between 5 and 1440. Default value is 120.
      */
+    @Range(min = 5, max = 1440)
     private Integer timeToLive = 120;
 
     /**
      * Priority. Can be 'Low', 'Normal' or 'High'. Default value is Normal.
+     * See {@link io.target365.dto.enums.Priority} for possible values
      */
-    private Priority priority = Priority.Normal;
+    private String priority = Priority.Normal.name();
 
     /**
      * Message delivery mode. Can be either AtLeastOnce or AtMostOnce. Default value is AtMostOnce.
      */
     private DeliveryMode deliveryMode = DeliveryMode.AtMostOnce;
-
-    /**
-     * Merchant id. Only used for STREX messages.
-     */
-    private String merchantId;
-
-    /**
-     * Service code. Only used for STREX messages.
-     */
-    private String serviceCode;
-
-    /**
-     * Invoice text. Only used for STREX messages.
-     */
-    private String invoiceText;
-
-    /**
-     * Price. Only used for STREX messages.
-     */
-    private Double price;
 
     /**
      * Delivery report url.
@@ -111,7 +106,8 @@ public class OutMessage implements Serializable {
     private ZonedDateTime created;
 
     /**
-     * Delivery status code. Read-only property. See OutMessageStatusCodes for valid values.
+     * Delivery status code. Read-only property.
+     * See {@link io.target365.dto.enums.StatusCode} for possible values
      */
     private String statusCode;
 
@@ -121,21 +117,14 @@ public class OutMessage implements Serializable {
     private Boolean delivered;
 
     /**
-     * Whether billing was performed. Null if status is unknown. Read-only property.
-     */
-    private Boolean billed;
-
-    /**
      * Tags associated with message. Can be used for statistics and grouping.
      */
     private List<String> tags;
 
     /**
-     * Priority
+     * Associated custom properties.
      */
-    public enum Priority {
-        Low, Normal, High
-    }
+    private Map<String, Object> properties;
 
     /**
      * Delivery mode
@@ -143,4 +132,5 @@ public class OutMessage implements Serializable {
     public enum DeliveryMode {
         AtLeastOnce, AtMostOnce
     }
+
 }
