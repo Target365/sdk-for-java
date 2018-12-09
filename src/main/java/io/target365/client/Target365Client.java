@@ -288,14 +288,6 @@ public class Target365Client implements Client {
     }
 
     @Override
-    public Future<String> reversePayment(final String transactionId) {
-        validationService.validate(NotBlankValidator.of("transactionId", transactionId));
-
-        return doGet("api/reverse-payment", ImmutableList.of(new Param("transactionId", transactionId)), Status.CREATED)
-                .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response));
-    }
-
-    @Override
     public Future<Boolean> verifySignature(
             final String method, final String uri, final String content, final String xEcdsaSignatureString
     ) {

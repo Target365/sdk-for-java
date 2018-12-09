@@ -1,4 +1,4 @@
 package io.target365.client;
 
 public interface Client extends PingClient, KeywordClient, LookupClient, StrexClient,
-        OutMessageClient, InMessageClient, ReversePaymentClient, VerificationClient, PublicKeysClient { }
+        OutMessageClient, InMessageClient, VerificationClient, PublicKeysClient { }

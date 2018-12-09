@@ -84,7 +84,7 @@ public class StrexTransaction implements Serializable {
     private String correlationId;
 
     /**
-     * One-Time-Password. Used with previsouly sent one-time-passwords.
+     * One-Time-Password. Used with previously sent one-time-passwords.
      */
     private String oneTimePassword;
 
