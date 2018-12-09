@@ -61,5 +61,5 @@ public class StrexOneTimePassword implements Serializable {
     /**
      * Whether one-time password sms has been delivered. Null means unknown.
      */
-    private String delivered;
+    private Boolean delivered;
 }

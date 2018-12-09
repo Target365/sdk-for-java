@@ -108,12 +108,12 @@ public class StrexClientTest extends ClientTest {
         assertThat(createdStrexTransaction.getInvoiceText()).isEqualTo(strexTransaction.getInvoiceText());
 
         // Reverse strex transaction
-        strexClient.reverseStrexTransaction(strexTransaction.getTransactionId()).get();
+        final String reversedStrexTransactionId = strexClient.reverseStrexTransaction(strexTransaction.getTransactionId()).get();
 
         // Read reversed strex transaction
-        final StrexTransaction reversedStrexTransaction = strexClient.getStrexTransaction("-" + strexTransaction.getTransactionId()).get();
+        final StrexTransaction reversedStrexTransaction = strexClient.getStrexTransaction(reversedStrexTransactionId).get();
         assertThat(reversedStrexTransaction).isNotNull();
-        assertThat(reversedStrexTransaction.getTransactionId()).isEqualTo("-" + strexTransaction.getTransactionId());
+        assertThat(reversedStrexTransaction.getTransactionId()).isEqualTo(reversedStrexTransactionId);
         assertThat(reversedStrexTransaction.getMerchantId()).isEqualTo(strexTransaction.getMerchantId());
         assertThat(reversedStrexTransaction.getShortNumber()).isEqualTo(strexTransaction.getShortNumber());
         assertThat(reversedStrexTransaction.getRecipient()).isEqualTo(strexTransaction.getRecipient());

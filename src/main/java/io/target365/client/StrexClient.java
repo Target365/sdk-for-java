@@ -80,8 +80,8 @@ public interface StrexClient {
      * Reverses a previous strex transaction.
      *
      * @param transactionId Transaction id.
-     * @return Void
+     * @return Resource uri of reversed transaction.
      */
-    Future<Void> reverseStrexTransaction(@NotBlank final String transactionId);
+    Future<String> reverseStrexTransaction(@NotBlank final String transactionId);
 
 }

@@ -27,8 +27,8 @@ public interface KeywordClient {
      * @return Lists of all keywords.
      */
     Future<List<Keyword>> getKeywords(
-        @Nullable final String shortNumberId, @Nullable final String keywordText,
-        @Nullable final Keyword.Mode mode, @Nullable final String tag
+            @Nullable final String shortNumberId, @Nullable final String keywordText,
+            @Nullable final Keyword.Mode mode, @Nullable final String tag
     );
 
     /**
@@ -50,7 +50,7 @@ public interface KeywordClient {
     /**
      * Updates a keyword.
      *
-     * @param keyword   Keyword.
+     * @param keyword Keyword.
      * @return Void
      */
     Future<Void> putKeyword(@NotNull @Valid final Keyword keyword);

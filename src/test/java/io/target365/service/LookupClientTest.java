@@ -31,8 +31,7 @@ public class LookupClientTest extends ClientTest {
         final LookupResult lookupResult = lookupClient.addressLookup(msisdn).get();
         assertThat(lookupResult).isNotNull();
         assertThat(lookupResult.getMsisdn()).isEqualTo("98079008");
-        assertThat(lookupResult.getFirstName()).isEqualTo("Hans");
-        assertThat(lookupResult.getMiddleName()).isEqualTo("Olav");
+        assertThat(lookupResult.getFirstName()).isEqualTo("Hans Olav");
         assertThat(lookupResult.getLastName()).isEqualTo("Stjernholm");
         assertThat(lookupResult.getGender()).isEqualTo(LookupResult.Gender.M);
     }

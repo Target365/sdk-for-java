@@ -69,8 +69,9 @@ public class StrexTransaction implements Serializable {
 
     /**
      * Status code.
+     * See {@link io.target365.dto.enums.StatusCode} for possible values
      */
-    private OutMessage.StatusCode statusCode;
+    private String statusCode;
 
     /**
      * Session id. Can be used as the clients to get all out-messages associated to a specific session.

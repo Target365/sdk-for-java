@@ -280,11 +280,11 @@ public class Target365Client implements Client {
     }
 
     @Override
-    public Future<Void> reverseStrexTransaction(final String transactionId) {
+    public Future<String> reverseStrexTransaction(final String transactionId) {
         validationService.validate(NotBlankValidator.of("transactionId", transactionId));
 
-        return doDelete("api/strex/transactions/" + Util.safeEncode(transactionId), Status.NO_CONTENT)
-                .thenApplyAsync(response -> VOID);
+        return doDelete("api/strex/transactions/" + Util.safeEncode(transactionId), Status.CREATED)
+                .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response));
     }
 
     @Override

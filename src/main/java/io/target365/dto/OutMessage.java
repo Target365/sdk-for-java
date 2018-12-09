@@ -1,6 +1,7 @@
 package io.target365.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.target365.dto.enums.Priority;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -80,8 +81,9 @@ public class OutMessage implements Serializable {
 
     /**
      * Priority. Can be 'Low', 'Normal' or 'High'. Default value is Normal.
+     * See {@link io.target365.dto.enums.Priority} for possible values
      */
-    private Priority priority = Priority.Normal;
+    private String priority = Priority.Normal.name();
 
     /**
      * Message delivery mode. Can be either AtLeastOnce or AtMostOnce. Default value is AtMostOnce.
@@ -105,8 +107,9 @@ public class OutMessage implements Serializable {
 
     /**
      * Delivery status code. Read-only property.
+     * See {@link io.target365.dto.enums.StatusCode} for possible values
      */
-    private StatusCode statusCode;
+    private String statusCode;
 
     /**
      * Whether message was delivered. Null if status is unknown. Read-only property.
@@ -124,47 +127,10 @@ public class OutMessage implements Serializable {
     private Map<String, Object> properties;
 
     /**
-     * Priority
-     */
-    public enum Priority {
-        Low, Normal, High
-    }
-
-    /**
      * Delivery mode
      */
     public enum DeliveryMode {
         AtLeastOnce, AtMostOnce
     }
 
-    /**
-     * Status code
-     */
-    public enum StatusCode {
-
-        /**
-         * Message is queued
-         */
-        Queued,
-
-        /**
-         * Message has been sent
-         */
-        Sent,
-
-        /**
-         * Message has failed
-         */
-        Failed,
-
-        /**
-         * Message has been delivered/billed
-         */
-        Ok,
-
-        /**
-         * Message billing has been reversed
-         */
-        Reversed
-    }
 }
