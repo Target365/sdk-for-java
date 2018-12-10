@@ -2,7 +2,7 @@
 
 #### Getting started
 
-To get started please register at <http://www.target365.no> and follow the instructions. Registration is free!
+To get started please send us an email at <support@target365.no>.
 
 ### Authors and maintainers
 Hans Olav <https://github.com/HansOlavS>
