@@ -6,6 +6,18 @@ To get started please send us an email at <support@target365.no> containing your
 
 If you want, you can generate your EC public/private key-pair here: <https://crypto-utils.com/>
 
+### Maven
+
+```Xml
+<dependency>
+  <groupId>com.github.target365</groupId>
+  <artifactId>target-365-sdk</artifactId>
+  <version>1.0</version>
+</dependency>
+```
+
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.target365/target-365-sdk.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.target365%22%20AND%20a:%22target-365-sdk%22)
+
 ### Authors and maintainers
 Hans Olav <https://github.com/HansOlavS>
 
