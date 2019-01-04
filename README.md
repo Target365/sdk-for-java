@@ -6,7 +6,7 @@ To get started please send us an email at <support@target365.no> containing your
 
 If you want, you can generate your EC public/private key-pair here: <https://crypto-utils.com/>
 
-### Maven
+### Apache Maven
 
 ```Xml
 <dependency>
@@ -17,6 +17,12 @@ If you want, you can generate your EC public/private key-pair here: <https://cry
 ```
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.target365/target-365-sdk.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.target365%22%20AND%20a:%22target-365-sdk%22)
+
+### Gradle Groovy DSL
+
+```
+implementation 'com.github.target365:target-365-sdk:1.0'
+```
 
 ### Authors and maintainers
 Hans Olav <https://github.com/HansOlavS>
