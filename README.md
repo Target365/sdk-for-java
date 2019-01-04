@@ -25,9 +25,7 @@ implementation 'com.github.target365:target-365-sdk:1.0'
 ```
 
 ### Authors and maintainers
-Hans Olav <https://github.com/HansOlavS>
-
-Target365 <support@target365.no>
+Target365 (<support@target365.no>)
 
 ### Issues / Bugs / Questions
 
