@@ -1,6 +1,6 @@
 ## Target365 SDK for Java
 
-#### Getting started
+### Getting started
 
 To get started please send us an email at <support@target365.no> containing your EC public key in DER(ANS.1) format.
 
