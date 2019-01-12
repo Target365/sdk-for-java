@@ -14,13 +14,11 @@ If you want, you can generate your EC public/private key-pair here: <https://cry
 </dependency>
 ```
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.github.target365/target-365-sdk.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.target365%22%20AND%20a:%22target-365-sdk%22)
-
-### Gradle Groovy DSL
-
+### Gradle
 ```
 implementation 'com.github.target365:target-365-sdk:1.0'
 ```
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.target365/target-365-sdk.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.target365%22%20AND%20a:%22target-365-sdk%22)
 
 ### Authors and maintainers
 Target365 (<support@target365.no>)
