@@ -107,9 +107,6 @@ public class StrexClientTest extends ClientTest {
         assertThat(createdStrexTransaction.getServiceCode()).isEqualTo(strexTransaction.getServiceCode());
         assertThat(createdStrexTransaction.getInvoiceText()).isEqualTo(strexTransaction.getInvoiceText());
 
-        // Wait for 10 secs to allow the transaction to complete async
-        Thread.sleep(10000);
-
         // Reverse strex transaction
         final String reversedStrexTransactionId = strexClient.reverseStrexTransaction(strexTransaction.getTransactionId()).get();
 
