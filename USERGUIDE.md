@@ -19,7 +19,6 @@
     * [Create a keyword](#create-a-keyword)
     * [Delete a keyword](#delete-a-keyword)
     * [SMS forward](#sms-forward)
-    * [SMS forward using the SDK](#sms-forward-using-the-sdk)
 
 ## Introduction
 The Target365 SDK gives you direct access to our online services like sending and receiving SMS, address lookup and Strex payment transactions.
@@ -81,97 +80,90 @@ serviceClient.putOutMessage(outMessage).get();
 
 ### Delete a scheduled SMS
 This example deletes a previously created scheduled SMS.
-```C#
-await serviceClient.DeleteOutMessageAsync(transactionId);
+```Java
+serviceClient.deleteOutMessage(transactionId).get();
 ```
+
 ## Payment transactions
 
 ### Create a Strex payment transaction
 This example creates a 1 NOK Strex payment transaction that the end user will confirm by replying "OK" to an SMS from Strex.
-```C#
-var transaction = new StrexTransaction
-{
-    TransactionId = Guid.NewGuid().ToString(),
-    ShortNumber = "2002",
-    Recipient = "+4798079008",
-    MerchantId = "YOUR_MERCHANT_ID",
-    Price = 1,
-    ServiceCode = ServiceCodes.NonCommercialDonation,
-    InvoiceText = "Donation test",
-};
+```Java
+final StrexTransaction transaction = new StrexTransaction()
+    .setTransactionId(UUID.randomUUID().toString())
+    .setMerchantId("YOUR_MERCHANT_ID")
+    .setShortNumber("2002")
+    .setRecipient("+4798079008")
+    .setPrice(1d)
+    .setServiceCode("10001")
+    .setInvoiceText("Dontaion test");
 
-await serviceClient.CreateStrexTransactionAsync(transaction);
+serviceClient.postStrexTransaction(transaction).get();
 ```
 
 ### Create a Strex payment transaction with one-time password
 This example creates a Strex one-time password sent to the end user and get completes the payment by using the one-time password.
-```C#
-transactionId = Guid.NewGuid().ToString();
+```Java
+final String transactionId = UUID.randomUUID().toString();
 
-var oneTimePassword = new OneTimePassword
-{
-    TransactionId = transactionId,
-    MerchantId = "YOUR_MERCHANT_ID",
-    Recipient = "+4798079008",
-    Recurring = false
-};
+final StrexOneTimePassword strexOneTimePassword = new StrexOneTimePassword()
+    .setTransactionId(transactionId)
+    .setMerchantId("10000002")
+    .setRecipient("+4798079008")
+    .setRecurring(Boolean.FALSE);
 
-await serviceClient.CreateOneTimePasswordAsync(oneTimePassword);
+serviceClient.postStrexOneTimePassword(strexOneTimePassword).get();
 
 // *** Get input from end user (eg. via web site) ***
 
-var transaction = new StrexTransaction
-{
-    TransactionId = transactionId,
-    ShortNumber = "2002",
-    Recipient = "+4798079008",
-    MerchantId = "YOUR_MERCHANT_ID",
-    Price = 1,
-    ServiceCode = ServiceCodes.NonCommercialDonation,
-    InvoiceText = "Donation test",
-    OneTimePassword = "ONE_TIME_PASSWORD_FROM_USER"
-};
+final StrexTransaction transaction = new StrexTransaction()
+    .setTransactionId(UUID.randomUUID().toString())
+    .setMerchantId("YOUR_MERCHANT_ID")
+    .setShortNumber("2002")
+    .setRecipient("+4798079008")
+    .setPrice(1d)
+    .setServiceCode("10001")
+    .setInvoiceText("Dontaion test")
+    .setOneTimePassword("ONE_TIME_PASSWORD_FROM_USER");
 
-await serviceClient.CreateStrexTransactionAsync(transaction);
+serviceClient.postStrexTransaction(transaction).get();
 ```
 
 ### Reverse a Strex payment transaction
 This example reverses a previously billed Strex payment transaction. The original transaction will not change, but a reversal transaction will be created that counters the previous transaction by a negative Price. The reversal is an asynchronous operation that usually takes a few seconds to finish.
-```C#
-var reversedTransactionId = await serviceClient.ReverseStrexTransactionAsync(transactionId);
-Console.WriteLine($"Reversal transaction id is {reversedTransactionId}");
+```Java
+final String reversalTransactionId = serviceClient.reverseStrexTransaction(transactionId).get();
 ```
+
 ## Lookup
 
 ### Address lookup for mobile number
 This example looks up address information for the mobile number 98079008. Lookup information includes registered name and address.
-```C#
-var lookup = await serviceClient.LookupAsync("+4798079008");
-Console.WriteLine("Mobile number 98079008 is registered to {lookup.LastName}, {lookup.ForstName}");
+```Java
+final LookupResult lookup = serviceClient.addressLookup("+4798079008").get();
+final String firstName = lookup.getFirstName();
+final String lastName = lookup.getLastName();
 ```
 
 ## Keywords
 
 ### Create a keyword
 This example creates a new keyword on short number 2002 that forwards incoming SMS messages to 2002 that starts with "HELLO" to the URL the https://your-site.net/api/receive-sms.
-```C#
-var keyword = new Keyword
-{
-    ShortNumberId = "NO-2002",
-    KeywordText = "HELLO",
-    Mode = KeywordModes.Text,
-    ForwardUrl = "https://your-site.net/api/receive-sms",
-    Enabled = true
-};
+```Java
+final Keyword keyword = new Keyword()
+    .setShortNumberId("NO-2002")
+    .setKeywordText("HELLO")
+    .setMode(Keyword.Mode.Text)
+    .setForwardUrl("https://your-site.net/api/receive-sms")
+    .setEnabled(Boolean.TRUE);
 
-var keywordId = await serviceClient.CreateKeywordAsync(keyword);
-Console.WriteLine($"Keyword id is {keywordId}");
+final String keywordId = serviceClient.postKeyword(keyword).get();
 ```
 
 ### Delete a keyword
 This example deletes a keyword.
-```C#
-await serviceClient.CreateKeywordAsync(keywordId);
+```Java
+serviceClient.deleteKeyword(keywordId).get();
 ```
 
 ### SMS forward
@@ -196,21 +188,4 @@ Host: your-site.net
 HTTP/1.1 200 OK
 Date: Thu, 07 Feb 2019 21:13:51 GMT
 Content-Length: 0
-```
-
-### SMS forward using the SDK
-This example shows how to parse an SMS forward request using the SDK.
-```C#
-[Route("api/receive-sms")]
-public async Task<HttpResponseMessage> PostInMessage(HttpRequestMessage request)
-{
-    var settings = new JsonSerializerSettings
-    {
-    	Converters = new List<JsonConverter> { new StringEnumConverter { CamelCaseText = false } },
-    };
-    
-    var message = JsonConvert.DeserializeObject<InMessage>(await request.Content.ReadAsStringAsync(), settings);
-    Console.WriteLine($"Got in-message from {message.Sender} with text '{message.Content}'.");
-    return request.CreateResponse(HttpStatusCode.OK);
-}
 ```
