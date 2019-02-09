@@ -36,10 +36,12 @@ import io.target365.dto.StrexTransaction;
 import io.target365.exception.InvalidInputException;
 import io.target365.util.Util;
 
-String baseUrl = "https://shared.target365.io";
-String keyName = "YOUR_KEY";
-String privateKey = "BASE64_EC_PRIVATE_KEY";
-Target365Client serviceClient = Target365Client.getInstance(privateKey, new Target365Client.Parameters(baseUrl, keyName));
+final String baseUrl = "https://shared.target365.io";
+final String keyName = "YOUR_KEY";
+final String privateKey = "BASE64_EC_PRIVATE_KEY";
+
+final Target365Client serviceClient = Target365Client.getInstance(privateKey,
+    new Target365Client.Parameters(baseUrl, keyName));
 ```
 ## Text messages
 
@@ -69,9 +71,7 @@ final String transactionId = serviceClient.postOutMessage(outMessage).get();
 ### Edit a scheduled SMS
 This example updates a previously created scheduled SMS.
 ```Java
-final OutMessage outMessage = serviceClient.getOutMessage(transactionId).get();
-
-outMessage
+final OutMessage outMessage = serviceClient.getOutMessage(transactionId).get()
   .setSendTime(outMessage.getSendTime().plus(1, ChronoUnit.HOURS)))
   .setContent(outMessage.getContent() + " An hour later! :)";
   
@@ -148,7 +148,7 @@ final String lastName = lookup.getLastName();
 ## Keywords
 
 ### Create a keyword
-This example creates a new keyword on short number 2002 that forwards incoming SMS messages to 2002 that starts with "HELLO" to the URL the https://your-site.net/api/receive-sms.
+This example creates a new keyword on short number 2002 that forwards incoming SMS messages to 2002 that starts with "HELLO" to the URL  "https://your-site.net/api/receive-sms".
 ```Java
 final Keyword keyword = new Keyword()
     .setShortNumberId("NO-2002")
