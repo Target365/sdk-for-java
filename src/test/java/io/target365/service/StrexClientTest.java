@@ -87,7 +87,7 @@ public class StrexClientTest extends ClientTest {
         final StrexTransaction strexTransaction = new StrexTransaction()
                 .setTransactionId(UUID.randomUUID().toString())
                 .setMerchantId("10000001")
-                .setShortNumber("NO-0000")
+                .setShortNumber("0000")
                 .setRecipient("+4798079008")
                 .setPrice(1000d)
                 .setServiceCode("10001")
