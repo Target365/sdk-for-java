@@ -39,12 +39,12 @@ public class OutMessageClientTest extends ClientTest {
     public void test() throws Exception {
         final String msisdn = "+4798079008";
 
-        final OutMessage outMessageForBatch = new OutMessage().setSender("OutMessageBatch Sender")
+        final OutMessage outMessageForBatch = new OutMessage().setSender("Target365")
                 .setRecipient("+4798079008").setContent("OutMessageBatch 0001")
                 .setSendTime(ZonedDateTime.now().plus(1, ChronoUnit.DAYS)).setTransactionId(UUID.randomUUID().toString());
         final OutMessageBatch outMessageBatch = new OutMessageBatch().setItems(ImmutableList.of(outMessageForBatch));
 
-        final OutMessage outMessage = new OutMessage().setSender("OutMessage Sender")
+        final OutMessage outMessage = new OutMessage().setSender("Target365")
                 .setRecipient("+4798079008").setContent("OutMessage 0001")
                 .setSendTime(ZonedDateTime.now().plus(1, ChronoUnit.DAYS));
 
@@ -96,6 +96,14 @@ public class OutMessageClientTest extends ClientTest {
 
     @Test
     public void validation() {
+        // getSmsPartsForText
+        String singleSmsText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
+        String doubleSmsText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus at velit eget nisl facilisis tempus. Pellentesque consectetur mi in libero maximus tristique. Quisque non nisi volutpat, egestas dui quis, varius nunc. Maecenas turpis libero, tincidunt vitae erat at, accumsan euismod purus.";
+        assertThat(OutMessage.getSmsPartsForText(singleSmsText, false)).isEqualTo(1);
+        assertThat(OutMessage.getSmsPartsForText(doubleSmsText, false)).isEqualTo(2);
+        assertThat(OutMessage.getSmsPartsForText(singleSmsText, true)).isEqualTo(1);
+        assertThat(OutMessage.getSmsPartsForText(doubleSmsText, true)).isEqualTo(5);
+
         assertThat(catchThrowableOfType(() -> outMessageClient.prepareMsisdns(null), InvalidInputException.class).getViolations())
                 .containsExactlyInAnyOrder("msisdns must not be empty");
 

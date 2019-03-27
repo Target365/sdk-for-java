@@ -13,8 +13,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Out-message.
@@ -28,6 +27,58 @@ import java.util.Map;
 public class OutMessage implements Serializable {
 
     private static final long serialVersionUID = 2311238557213312531L;
+
+    /**
+     * Gets the number of sms message parts are required for a given text and encoding
+     */
+    public static int getSmsPartsForText(String text, boolean unicode)
+    {
+        if (unicode) {
+            return (text.length() <= 70) ? 1 : (int)Math.ceil(text.length() / 67.0);
+        }
+
+        final char[] extendedChars = new char[] { '\f', '^', '{', '}', '\\', '[', '~', ']', '|', '€' };
+        HashSet<Character> extendedCharSet = new HashSet<Character>();
+
+        for (char c : extendedChars) {
+            extendedCharSet.add((c));
+        }
+
+        int totalCharCount = 0;
+
+        for (char c : text.toCharArray()) {
+            totalCharCount++;
+
+            if (extendedCharSet.contains(c)) {
+                totalCharCount++;
+            }
+        }
+
+        if (totalCharCount <= 160) {
+            return 1;
+        }
+
+        final int maxSeptetsPerPart = 153;
+        int parts = 1;
+        int septets = 0;
+
+        for (char c : text.toCharArray())
+        {
+            if (septets == maxSeptetsPerPart || (septets == (maxSeptetsPerPart - 1) && extendedCharSet.contains(c)))
+            {
+                parts++;
+                septets = 0;
+            }
+
+            if (extendedCharSet.contains(c)) {
+                septets += 2;
+            } else {
+                septets += 1;
+            }
+        }
+
+        return parts;
+    }
 
     /**
      * Transaction id. Must be unique per message if used. This can be used for guarding against resending messages.
@@ -112,6 +163,12 @@ public class OutMessage implements Serializable {
     private String statusCode;
 
     /**
+     * Delivery status code. Read-only property.
+     * See {@link io.target365.dto.enums.DetailedStatusCode} for possible values
+     */
+    private String detailedStatusCode;
+
+    /**
      * Set to true to allow unicode SMS, false to fail if content is unicode, null to replace unicode chars to '?'.
      */
     private Boolean allowUnicode;
@@ -120,6 +177,16 @@ public class OutMessage implements Serializable {
      * Whether message was delivered. Null if status is unknown. Read-only property.
      */
     private Boolean delivered;
+
+    /**
+     * External SMSC transaction id.
+     */
+    private String smscTransactionId;
+
+    /**
+     * SMSC message parts.
+     */
+    private Integer smscMessageParts;
 
     /**
      * Tags associated with message. Can be used for statistics and grouping.
