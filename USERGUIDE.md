@@ -191,7 +191,7 @@ Date: Thu, 07 Feb 2019 21:13:51 GMT
 Content-Length: 0
 ```
 
-### #DLR forward
+### DLR forward
 #### Request
 ```
 POST https://your-site.net/api/receive-dlr HTTP/1.1
