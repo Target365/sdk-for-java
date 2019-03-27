@@ -32,8 +32,7 @@ public class StrexMerchantId implements Serializable {
     /**
      * Short number id.
      */
-    @NotBlank
-    private String shortNumberId;
+    private String[] shortNumberIds;
 
     /**
      * This is a write-only property and will always return null.

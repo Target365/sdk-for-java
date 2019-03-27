@@ -33,7 +33,7 @@ public class StrexClientTest extends ClientTest {
     public void testMerchantId() throws Exception {
         final StrexMerchantId strexMerchantId = new StrexMerchantId()
                 .setMerchantId("10000001")
-                .setShortNumberId("NO-0000")
+                .setShortNumberIds(new String[] {"NO-0000"})
                 .setPassword("test");
 
         // Delete strex merchant id if it exists (data cleanup)
@@ -46,15 +46,15 @@ public class StrexClientTest extends ClientTest {
         // Read strex merchant id
         final StrexMerchantId created = strexClient.getMerchantId(strexMerchantId.getMerchantId()).get();
         assertThat(created.getMerchantId()).isEqualTo(strexMerchantId.getMerchantId());
-        assertThat(created.getShortNumberId()).isEqualTo(strexMerchantId.getShortNumberId());
+        assertThat(created.getShortNumberIds()).isEqualTo(strexMerchantId.getShortNumberIds());
         assertThat(created.getPassword()).isEqualTo(null);
 
         // Update strex merchant id verify strex merchant id was updated
         strexClient.putMerchantId(created.getMerchantId(), new StrexMerchantId().setMerchantId(created.getMerchantId())
-                .setShortNumberId(created.getShortNumberId()).setPassword(created.getPassword() + "-updated")).get();
+                .setShortNumberIds(created.getShortNumberIds()).setPassword(created.getPassword() + "-updated")).get();
         final StrexMerchantId updated = strexClient.getMerchantId(created.getMerchantId()).get();
         assertThat(updated.getMerchantId()).isEqualTo(strexMerchantId.getMerchantId());
-        assertThat(updated.getShortNumberId()).isEqualTo(strexMerchantId.getShortNumberId());
+        assertThat(updated.getShortNumberIds()).isEqualTo(strexMerchantId.getShortNumberIds());
         assertThat(updated.getPassword()).isEqualTo(null);
 
         // Delete strex merchant id and verify that it has been deleted
@@ -125,7 +125,7 @@ public class StrexClientTest extends ClientTest {
     @Test
     public void validationMerchantId() {
         final StrexMerchantId strexMerchantIdWithNulls = new StrexMerchantId();
-        final StrexMerchantId strexMerchantIdWithBlanks = new StrexMerchantId().setMerchantId("").setShortNumberId("");
+        final StrexMerchantId strexMerchantIdWithBlanks = new StrexMerchantId().setMerchantId("").setShortNumberIds(null);
 
         assertThat(catchThrowableOfType(() -> strexClient.getMerchantId(null), InvalidInputException.class).getViolations())
                 .containsExactlyInAnyOrder("merchantId must not be blank");
@@ -137,12 +137,10 @@ public class StrexClientTest extends ClientTest {
                 .containsExactlyInAnyOrder("merchantId must not be blank", "strexMerchantId must not be null");
 
         assertThat(catchThrowableOfType(() -> strexClient.putMerchantId("", strexMerchantIdWithNulls), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("merchantId must not be blank", "strexMerchantId.merchantId must not be blank",
-                        "strexMerchantId.shortNumberId must not be blank");
+                .containsExactlyInAnyOrder("merchantId must not be blank", "strexMerchantId.merchantId must not be blank");
 
         assertThat(catchThrowableOfType(() -> strexClient.putMerchantId("", strexMerchantIdWithBlanks), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("merchantId must not be blank", "strexMerchantId.merchantId must not be blank",
-                        "strexMerchantId.shortNumberId must not be blank");
+                .containsExactlyInAnyOrder("merchantId must not be blank", "strexMerchantId.merchantId must not be blank");
 
         assertThat(catchThrowableOfType(() -> strexClient.deleteMerchantId(null), InvalidInputException.class).getViolations())
                 .containsExactlyInAnyOrder("merchantId must not be blank");
