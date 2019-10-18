@@ -11,6 +11,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Strex transaction.
@@ -87,6 +89,16 @@ public class StrexTransaction implements Serializable {
      * One-Time-Password. Used with previously sent one-time-passwords.
      */
     private String oneTimePassword;
+
+    /**
+     * Tags associated with transaction. Can be used for statistics and grouping.
+     */
+    private List<String> tags;
+
+    /**
+     * Associated custom properties.
+     */
+    private Map<String, Object> properties;
 
     /**
      * Read-only: Whether billing has been performed. Null means unknown status.

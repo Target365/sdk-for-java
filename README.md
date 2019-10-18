@@ -3,7 +3,7 @@
 
 ### Getting started
 To get started please send us an email at <support@target365.no> containing your EC public key in DER(ANS.1) format.
-If you want, you can generate your EC public/private key-pair here: <https://crypto-utils.com/>.
+If you want, you can generate your EC public/private key-pair here: <https://8gwifi.org/sshfunctions.jsp>.
 
 Check out our [Java User Guide](USERGUIDE.md).
 
@@ -12,13 +12,13 @@ Check out our [Java User Guide](USERGUIDE.md).
 <dependency>
   <groupId>com.github.target365</groupId>
   <artifactId>target-365-sdk</artifactId>
-  <version>1.2</version>
+  <version>1.3.3</version>
 </dependency>
 ```
 
 ### Gradle
 ```
-implementation 'com.github.target365:target-365-sdk:1.2'
+implementation 'com.github.target365:target-365-sdk:1.3.3'
 ```
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.target365/target-365-sdk.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.target365%22%20AND%20a:%22target-365-sdk%22)
 
