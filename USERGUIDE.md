@@ -98,7 +98,8 @@ final StrexTransaction transaction = new StrexTransaction()
     .setRecipient("+4798079008")
     .setPrice(1d)
     .setServiceCode("10001")
-    .setInvoiceText("Dontaion test");
+    .setInvoiceText("Dontaion test")
+    .setSmsConfirmation(true);
 
 serviceClient.postStrexTransaction(transaction).get();
 ```
