@@ -13,6 +13,10 @@
     * [Create a Strex payment transaction](#create-a-strex-payment-transaction)
     * [Create a Strex payment transaction with one-time password](#create-a-strex-payment-transaction-with-one-time-password)
     * [Reverse a Strex payment transaction](#reverse-a-strex-payment-transaction)
+* [One-click transactions](#one-click-transactions)
+    * [One-time transaction](#one-time-transaction)
+    * [Setup subscription transaction](#setup-subscription-transaction)
+    * [Recurring transaction](#recurring-transaction)
 * [Lookup](#lookup)
     * [Address lookup for mobile number](#address-lookup-for-mobile-number)
 * [Keywords](#keywords)
@@ -136,6 +140,70 @@ serviceClient.postStrexTransaction(transaction).get();
 This example reverses a previously billed Strex payment transaction. The original transaction will not change, but a reversal transaction will be created that counters the previous transaction by a negative Price. The reversal is an asynchronous operation that usually takes a few seconds to finish.
 ```Java
 final String reversalTransactionId = serviceClient.reverseStrexTransaction(transactionId).get();
+```
+
+## One-click transactions
+
+### One-time transaction
+This example sets up a simple one-time transaction for one-click. After creation you can redirect the end-user to the one-click landing page by redirecting to http://betal.strex.no/{YOUR-ACCOUNT-ID}/{YOUR-TRANSACTION-ID} for PROD and http://strex-test.target365.io/{YOUR-ACCOUNT-ID}/{YOUR-TRANSACTION-ID} for TEST-environment.
+![one-time sequence](https://github.com/Target365/sdk-for-java/raw/master/oneclick-simple-transaction-flow.png "One-time sequence diagram")
+
+```Java
+final String transactionId = UUID.randomUUID().toString();
+final Map<String, Object> properties = new HashMap<String, Object>();
+properties.add("RedirectUrl", "https://your-return-url.com?id=" + transactionId);
+
+final StrexTransaction transaction = new StrexTransaction()
+    .setTransactionId(transactionId)
+    .setMerchantId("YOUR_MERCHANT_ID")
+    .setShortNumber("2002")
+    .setPrice(1d)
+    .setServiceCode("10001")
+    .setInvoiceText("Dontaion test")
+    .setProperties(properties);
+
+serviceClient.postStrexTransaction(transaction).get();
+
+// TODO: Redirect end-user to one-click landing page
+```
+### Setup subscription transaction
+This example sets up a subscription transaction for one-click. After creation you can redirect the end-user to the one-click landing page by redirecting to http://betal.strex.no/{YOUR-ACCOUNT-ID}/{YOUR-TRANSACTION-ID} for PROD and http://strex-test.target365.io/{YOUR-ACCOUNT-ID}/{YOUR-TRANSACTION-ID} for TEST-environment.
+![subscription sequence](https://github.com/Target365/sdk-for-java/raw/master/oneclick-subscription-flow.png "Subscription sequence diagram")
+```Java
+final String transactionId = UUID.randomUUID().toString();
+final Map<String, Object> properties = new HashMap<String, Object>();
+properties.add("RedirectUrl", "https://your-return-url.com?id=" + transactionId);
+properties.add("Recurring", true);
+
+final StrexTransaction transaction = new StrexTransaction()
+    .setTransactionId(transactionId)
+    .setMerchantId("YOUR_MERCHANT_ID")
+    .setShortNumber("2002")
+    .setPrice(1d)
+    .setServiceCode("10001")
+    .setInvoiceText("Dontaion test")
+    .setProperties(properties);
+
+serviceClient.postStrexTransaction(transaction).get();
+
+// TODO: Redirect end-user to one-click landing page
+```
+### Recurring transaction
+This example sets up a recurring transaction for one-click. After creation you can immediately get the transaction to get the status code - the server will wait up to 20 seconds for the async transaction to complete.
+![Recurring sequence](https://github.com/Target365/sdk-for-java/raw/master/oneclick-recurring-flow.png "Recurring sequence diagram")
+```Java
+final StrexTransaction transaction = new StrexTransaction()
+    .setTransactionId(UUID.randomUUID().toString())
+    .setRecipient("RECIPIENT_FROM_SUBSCRIPTION_TRANSACTION")
+    .setMerchantId("YOUR_MERCHANT_ID")
+    .setShortNumber("2002")
+    .setPrice(1d)
+    .setServiceCode("10001")
+    .setInvoiceText("Dontaion test");
+
+serviceClient.postStrexTransaction(transaction).get();
+
+// TODO: Check transaction.StatusCode
 ```
 
 ## Lookup
