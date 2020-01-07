@@ -54,6 +54,8 @@ public class EcdsaSigner implements Signer {
             final String rawEcPrivateKey = ecPrivateKeyAsString
                 .replaceAll("-----BEGIN EC PRIVATE KEY-----", "")
                 .replaceAll("-----END EC PRIVATE KEY-----", "")
+                .replaceAll("-----BEGIN PRIVATE KEY-----", "")
+                .replaceAll("-----END PRIVATE KEY-----", "")
                 .replaceAll("\n", "");
 
             final PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(DatatypeConverter.parseBase64Binary(rawEcPrivateKey));

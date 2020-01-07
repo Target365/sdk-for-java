@@ -65,6 +65,8 @@ public class EcdsaVerifier implements Verifier {
             final String rawEcPublicKey = ecPublicKeyAsString
                 .replaceAll("-----BEGIN EC PUBLIC KEY-----", "")
                 .replaceAll("-----END EC PUBLIC KEY-----", "")
+                .replaceAll("-----BEGIN PUBLIC KEY-----", "")
+                .replaceAll("-----END PUBLIC KEY-----", "")
                 .replaceAll("\n", "");
 
             final X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(DatatypeConverter.parseBase64Binary(rawEcPublicKey));

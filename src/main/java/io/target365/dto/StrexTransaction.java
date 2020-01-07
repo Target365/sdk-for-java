@@ -48,7 +48,6 @@ public class StrexTransaction implements Serializable {
     /**
      * Recipient phone number.
      */
-    @NotBlank
     private String recipient;
 
     /**

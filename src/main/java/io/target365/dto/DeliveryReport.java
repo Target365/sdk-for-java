@@ -1,21 +1,12 @@
 package io.target365.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import io.target365.dto.enums.Priority;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import org.hibernate.validator.constraints.Range;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
-import java.time.ZonedDateTime;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Delivery report

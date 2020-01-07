@@ -30,39 +30,6 @@ public class StrexClientTest extends ClientTest {
     }
 
     @Test
-    public void testMerchantId() throws Exception {
-        final StrexMerchantId strexMerchantId = new StrexMerchantId()
-                .setMerchantId("10000001")
-                .setShortNumberIds(new String[] {"NO-0000"})
-                .setPassword("test");
-
-        // Delete strex merchant id if it exists (data cleanup)
-        strexClient.getMerchantIds().get().stream().filter(smid -> smid.getMerchantId().equals(strexMerchantId.getMerchantId()))
-                .forEach(smid -> Util.wrap(() -> strexClient.deleteMerchantId(smid.getMerchantId()).get()));
-
-        // Create strex merchant id
-        strexClient.putMerchantId(strexMerchantId.getMerchantId(), strexMerchantId).get();
-
-        // Read strex merchant id
-        final StrexMerchantId created = strexClient.getMerchantId(strexMerchantId.getMerchantId()).get();
-        assertThat(created.getMerchantId()).isEqualTo(strexMerchantId.getMerchantId());
-        assertThat(created.getShortNumberIds()).isEqualTo(strexMerchantId.getShortNumberIds());
-        assertThat(created.getPassword()).isEqualTo(null);
-
-        // Update strex merchant id verify strex merchant id was updated
-        strexClient.putMerchantId(created.getMerchantId(), new StrexMerchantId().setMerchantId(created.getMerchantId())
-                .setShortNumberIds(created.getShortNumberIds()).setPassword(created.getPassword() + "-updated")).get();
-        final StrexMerchantId updated = strexClient.getMerchantId(created.getMerchantId()).get();
-        assertThat(updated.getMerchantId()).isEqualTo(strexMerchantId.getMerchantId());
-        assertThat(updated.getShortNumberIds()).isEqualTo(strexMerchantId.getShortNumberIds());
-        assertThat(updated.getPassword()).isEqualTo(null);
-
-        // Delete strex merchant id and verify that it has been deleted
-        strexClient.deleteMerchantId(created.getMerchantId()).get();
-        assertThat(strexClient.getMerchantId(strexMerchantId.getMerchantId()).get()).isNull();
-    }
-
-    @Test
     public void testOneTimePassword() throws Exception {
         final StrexOneTimePassword strexOneTimePassword = new StrexOneTimePassword()
                 .setTransactionId(UUID.randomUUID().toString())
@@ -86,7 +53,7 @@ public class StrexClientTest extends ClientTest {
     public void testTransaction() throws Exception {
         final StrexTransaction strexTransaction = new StrexTransaction()
                 .setTransactionId(UUID.randomUUID().toString())
-                .setMerchantId("10000001")
+                .setMerchantId("JavaSdkTest")
                 .setShortNumber("0000")
                 .setRecipient("+4798079008")
                 .setPrice(1000d)
@@ -184,14 +151,13 @@ public class StrexClientTest extends ClientTest {
 
         assertThat(catchThrowableOfType(() -> strexClient.postStrexTransaction(strexTransactionWithNulls), InvalidInputException.class).getViolations())
                 .containsExactlyInAnyOrder("transaction.transactionId must not be blank", "transaction.merchantId must not be blank",
-                        "transaction.shortNumber must not be blank", "transaction.recipient must not be blank",
-                        "transaction.price must not be null", "transaction.serviceCode must not be blank",
-                        "transaction.invoiceText must not be blank");
+                        "transaction.shortNumber must not be blank", "transaction.price must not be null",
+                        "transaction.serviceCode must not be blank", "transaction.invoiceText must not be blank");
 
         assertThat(catchThrowableOfType(() -> strexClient.postStrexTransaction(strexTransactionWithBlanks), InvalidInputException.class).getViolations())
                 .containsExactlyInAnyOrder("transaction.transactionId must not be blank", "transaction.merchantId must not be blank",
-                        "transaction.shortNumber must not be blank", "transaction.recipient must not be blank",
-                        "transaction.serviceCode must not be blank", "transaction.invoiceText must not be blank");
+                        "transaction.shortNumber must not be blank", "transaction.serviceCode must not be blank",
+                        "transaction.invoiceText must not be blank");
 
         assertThat(catchThrowableOfType(() -> strexClient.getStrexTransaction(null), InvalidInputException.class).getViolations())
                 .containsExactlyInAnyOrder("transactionId must not be blank");
