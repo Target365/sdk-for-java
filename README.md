@@ -5,13 +5,26 @@
 To get started please send us an email at <support@target365.no> containing your EC public key in PEM-format.
 You can generate your EC public/private key-pair using openssl like this:
 ```
-openssl ecparam -name prime256v1 -genkey -noout -out mykey.pem
+openssl ecparam -name prime256v1 -genkey -noout -out private.pem
 ```
-Use this openssl command to extract the public key in PEM-format:
+Use openssl to convert it to pk8 format which Java uses.
 ```
-openssl ec -in mykey.pem -pubout -out pubkey.pem
+openssl pkcs8 -topk8 -inform pem -in private.pem -outform pem -nocrypt -out private.key
 ```
-You can then send us the pubkey.pem file. The file should look something like this:
+The file `private.key` should look something like this:
+```
+-----BEGIN PRIVATE KEY-----
+MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgzNTTnuXqcrI5uSEa
+V6REzZG7hU+TzRl0Phe56k9/gPWhRANCAAQwB42Sozmtci4mDjnegx003FBV+9PQ
+eYBRvK7GScuDQo2+DjEn4hUsnKDZw9o4y+xRat+ItUGKcvVCMW8Swod5
+-----END PRIVATE KEY-----
+```
+
+Use this openssl command to extract the public key:
+```
+openssl ec -in private.key -pubout -out public.key
+```
+You can then send us the `public.key` file. The file should look something like this:
 ```
 -----BEGIN PUBLIC KEY-----
 MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEuVHnFqJxiBC9I5+8a8Sx66brBCz3
