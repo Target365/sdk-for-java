@@ -39,13 +39,13 @@ For more details on using the SDK we strongly suggest you check out our [Java Us
 <dependency>
   <groupId>com.github.target365</groupId>
   <artifactId>target-365-sdk</artifactId>
-  <version>1.3.4</version>
+  <version>1.3.5</version>
 </dependency>
 ```
 
 ### Gradle
 ```
-implementation 'com.github.target365:target-365-sdk:1.3.4'
+implementation 'com.github.target365:target-365-sdk:1.3.5'
 ```
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.target365/target-365-sdk.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.target365%22%20AND%20a:%22target-365-sdk%22)
 
