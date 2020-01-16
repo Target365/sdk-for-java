@@ -47,7 +47,7 @@ public class DeliveryReport implements Serializable {
     private String recipient;
 
    /**
-    * Operator associated with the message. Can be 'telenor', 'netcom', 'ice' or 'networknorway'.
+    * Operator associated with the message. Can be 'no.telenor', 'no.telia', 'no.ice' etc.
     */
     private String operator;
 

@@ -25,7 +25,7 @@ public interface StrexClient {
      * @param merchantId Strex merchant id.
      * @return A strex merchant id.
      */
-    Future<StrexMerchantId> getMerchantId(@NotBlank final String merchantId);
+    Future<StrexMerchantId> getMerchantId(@NotNull final String merchantId);
 
     /**
      * Updates or creates a new merchant id.
@@ -34,7 +34,7 @@ public interface StrexClient {
      * @param strexMerchantId Merchant data.
      * @return Void
      */
-    Future<Void> putMerchantId(@NotBlank final String merchantId, @NotNull @Valid final StrexMerchantId strexMerchantId);
+    Future<Void> putMerchantId(@NotNull final String merchantId, @NotNull @Valid final StrexMerchantId strexMerchantId);
 
     /**
      * Deletes a merchant id.
@@ -42,7 +42,7 @@ public interface StrexClient {
      * @param merchantId Strex merchant id.
      * @return Void
      */
-    Future<Void> deleteMerchantId(@NotBlank final String merchantId);
+    Future<Void> deleteMerchantId(@NotNull final String merchantId);
 
     /**
      * Creates a new one-time password.
@@ -58,7 +58,7 @@ public interface StrexClient {
      * @param transactionId Transaction id.
      * @return A strex one-time password.
      */
-    Future<StrexOneTimePassword> getStrexOneTimePassword(@NotBlank final String transactionId);
+    Future<StrexOneTimePassword> getStrexOneTimePassword(@NotNull final String transactionId);
 
     /**
      * Creates a new strex transaction.
@@ -74,7 +74,7 @@ public interface StrexClient {
      * @param transactionId Transaction id.
      * @return A strex transaction.
      */
-    Future<StrexTransaction> getStrexTransaction(@NotBlank final String transactionId);
+    Future<StrexTransaction> getStrexTransaction(@NotNull final String transactionId);
 
     /**
      * Reverses a previous strex transaction.
@@ -82,6 +82,6 @@ public interface StrexClient {
      * @param transactionId Transaction id.
      * @return Resource uri of reversed transaction.
      */
-    Future<String> reverseStrexTransaction(@NotBlank final String transactionId);
+    Future<String> reverseStrexTransaction(@NotNull final String transactionId);
 
 }

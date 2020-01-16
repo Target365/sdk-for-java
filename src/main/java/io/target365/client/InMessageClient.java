@@ -2,7 +2,7 @@ package io.target365.client;
 
 import io.target365.dto.InMessage;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.concurrent.Future;
 
 public interface InMessageClient {
@@ -14,6 +14,6 @@ public interface InMessageClient {
      * @param transactionId Message transaction id.
      * @return An in-message.
      */
-    Future<InMessage> getInMessage(@NotBlank final String shortNumberId, @NotBlank final String transactionId);
+    Future<InMessage> getInMessage(@NotNull final String shortNumberId, @NotNull final String transactionId);
 
 }

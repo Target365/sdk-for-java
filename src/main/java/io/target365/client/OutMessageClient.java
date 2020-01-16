@@ -18,7 +18,7 @@ public interface OutMessageClient {
      * @param msisdns MSISDNs to prepare as a string array.
      * @return Void
      */
-    Future<Void> prepareMsisdns(@NotEmpty final List<@NotBlank String> msisdns);
+    Future<Void> prepareMsisdns(@NotEmpty final List<@NotNull String> msisdns);
 
     /**
      * Posts a new batch of up to 100 out-messages.
@@ -42,7 +42,7 @@ public interface OutMessageClient {
      * @param transactionId Message transaction id.
      * @return An out-message.
      */
-    Future<OutMessage> getOutMessage(@NotBlank final String transactionId);
+    Future<OutMessage> getOutMessage(@NotNull final String transactionId);
 
     /**
      * Updates a future scheduled out-message.
@@ -58,6 +58,6 @@ public interface OutMessageClient {
      * @param transactionId Message transaction id.
      * @return Void
      */
-    Future<Void> deleteOutMessage(@NotBlank final String transactionId);
+    Future<Void> deleteOutMessage(@NotNull final String transactionId);
 
 }

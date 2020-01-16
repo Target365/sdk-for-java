@@ -30,7 +30,7 @@ public final class Util {
     }
 
     /**
-     * Wraps supplier which can throws {@link Exception} and converts it to {@link RuntimeException} if thrown
+     * Wraps supplier which can throw {@link Exception} and converts it to {@link RuntimeException} if thrown
      *
      * @param supplier Supplier which potentially can throw an {@link Exception}
      * @param <T>      Type of the supplier result
@@ -45,7 +45,7 @@ public final class Util {
     }
 
     /**
-     * Wraps supplier which can throws {@link Exception} and returns <code>null</code> if thrown
+     * Wraps supplier which can throw {@link Exception} and returns <code>null</code> if thrown
      *
      * @param supplier Supplier which potentially can throw an {@link Exception}
      * @param <T>      Type of the supplier result

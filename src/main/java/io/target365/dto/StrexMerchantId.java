@@ -7,7 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -26,7 +26,7 @@ public class StrexMerchantId implements Serializable {
     /**
      * Strex merchant id.
      */
-    @NotBlank
+    @NotNull
     private String merchantId;
 
     /**

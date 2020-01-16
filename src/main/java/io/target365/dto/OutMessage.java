@@ -7,10 +7,11 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import org.hibernate.validator.constraints.Range;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.*;
@@ -98,19 +99,19 @@ public class OutMessage implements Serializable {
     /**
      * Sender. Can be an alphanumeric string, a phone number or a short number.
      */
-    @NotBlank
+    @NotNull
     private String sender;
 
     /**
      * Recipient phone number.
      */
-    @NotBlank
+    @NotNull
     private String recipient;
 
     /**
      * Content. The actual text message content.
      */
-    @NotBlank
+    @NotNull
     private String content;
 
     /**
@@ -127,7 +128,8 @@ public class OutMessage implements Serializable {
     /**
      * Message Time-To-Live (TTL) in minutes. Must be between 5 and 1440. Default value is 120.
      */
-    @Range(min = 5, max = 1440)
+    @Min(value = 5)
+    @Max(value = 1440)
     private Integer timeToLive = 120;
 
     /**

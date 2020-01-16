@@ -37,15 +37,15 @@ public class VerificationClientTest extends ClientTest {
     @Test
     public void validation() throws Exception {
         assertThat(catchThrowableOfType(() -> verificationClient.verifySignature(null, null, null, null), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("method must not be blank", "uri must not be blank", "content must not be null",
-                        "xEcdsaSignatureString must not be blank", "xEcdsaSignatureString must conform to the pattern ^[A-Za-z0-9_-]+:[0-9]+:[A-Za-z0-9_-]+:[A-Za-z0-9_+/=]+$");
+                .containsExactlyInAnyOrder("method may not be null", "uri may not be null", "content may not be null",
+                        "xEcdsaSignatureString may not be null", "xEcdsaSignatureString must conform to the pattern ^[A-Za-z0-9_-]+:[0-9]+:[A-Za-z0-9_-]+:[A-Za-z0-9_+/=]+$");
 
         assertThat(catchThrowableOfType(() -> verificationClient.verifySignature("", "", "", ""), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("method must not be blank", "uri must not be blank", "xEcdsaSignatureString must not be blank",
+                .containsExactlyInAnyOrder("method may not be null", "uri may not be null", "xEcdsaSignatureString may not be null",
                         "xEcdsaSignatureString must conform to the pattern ^[A-Za-z0-9_-]+:[0-9]+:[A-Za-z0-9_-]+:[A-Za-z0-9_+/=]+$");
 
         assertThat(catchThrowableOfType(() -> verificationClient.verifySignature("", "", "", ""), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("method must not be blank", "uri must not be blank", "xEcdsaSignatureString must not be blank",
+                .containsExactlyInAnyOrder("method may not be null", "uri may not be null", "xEcdsaSignatureString may not be null",
                         "xEcdsaSignatureString must conform to the pattern ^[A-Za-z0-9_-]+:[0-9]+:[A-Za-z0-9_-]+:[A-Za-z0-9_+/=]+$");
 
         assertThat(catchThrowableOfType(() -> verificationClient.verifySignature("GET", "uri", "", ":::"), InvalidInputException.class).getViolations())

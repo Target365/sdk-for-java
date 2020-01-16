@@ -28,5 +28,6 @@ public class OutMessageBatch implements Serializable {
 
     @NotNull
     @Size(min = 1, max = 100)
+    @Valid
     private List<@NotNull @Valid OutMessage> items;
 }

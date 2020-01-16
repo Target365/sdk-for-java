@@ -27,19 +27,19 @@ public class StrexOneTimePassword implements Serializable {
     /**
      * Transaction id.
      */
-    @NotBlank
+    @NotNull
     private String transactionId;
 
     /**
      * Merchant id.
      */
-    @NotBlank
+    @NotNull
     private String merchantId;
 
     /**
      * Recipient phone number.
      */
-    @NotBlank
+    @NotNull
     private String recipient;
 
     /**

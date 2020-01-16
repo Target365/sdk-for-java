@@ -62,21 +62,21 @@ public class PublicKeyClientTest extends ClientTest {
     @Test
     public void validation() {
         assertThat(catchThrowableOfType(() -> publicKeysClient.getServerPublicKey(null), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("keyName must not be blank");
+                .containsExactlyInAnyOrder("keyName may not be null");
 
         assertThat(catchThrowableOfType(() -> publicKeysClient.getServerPublicKey(""), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("keyName must not be blank");
+                .containsExactlyInAnyOrder("keyName may not be null");
 
         assertThat(catchThrowableOfType(() -> publicKeysClient.getClientPublicKey(null), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("keyName must not be blank");
+                .containsExactlyInAnyOrder("keyName may not be null");
 
         assertThat(catchThrowableOfType(() -> publicKeysClient.getClientPublicKey(""), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("keyName must not be blank");
+                .containsExactlyInAnyOrder("keyName may not be null");
 
         assertThat(catchThrowableOfType(() -> publicKeysClient.deleteClientPublicKey(null), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("keyName must not be blank");
+                .containsExactlyInAnyOrder("keyName may not be null");
 
         assertThat(catchThrowableOfType(() -> publicKeysClient.deleteClientPublicKey(""), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("keyName must not be blank");
+                .containsExactlyInAnyOrder("keyName may not be null");
     }
 }

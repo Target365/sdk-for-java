@@ -39,9 +39,9 @@ public class InMessageClientTest extends ClientTest {
     @Test
     public void validation() {
         assertThat(catchThrowableOfType(() -> inMessageClient.getInMessage(null, null), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("shortNumberId must not be blank", "transactionId must not be blank");
+                .containsExactlyInAnyOrder("shortNumberId may not be null", "transactionId may not be null");
 
         assertThat(catchThrowableOfType(() -> inMessageClient.getInMessage("", ""), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("shortNumberId must not be blank", "transactionId must not be blank");
+                .containsExactlyInAnyOrder("shortNumberId may not be null", "transactionId may not be null");
     }
 }

@@ -70,39 +70,29 @@ public class KeywordClientTest extends ClientTest {
     @Test
     public void validation() {
         final Keyword keywordWithNulls = new Keyword();
-        final Keyword keywordWithBlanks = new Keyword().setShortNumberId("").setKeywordText("").setForwardUrl("");
 
         assertThat(catchThrowableOfType(() -> keywordClient.postKeyword(null), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("keyword must not be null");
+                .containsExactlyInAnyOrder("keyword may not be null");
 
         assertThat(catchThrowableOfType(() -> keywordClient.postKeyword(keywordWithNulls), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("keyword.shortNumberId must not be blank", "keyword.keywordText must not be blank",
-                        "keyword.mode must not be null", "keyword.forwardUrl must not be blank", "keyword.enabled must not be null");
-
-        assertThat(catchThrowableOfType(() -> keywordClient.postKeyword(keywordWithBlanks), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("keyword.shortNumberId must not be blank", "keyword.keywordText must not be blank",
-                        "keyword.mode must not be null", "keyword.forwardUrl must not be blank", "keyword.enabled must not be null");
+                .containsExactlyInAnyOrder("keyword.shortNumberId may not be null", "keyword.keywordText may not be null",
+                        "keyword.mode may not be null", "keyword.forwardUrl may not be null", "keyword.enabled may not be null");
 
         assertThat(catchThrowableOfType(() -> keywordClient.getKeyword(null), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("keywordId must not be blank");
+                .containsExactlyInAnyOrder("keywordId may not be null");
 
         assertThat(catchThrowableOfType(() -> keywordClient.getKeyword(""), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("keywordId must not be blank");
+                .containsExactlyInAnyOrder("keywordId may not be null");
 
         assertThat(catchThrowableOfType(() -> keywordClient.putKeyword(keywordWithNulls), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("keyword.shortNumberId must not be blank", "keyword.keywordId must not be null",
-                        "keyword.keywordText must not be blank", "keyword.mode must not be null", "keyword.forwardUrl must not be blank",
-                        "keyword.enabled must not be null");
-
-        assertThat(catchThrowableOfType(() -> keywordClient.putKeyword(keywordWithBlanks), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("keyword.shortNumberId must not be blank", "keyword.keywordId must not be null",
-                        "keyword.keywordText must not be blank", "keyword.mode must not be null", "keyword.forwardUrl must not be blank",
-                        "keyword.enabled must not be null");
+                .containsExactlyInAnyOrder("keyword.shortNumberId may not be null", "keyword.keywordId may not be null",
+                        "keyword.keywordText may not be null", "keyword.mode may not be null", "keyword.forwardUrl may not be null",
+                        "keyword.enabled may not be null");
 
         assertThat(catchThrowableOfType(() -> keywordClient.deleteKeyword(null), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("keywordId must not be blank");
+                .containsExactlyInAnyOrder("keywordId may not be null");
 
         assertThat(catchThrowableOfType(() -> keywordClient.deleteKeyword(""), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("keywordId must not be blank");
+                .containsExactlyInAnyOrder("keywordId may not be null");
     }
 }

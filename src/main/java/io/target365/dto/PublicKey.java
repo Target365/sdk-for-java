@@ -7,7 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
 
 /**
@@ -26,19 +26,19 @@ public class PublicKey {
     /**
      * Public key name
      */
-    @NotBlank
+    @NotNull
     private String name;
 
     /**
      * Public key in DER(ANS.1) base64 format.
      */
-    @NotBlank
+    @NotNull
     private String publicKeyString;
 
     /**
      * Signing algorithm used. Usually 'ECDsaP256'.
      */
-    @NotBlank
+    @NotNull
     private String signAlgo;
 
     /**

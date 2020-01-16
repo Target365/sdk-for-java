@@ -45,7 +45,7 @@ public interface KeywordClient {
      * @param keywordId Keyword id.
      * @return A keyword.
      */
-    Future<Keyword> getKeyword(@NotBlank final String keywordId);
+    Future<Keyword> getKeyword(@NotNull final String keywordId);
 
     /**
      * Updates a keyword.
@@ -61,5 +61,5 @@ public interface KeywordClient {
      * @param keywordId Keyword id.
      * @return Void
      */
-    Future<Void> deleteKeyword(@NotBlank final String keywordId);
+    Future<Void> deleteKeyword(@NotNull final String keywordId);
 }

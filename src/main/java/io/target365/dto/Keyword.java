@@ -7,7 +7,6 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
@@ -35,13 +34,13 @@ public class Keyword implements Serializable {
     /**
      * Short number associated with keyword.
      */
-    @NotBlank
+    @NotNull
     private String shortNumberId;
 
     /**
      * Keyword text.
      */
-    @NotBlank
+    @NotNull
     private String keywordText;
 
     /**
@@ -53,7 +52,7 @@ public class Keyword implements Serializable {
     /**
      * Keyword forward url to post incoming messages.
      */
-    @NotBlank
+    @NotNull
     private String forwardUrl;
 
     /**

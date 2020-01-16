@@ -7,7 +7,6 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
@@ -30,19 +29,19 @@ public class StrexTransaction implements Serializable {
     /**
      * Transaction id. Must be unique per message if used. Can be used for guarding against resending messages.
      */
-    @NotBlank
+    @NotNull
     private String transactionId;
 
     /**
      * Merchant id.
      */
-    @NotBlank
+    @NotNull
     private String merchantId;
 
     /**
      * Short number.
      */
-    @NotBlank
+    @NotNull
     private String shortNumber;
 
     /**
@@ -59,13 +58,13 @@ public class StrexTransaction implements Serializable {
     /**
      * Service code.
      */
-    @NotBlank
+    @NotNull
     private String serviceCode;
 
     /**
      * Invoice text.
      */
-    @NotBlank
+    @NotNull
     private String invoiceText;
 
     /**

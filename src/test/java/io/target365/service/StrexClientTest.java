@@ -6,7 +6,6 @@ import io.target365.dto.StrexMerchantId;
 import io.target365.dto.StrexOneTimePassword;
 import io.target365.dto.StrexTransaction;
 import io.target365.exception.InvalidInputException;
-import io.target365.util.Util;
 import org.assertj.core.data.Percentage;
 import org.junit.Before;
 import org.junit.Test;
@@ -95,80 +94,67 @@ public class StrexClientTest extends ClientTest {
         final StrexMerchantId strexMerchantIdWithBlanks = new StrexMerchantId().setMerchantId("").setShortNumberIds(null);
 
         assertThat(catchThrowableOfType(() -> strexClient.getMerchantId(null), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("merchantId must not be blank");
+                .containsExactlyInAnyOrder("merchantId may not be null");
 
         assertThat(catchThrowableOfType(() -> strexClient.getMerchantId(""), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("merchantId must not be blank");
+                .containsExactlyInAnyOrder("merchantId may not be null");
 
         assertThat(catchThrowableOfType(() -> strexClient.putMerchantId(null, null), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("merchantId must not be blank", "strexMerchantId must not be null");
+                .containsExactlyInAnyOrder("merchantId may not be null", "strexMerchantId may not be null");
 
         assertThat(catchThrowableOfType(() -> strexClient.putMerchantId("", strexMerchantIdWithNulls), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("merchantId must not be blank", "strexMerchantId.merchantId must not be blank");
+                .containsExactlyInAnyOrder("strexMerchantId.merchantId may not be null", "merchantId may not be null");
 
         assertThat(catchThrowableOfType(() -> strexClient.putMerchantId("", strexMerchantIdWithBlanks), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("merchantId must not be blank", "strexMerchantId.merchantId must not be blank");
+                .containsExactlyInAnyOrder("merchantId may not be null");
 
         assertThat(catchThrowableOfType(() -> strexClient.deleteMerchantId(null), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("merchantId must not be blank");
+                .containsExactlyInAnyOrder("merchantId may not be null");
 
         assertThat(catchThrowableOfType(() -> strexClient.deleteMerchantId(""), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("merchantId must not be blank");
+                .containsExactlyInAnyOrder("merchantId may not be null");
     }
 
     @Test
     public void validationOneTimePassword() {
         final StrexOneTimePassword strexOneTimePasswordWithNulls = new StrexOneTimePassword();
-        final StrexOneTimePassword strexOneTimePasswordWithBlanks = new StrexOneTimePassword().setTransactionId("")
-                .setMerchantId("").setRecipient("").setRecurring(Boolean.FALSE);
 
         assertThat(catchThrowableOfType(() -> strexClient.postStrexOneTimePassword(null), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("oneTimePassword must not be null");
+                .containsExactlyInAnyOrder("oneTimePassword may not be null");
 
         assertThat(catchThrowableOfType(() -> strexClient.postStrexOneTimePassword(strexOneTimePasswordWithNulls), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("oneTimePassword.transactionId must not be blank", "oneTimePassword.merchantId must not be blank",
-                        "oneTimePassword.recipient must not be blank", "oneTimePassword.recurring must not be null");
-
-        assertThat(catchThrowableOfType(() -> strexClient.postStrexOneTimePassword(strexOneTimePasswordWithBlanks), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("oneTimePassword.transactionId must not be blank", "oneTimePassword.merchantId must not be blank",
-                        "oneTimePassword.recipient must not be blank");
+                .containsExactlyInAnyOrder("oneTimePassword.transactionId may not be null", "oneTimePassword.merchantId may not be null",
+                        "oneTimePassword.recipient may not be null", "oneTimePassword.recurring may not be null");
 
         assertThat(catchThrowableOfType(() -> strexClient.getStrexOneTimePassword(null), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("transactionId must not be blank");
+                .containsExactlyInAnyOrder("transactionId may not be null");
 
         assertThat(catchThrowableOfType(() -> strexClient.getStrexOneTimePassword(""), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("transactionId must not be blank");
+                .containsExactlyInAnyOrder("transactionId may not be null");
     }
 
     @Test
     public void validationTransaction() {
         final StrexTransaction strexTransactionWithNulls = new StrexTransaction();
-        final StrexTransaction strexTransactionWithBlanks = new StrexTransaction().setTransactionId("")
-                .setMerchantId("").setRecipient("").setShortNumber("").setRecipient("").setPrice(1000d).setServiceCode("").setInvoiceText("");
 
         assertThat(catchThrowableOfType(() -> strexClient.postStrexTransaction(null), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("transaction must not be null");
+                .containsExactlyInAnyOrder("transaction may not be null");
 
         assertThat(catchThrowableOfType(() -> strexClient.postStrexTransaction(strexTransactionWithNulls), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("transaction.transactionId must not be blank", "transaction.merchantId must not be blank",
-                        "transaction.shortNumber must not be blank", "transaction.price must not be null",
-                        "transaction.serviceCode must not be blank", "transaction.invoiceText must not be blank");
-
-        assertThat(catchThrowableOfType(() -> strexClient.postStrexTransaction(strexTransactionWithBlanks), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("transaction.transactionId must not be blank", "transaction.merchantId must not be blank",
-                        "transaction.shortNumber must not be blank", "transaction.serviceCode must not be blank",
-                        "transaction.invoiceText must not be blank");
+                .containsExactlyInAnyOrder("transaction.transactionId may not be null", "transaction.merchantId may not be null",
+                        "transaction.shortNumber may not be null", "transaction.price may not be null",
+                        "transaction.serviceCode may not be null", "transaction.invoiceText may not be null");
 
         assertThat(catchThrowableOfType(() -> strexClient.getStrexTransaction(null), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("transactionId must not be blank");
+                .containsExactlyInAnyOrder("transactionId may not be null");
 
         assertThat(catchThrowableOfType(() -> strexClient.getStrexTransaction(""), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("transactionId must not be blank");
+                .containsExactlyInAnyOrder("transactionId may not be null");
 
         assertThat(catchThrowableOfType(() -> strexClient.reverseStrexTransaction(null), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("transactionId must not be blank");
+                .containsExactlyInAnyOrder("transactionId may not be null");
 
         assertThat(catchThrowableOfType(() -> strexClient.reverseStrexTransaction(""), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("transactionId must not be blank");
+                .containsExactlyInAnyOrder("transactionId may not be null");
     }
 }

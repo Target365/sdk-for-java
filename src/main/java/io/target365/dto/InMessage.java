@@ -7,7 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -39,19 +39,19 @@ public class InMessage implements Serializable {
     /**
      * Sender. Can be an alphanumeric string, a phone number or a short number.
      */
-    @NotBlank
+    @NotNull
     private String sender;
 
     /**
      * Recipient phone number.
      */
-    @NotBlank
+    @NotNull
     private String recipient;
 
     /**
      * Content. The actual text message content.
      */
-    @NotBlank
+    @NotNull
     private String content;
 
     /**

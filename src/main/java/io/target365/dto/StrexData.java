@@ -26,19 +26,19 @@ public class StrexData {
     /**
      * Merchant id.
      */
-    @NotBlank
+    @NotNull
     private String merchantId;
 
     /**
      * Service code.
      */
-    @NotBlank
+    @NotNull
     private String serviceCode;
 
     /**
      * Invoice text.
      */
-    @NotBlank
+    @NotNull
     private String invoiceText;
 
     /**

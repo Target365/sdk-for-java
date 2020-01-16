@@ -39,9 +39,9 @@ public class LookupClientTest extends ClientTest {
     @Test
     public void validation() {
         assertThat(catchThrowableOfType(() -> lookupClient.addressLookup(null), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("msisdn must not be blank");
+                .containsExactlyInAnyOrder("msisdn may not be null");
 
         assertThat(catchThrowableOfType(() -> lookupClient.addressLookup(""), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("msisdn must not be blank");
+                .containsExactlyInAnyOrder("msisdn may not be null");
     }
 }

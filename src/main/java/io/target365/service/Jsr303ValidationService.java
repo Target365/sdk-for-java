@@ -39,7 +39,7 @@ public class Jsr303ValidationService implements ValidationService {
 
         @Override
         public List<String> valid() {
-            return object == null ? ImmutableList.of(field + " must not be null") : ImmutableList.of();
+            return object == null ? ImmutableList.of(field + " may not be null") : ImmutableList.of();
         }
 
         public static Validator of(final String field, final Object value) {
@@ -79,7 +79,7 @@ public class Jsr303ValidationService implements ValidationService {
         @Override
         public List<String> valid() {
             return !NotNullValidator.of(field, value).valid().isEmpty() || value.isEmpty()
-                    ? ImmutableList.of(field + " must not be blank") : ImmutableList.of();
+                    ? ImmutableList.of(field + " may not be null") : ImmutableList.of();
         }
 
         public static Validator of(final String field, final String string) {
