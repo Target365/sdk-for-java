@@ -1,6 +1,7 @@
 package io.target365.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.target365.dto.enums.DeliveryMode;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,10 +34,58 @@ public class StrexTransaction implements Serializable {
     private String transactionId;
 
     /**
-     * Merchant id.
+     * Session id. Can be used as the clients to get all out-messages associated to a specific session.
+     */
+    private String sessionId;
+
+    /**
+     * Correlation id. Can be used as the clients correlation id for tracking messages and delivery reports.
+     */
+    private String correlationId;
+
+    /**
+     * Merchant id - provided by Strex.
      */
     @NotNull
     private String merchantId;
+
+    /**
+     * Service code - provided by Strex.
+     */
+    @NotNull
+    private String serviceCode;
+
+    /**
+     * Business model - optional and provided by Strex.
+     */
+    private String businessModel;
+
+    /**
+     * Age requirements - typically 18 for subscriptions and adult content. Default value is 0.
+     */
+    private int age;
+
+    /**
+     * Whether the transaction should be flagged as restricted - provided by Strex.
+     */
+    private boolean isRestricted;
+
+    /**
+     * Whether to use sms confirmation.
+     */
+    private Boolean smsConfirmation;
+
+    /**
+     * Invoice text - this shows up on the Strex portal for end users.
+     */
+    @NotNull
+    private String invoiceText;
+
+    /**
+     * Price - price to charge in whole NOK. Two decimals are supported (øre).
+     */
+    @NotNull
+    private Double price;
 
     /**
      * Short number.
@@ -50,43 +99,20 @@ public class StrexTransaction implements Serializable {
     private String recipient;
 
     /**
-     * Price.
+     * Optional SMS text message content (Not used for direct billing).
      */
-    @NotNull
-    private Double price;
-
-    /**
-     * Service code.
-     */
-    @NotNull
-    private String serviceCode;
-
-    /**
-     * Invoice text.
-     */
-    @NotNull
-    private String invoiceText;
-
-    /**
-     * Status code.
-     * See {@link io.target365.dto.enums.StatusCode} for possible values
-     */
-    private String statusCode;
-
-    /**
-     * Session id. Can be used as the clients to get all out-messages associated to a specific session.
-     */
-    private String sessionId;
-
-    /**
-     * Correlation id. Can be used as the clients correlation id for tracking messages and delivery reports.
-     */
-    private String correlationId;
+    private String content;
 
     /**
      * One-Time-Password. Used with previously sent one-time-passwords.
      */
     private String oneTimePassword;
+
+    /**
+     * Message delivery mode. Can be either 'AtLeastOnce' or 'AtMostOnce'. Default value is AtMostOnce.
+     * See {@link io.target365.dto.enums.DeliveryMode} for possible values
+     */
+    private String deliveryMode = DeliveryMode.AtMostOnce.name();
 
     /**
      * Tags associated with transaction. Can be used for statistics and grouping.
@@ -99,11 +125,6 @@ public class StrexTransaction implements Serializable {
     private Map<String, Object> properties;
 
     /**
-     * Read-only: Whether billing has been performed. Null means unknown status.
-     */
-    private Boolean billed;
-
-    /**
      * Created time. Read-only property.
      */
     private ZonedDateTime created;
@@ -113,4 +134,30 @@ public class StrexTransaction implements Serializable {
      */
     private ZonedDateTime lastModified;
 
+    /**
+     * Status code.
+     * See {@link io.target365.dto.enums.StatusCode} for possible values.
+     */
+    private String statusCode;
+
+    /**
+     * Detailed status code.
+     * See {@link io.target365.dto.enums.DetailedStatusCode} for possible values.
+     */
+    private String detailedStatusCode;
+
+    /**
+     * Read-only: Whether billing has been performed. Null means unknown status.
+     */
+    private Boolean billed;
+
+    /**
+     * Read-only: Strex payment gateway result code.
+     */
+    private String resultCode;
+
+    /**
+     * Read-only: Strex payment gateway result description.
+     */
+    private String resultDescription;
 }

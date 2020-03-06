@@ -7,7 +7,6 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -24,25 +23,45 @@ public class StrexData {
     private static final long serialVersionUID = -4215212257234662326L;
 
     /**
-     * Merchant id.
+     * Merchant id - provided by Strex.
      */
     @NotNull
     private String merchantId;
 
     /**
-     * Service code.
+     * Service code - provided by Strex.
      */
     @NotNull
     private String serviceCode;
 
     /**
-     * Invoice text.
+     * Business model - optional and provided by Strex.
+     */
+    private String businessModel;
+
+    /**
+     * Age requirements - typically 18 for subscriptions and adult content. Default value is 0.
+     */
+    private int age;
+
+    /**
+     * Whether the transaction should be flagged as restricted - provided by Strex.
+     */
+    private boolean isRestricted;
+
+    /**
+     * Whether to use sms confirmation.
+     */
+    private Boolean smsConfirmation;
+
+    /**
+     * Invoice text - this shows up on the Strex portal for end users.
      */
     @NotNull
     private String invoiceText;
 
     /**
-     * Price.
+     * Price - price to charge in whole NOK. Two decimals are supported (øre).
      */
     @NotNull
     private Double price;
@@ -52,4 +71,13 @@ public class StrexData {
      */
     private Boolean billed;
 
+    /**
+     * Read-only: Strex payment gateway result code.
+     */
+    private String resultCode;
+
+    /**
+     * Read-only: Strex payment gateway result description.
+     */
+    private String resultDescription;
 }

@@ -99,4 +99,9 @@ public enum DetailedStatusCode {
     * Subscriber too young.
     */
     SubscriberTooYoung,
+
+    /**
+    * Timeout error.
+    */
+    TimeoutError,
 }

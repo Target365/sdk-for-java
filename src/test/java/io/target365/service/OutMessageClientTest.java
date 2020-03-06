@@ -6,6 +6,7 @@ import io.target365.client.Target365Client;
 import io.target365.dto.OutMessage;
 import io.target365.dto.OutMessageBatch;
 import io.target365.dto.StrexData;
+import io.target365.dto.enums.DeliveryMode;
 import io.target365.dto.enums.Priority;
 import io.target365.exception.InvalidInputException;
 import org.junit.Before;
@@ -50,7 +51,7 @@ public class OutMessageClientTest extends ClientTest {
                 .setSendTime(ZonedDateTime.now().plus(1, ChronoUnit.DAYS));
 
         assertThat(outMessage.getPriority()).isEqualTo(Priority.Normal.name());
-        assertThat(outMessage.getDeliveryMode()).isEqualTo(OutMessage.DeliveryMode.AtMostOnce);
+        assertThat(outMessage.getDeliveryMode()).isEqualTo(DeliveryMode.AtMostOnce.name());
 
         // Prepare msisdns
         outMessageClient.prepareMsisdns(ImmutableList.of(msisdn)).get();
@@ -61,7 +62,18 @@ public class OutMessageClientTest extends ClientTest {
         final String outMessageForBatchTransactionId = outMessageForBatchTransactionIds.get(0);
 
         // Read out message for batch
-        final OutMessage createdOutMessageBatch = outMessageClient.getOutMessage(outMessageForBatchTransactionId).get();
+        final ZonedDateTime timeout = ZonedDateTime.now().plusSeconds(30);
+        OutMessage createdOutMessageBatch = null;
+
+        while (ZonedDateTime.now().isBefore(timeout)) {
+            createdOutMessageBatch = outMessageClient.getOutMessage(outMessageForBatchTransactionId).get();
+
+            if (createdOutMessageBatch != null)
+                break;
+
+            Thread.sleep(2000);
+        }
+
         assertThat(createdOutMessageBatch.getSender()).isEqualTo(outMessageForBatch.getSender());
         assertThat(createdOutMessageBatch.getRecipient()).isEqualTo(outMessageForBatch.getRecipient());
         assertThat(createdOutMessageBatch.getContent()).isEqualTo(outMessageForBatch.getContent());

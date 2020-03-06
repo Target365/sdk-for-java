@@ -1,6 +1,7 @@
 package io.target365.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.target365.dto.enums.DeliveryMode;
 import io.target365.dto.enums.Priority;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -139,9 +140,10 @@ public class OutMessage implements Serializable {
     private String priority = Priority.Normal.name();
 
     /**
-     * Message delivery mode. Can be either AtLeastOnce or AtMostOnce. Default value is AtMostOnce.
+     * Message delivery mode. Can be either 'AtLeastOnce' or 'AtMostOnce'. Default value is AtMostOnce.
+     * See {@link io.target365.dto.enums.DeliveryMode} for possible values
      */
-    private DeliveryMode deliveryMode = DeliveryMode.AtMostOnce;
+    private String deliveryMode = DeliveryMode.AtMostOnce.name();
 
     /**
      * Delivery report url.
@@ -199,12 +201,4 @@ public class OutMessage implements Serializable {
      * Associated custom properties.
      */
     private Map<String, Object> properties;
-
-    /**
-     * Delivery mode
-     */
-    public enum DeliveryMode {
-        AtLeastOnce, AtMostOnce
-    }
-
 }
