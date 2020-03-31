@@ -54,7 +54,17 @@ public class StrexOneTimePassword implements Serializable {
     private Boolean recurring;
 
     /**
-     * One-time password message. This is prefixed to the generated password message.
+     * Text string which will be prepended to the standard Strex SMS message sent to the subscriber.
+     */
+    private String messagePrefix;
+
+    /**
+     * Text string which will be appended to the standard Strex SMS message sent to the subscriber.
+     */
+    private String messageSuffix;
+
+    /**
+     * Deprecated, use MessagePrefix and MessageSuffix instead.
      */
     private String message;
 
