@@ -95,8 +95,12 @@ serviceClient.deleteOutMessage(transactionId).get();
 
 ### Create a Strex payment transaction
 This example creates a 1 NOK Strex payment transaction that the end user will confirm by replying "OK" to an SMS from Strex.
-You can use MessagePrefix and MessageSuffix to influence the start and end of the SMS sent by Strex.
+You can use message_prefix and message_suffix custom properties to influence the start and end of the SMS sent by Strex.
 ```Java
+final Map<String, Object> properties = new HashMap<String, Object>();
+properties.add("message_prefix", "Dear customer...");
+properties.add("message_suffix", "Best regards...");
+
 final StrexTransaction transaction = new StrexTransaction()
     .setTransactionId(UUID.randomUUID().toString())
     .setMerchantId("YOUR_MERCHANT_ID")
@@ -107,7 +111,8 @@ final StrexTransaction transaction = new StrexTransaction()
     .setInvoiceText("Donation test")
     .setMessagePrefix("Dear customer...")
     .setMessageSuffix("Best Regards...")
-    .setSmsConfirmation(true);
+    .setSmsConfirmation(true)
+    .setProperties(properties);
 
 serviceClient.postStrexTransaction(transaction).get();
 ```
