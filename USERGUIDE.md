@@ -95,6 +95,7 @@ serviceClient.deleteOutMessage(transactionId).get();
 
 ### Create a Strex payment transaction
 This example creates a 1 NOK Strex payment transaction that the end user will confirm by replying "OK" to an SMS from Strex.
+You can use MessagePrefix and MessageSuffix to influence the start and end of the SMS sent by Strex.
 ```Java
 final StrexTransaction transaction = new StrexTransaction()
     .setTransactionId(UUID.randomUUID().toString())
@@ -104,6 +105,8 @@ final StrexTransaction transaction = new StrexTransaction()
     .setPrice(1d)
     .setServiceCode("10001")
     .setInvoiceText("Donation test")
+    .setMessagePrefix("Dear customer...")
+    .setMessageSuffix("Best Regards...")
     .setSmsConfirmation(true);
 
 serviceClient.postStrexTransaction(transaction).get();
@@ -111,6 +114,7 @@ serviceClient.postStrexTransaction(transaction).get();
 
 ### Create a Strex payment transaction with one-time password
 This example creates a Strex one-time password sent to the end user and get completes the payment by using the one-time password.
+You can use MessagePrefix and MessageSuffix to influence the start and end of the SMS sent by Strex.
 ```Java
 final String transactionId = UUID.randomUUID().toString();
 
@@ -118,6 +122,8 @@ final StrexOneTimePassword strexOneTimePassword = new StrexOneTimePassword()
     .setTransactionId(transactionId)
     .setMerchantId("10000002")
     .setRecipient("+4798079008")
+    .setMessagePrefix("Dear customer...")
+    .setMessageSuffix("Best Regards...")
     .setRecurring(Boolean.FALSE);
 
 serviceClient.postStrexOneTimePassword(strexOneTimePassword).get();
