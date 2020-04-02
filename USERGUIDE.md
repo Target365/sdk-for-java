@@ -98,8 +98,8 @@ This example creates a 1 NOK Strex payment transaction that the end user will co
 You can use message_prefix and message_suffix custom properties to influence the start and end of the SMS sent by Strex.
 ```Java
 final Map<String, Object> properties = new HashMap<String, Object>();
-properties.add("message_prefix", "Dear customer...");
-properties.add("message_suffix", "Best regards...");
+properties.put("message_prefix", "Dear customer...");
+properties.put("message_suffix", "Best regards...");
 
 final StrexTransaction transaction = new StrexTransaction()
     .setTransactionId(UUID.randomUUID().toString())
@@ -109,12 +109,10 @@ final StrexTransaction transaction = new StrexTransaction()
     .setPrice(1d)
     .setServiceCode("10001")
     .setInvoiceText("Donation test")
-    .setMessagePrefix("Dear customer...")
-    .setMessageSuffix("Best Regards...")
     .setSmsConfirmation(true)
     .setProperties(properties);
 
-serviceClient.postStrexTransaction(transaction).get();
+strexClient.postStrexTransaction(transaction).get();
 ```
 
 ### Create a Strex payment transaction with one-time password
@@ -166,7 +164,7 @@ If the MSISDN can't be determined automatically on the landing page the end user
 ```Java
 final String transactionId = UUID.randomUUID().toString();
 final Map<String, Object> properties = new HashMap<String, Object>();
-properties.add("RedirectUrl", "https://your-return-url.com?id=" + transactionId);
+properties.put("RedirectUrl", "https://your-return-url.com?id=" + transactionId);
 
 final StrexTransaction transaction = new StrexTransaction()
     .setTransactionId(transactionId)
@@ -187,8 +185,8 @@ This example sets up a subscription transaction for one-click. After creation yo
 ```Java
 final String transactionId = UUID.randomUUID().toString();
 final Map<String, Object> properties = new HashMap<String, Object>();
-properties.add("RedirectUrl", "https://your-return-url.com?id=" + transactionId);
-properties.add("Recurring", true);
+properties.put("RedirectUrl", "https://your-return-url.com?id=" + transactionId);
+properties.put("Recurring", true);
 
 final StrexTransaction transaction = new StrexTransaction()
     .setTransactionId(transactionId)
