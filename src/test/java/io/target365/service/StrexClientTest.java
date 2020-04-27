@@ -55,7 +55,8 @@ public class StrexClientTest extends ClientTest {
                 .setMerchantId("JavaSdkTest")
                 .setShortNumber("0000")
                 .setRecipient("+4798079008")
-                .setPrice(1000d)
+                .setPrice(10d)
+                .setTimeout(10)
                 .setServiceCode("10001")
                 .setInvoiceText("Test Invoice Text");
 
@@ -70,6 +71,7 @@ public class StrexClientTest extends ClientTest {
         assertThat(createdStrexTransaction.getShortNumber()).isEqualTo(strexTransaction.getShortNumber());
         assertThat(createdStrexTransaction.getRecipient()).isEqualTo(strexTransaction.getRecipient());
         assertThat(createdStrexTransaction.getPrice()).isCloseTo(strexTransaction.getPrice(), Percentage.withPercentage(1));
+        assertThat(createdStrexTransaction.getTimeout().intValue()).isEqualTo(strexTransaction.getTimeout().intValue());
         assertThat(createdStrexTransaction.getServiceCode()).isEqualTo(strexTransaction.getServiceCode());
         assertThat(createdStrexTransaction.getInvoiceText()).isEqualTo(strexTransaction.getInvoiceText());
 

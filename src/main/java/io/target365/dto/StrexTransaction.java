@@ -88,6 +88,11 @@ public class StrexTransaction implements Serializable {
     private Double price;
 
     /**
+     * Timeout in minutes for transactions which trigger end user registration. Default value is 5.
+     */
+    private Integer timeout = new Integer(5);
+
+    /**
      * Short number.
      */
     @NotNull
