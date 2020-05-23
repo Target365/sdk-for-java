@@ -1,5 +1,6 @@
 package io.target365.client;
 
+import io.target365.dto.OneClickConfig;
 import io.target365.dto.StrexMerchantId;
 import io.target365.dto.StrexOneTimePassword;
 import io.target365.dto.StrexTransaction;
@@ -26,23 +27,6 @@ public interface StrexClient {
      * @return A strex merchant id.
      */
     Future<StrexMerchantId> getMerchantId(@NotNull final String merchantId);
-
-    /**
-     * Updates or creates a new merchant id.
-     *
-     * @param merchantId      Strex merchant id.
-     * @param strexMerchantId Merchant data.
-     * @return Void
-     */
-    Future<Void> putMerchantId(@NotNull final String merchantId, @NotNull @Valid final StrexMerchantId strexMerchantId);
-
-    /**
-     * Deletes a merchant id.
-     *
-     * @param merchantId Strex merchant id.
-     * @return Void
-     */
-    Future<Void> deleteMerchantId(@NotNull final String merchantId);
 
     /**
      * Creates a new one-time password.
@@ -84,4 +68,19 @@ public interface StrexClient {
      */
     Future<String> reverseStrexTransaction(@NotNull final String transactionId);
 
+    /**
+     * Saves or updates a one-click config.
+     *
+     * @param config One-click config.
+     * @return Void
+     */
+    Future<Void> saveOneClickConfig(@NotNull @Valid final OneClickConfig config);
+
+    /**
+     * Gets a one-click config.
+     *
+     * @param configId One-click config id.
+     * @return One-click config.
+     */
+    Future<OneClickConfig> getOneClickConfig(@NotNull final String configId);
 }

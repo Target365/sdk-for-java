@@ -4,15 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import io.target365.dto.InMessage;
-import io.target365.dto.Keyword;
-import io.target365.dto.LookupResult;
-import io.target365.dto.OutMessage;
-import io.target365.dto.OutMessageBatch;
-import io.target365.dto.PublicKey;
-import io.target365.dto.StrexMerchantId;
-import io.target365.dto.StrexOneTimePassword;
-import io.target365.dto.StrexTransaction;
+import io.target365.dto.*;
 import io.target365.handler.CreatedResponseParser;
 import io.target365.handler.InvalidResponseHandler;
 import io.target365.handler.NotFoundResponseParser;
@@ -227,23 +219,6 @@ public class Target365Client implements Client {
     }
 
     @Override
-    public Future<Void> putMerchantId(final String merchantId, final StrexMerchantId strexMerchantId) {
-        validationService.validate(NotBlankValidator.of("merchantId", merchantId), NotNullValidator.of("strexMerchantId", strexMerchantId),
-                ValidValidator.of("strexMerchantId", strexMerchantId));
-
-        return doPut("api/strex/merchants/" + Util.safeEncode(merchantId), objectMappingService.toString(strexMerchantId), Status.NO_CONTENT)
-                .thenApplyAsync(response -> VOID);
-    }
-
-    @Override
-    public Future<Void> deleteMerchantId(final String merchantId) {
-        validationService.validate(NotBlankValidator.of("merchantId", merchantId));
-
-        return doDelete("api/strex/merchants/" + Util.safeEncode(merchantId), Status.NO_CONTENT)
-                .thenApplyAsync(response -> VOID);
-    }
-
-    @Override
     public Future<Void> postStrexOneTimePassword(final StrexOneTimePassword oneTimePassword) {
         validationService.validate(NotNullValidator.of("oneTimePassword", oneTimePassword),
                 ValidValidator.of("oneTimePassword", oneTimePassword));
@@ -277,6 +252,24 @@ public class Target365Client implements Client {
         return doGet("api/strex/transactions/" + Util.safeEncode(transactionId), ImmutableList.of(Status.OK, Status.NOT_FOUND))
                 .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response))
                 .thenApplyAsync(string -> objectMappingService.toObject(string, StrexTransaction.class));
+    }
+
+    @Override
+    public Future<Void> saveOneClickConfig(final OneClickConfig config) {
+        validationService.validate(NotNullValidator.of("config", config),
+                ValidValidator.of("config", config));
+
+        return doPut("api/one-click/configs/" + Util.safeEncode(config.getConfigId()), objectMappingService.toString(config), Status.CREATED)
+                .thenApplyAsync(response -> VOID);
+    }
+
+    @Override
+    public Future<OneClickConfig> getOneClickConfig(final String configId) {
+        validationService.validate(NotBlankValidator.of("configId", configId));
+
+        return doGet("api/one-click/configs/" + Util.safeEncode(configId), ImmutableList.of(Status.OK, Status.NOT_FOUND))
+                .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response))
+                .thenApplyAsync(string -> objectMappingService.toObject(string, OneClickConfig.class));
     }
 
     @Override

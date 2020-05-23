@@ -2,6 +2,7 @@ package io.target365.service;
 
 import io.target365.client.StrexClient;
 import io.target365.client.Target365Client;
+import io.target365.dto.OneClickConfig;
 import io.target365.dto.StrexMerchantId;
 import io.target365.dto.StrexOneTimePassword;
 import io.target365.dto.StrexTransaction;
@@ -57,6 +58,7 @@ public class StrexClientTest extends ClientTest {
                 .setRecipient("+4798079008")
                 .setPrice(10d)
                 .setTimeout(10)
+                .setContent("Java SDK Test")
                 .setServiceCode("10001")
                 .setInvoiceText("Test Invoice Text");
 
@@ -91,6 +93,46 @@ public class StrexClientTest extends ClientTest {
     }
 
     @Test
+    public void testOneClickConfig() throws Exception {
+        final OneClickConfig config = new OneClickConfig()
+                .setConfigId("APITEST")
+                .setShortNumber("0000")
+                .setMerchantId("JavaSdkTest")
+                .setPrice(99d)
+                .setTimeout(10)
+                .setBusinessModel("STREX-PAYMENT")
+                .setServiceCode("14002")
+                .setInvoiceText("Donation test")
+                .setOnlineText("Buy directly")
+                .setOfflineText("Buy with SMS pin-code")
+                .setRedirectUrl("https://tempuri.org/java")
+                .setRecurring(false)
+                .setRestricted(false)
+                .setAge(0);
+
+        // Save one-click config
+        strexClient.saveOneClickConfig(config).get();
+
+        // Read one-click config
+        final OneClickConfig createdConfig = strexClient.getOneClickConfig(config.getConfigId()).get();
+        assertThat(createdConfig).isNotNull();
+        assertThat(createdConfig.getConfigId()).isEqualTo(config.getConfigId());
+        assertThat(createdConfig.getShortNumber()).isEqualTo(config.getShortNumber());
+        assertThat(createdConfig.getMerchantId()).isEqualTo(config.getMerchantId());
+        assertThat(createdConfig.getPrice()).isCloseTo(config.getPrice(), Percentage.withPercentage(1));
+        assertThat(createdConfig.getTimeout()).isEqualTo(config.getTimeout());
+        assertThat(createdConfig.getBusinessModel()).isEqualTo(config.getBusinessModel());
+        assertThat(createdConfig.getServiceCode()).isEqualTo(config.getServiceCode());
+        assertThat(createdConfig.getInvoiceText()).isEqualTo(config.getInvoiceText());
+        assertThat(createdConfig.getOnlineText()).isEqualTo(config.getOnlineText());
+        assertThat(createdConfig.getOfflineText()).isEqualTo(config.getOfflineText());
+        assertThat(createdConfig.getRedirectUrl()).isEqualTo(config.getRedirectUrl());
+        assertThat(createdConfig.isRecurring()).isEqualTo(config.isRecurring());
+        assertThat(createdConfig.isRestricted()).isEqualTo(config.isRestricted());
+        assertThat(createdConfig.getAge()).isEqualTo(config.getAge());
+    }
+
+    @Test
     public void validationMerchantId() {
         final StrexMerchantId strexMerchantIdWithNulls = new StrexMerchantId();
         final StrexMerchantId strexMerchantIdWithBlanks = new StrexMerchantId().setMerchantId("").setShortNumberIds(null);
@@ -99,21 +141,6 @@ public class StrexClientTest extends ClientTest {
                 .containsExactlyInAnyOrder("merchantId may not be null");
 
         assertThat(catchThrowableOfType(() -> strexClient.getMerchantId(""), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("merchantId may not be null");
-
-        assertThat(catchThrowableOfType(() -> strexClient.putMerchantId(null, null), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("merchantId may not be null", "strexMerchantId may not be null");
-
-        assertThat(catchThrowableOfType(() -> strexClient.putMerchantId("", strexMerchantIdWithNulls), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("strexMerchantId.merchantId may not be null", "merchantId may not be null");
-
-        assertThat(catchThrowableOfType(() -> strexClient.putMerchantId("", strexMerchantIdWithBlanks), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("merchantId may not be null");
-
-        assertThat(catchThrowableOfType(() -> strexClient.deleteMerchantId(null), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("merchantId may not be null");
-
-        assertThat(catchThrowableOfType(() -> strexClient.deleteMerchantId(""), InvalidInputException.class).getViolations())
                 .containsExactlyInAnyOrder("merchantId may not be null");
     }
 
