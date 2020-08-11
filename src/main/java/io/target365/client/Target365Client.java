@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import io.target365.dto.*;
+import io.target365.dto.enums.UserValidity;
 import io.target365.handler.CreatedResponseParser;
 import io.target365.handler.InvalidResponseHandler;
 import io.target365.handler.NotFoundResponseParser;
@@ -278,6 +279,16 @@ public class Target365Client implements Client {
 
         return doDelete("api/strex/transactions/" + Util.safeEncode(transactionId), Status.CREATED)
                 .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response));
+    }
+
+    @Override
+    public Future<UserValidity> getStrexUserValidity(final String recipient, final String merchantId) {
+        validationService.validate(NotBlankValidator.of("recipient", recipient));
+
+        return doGet("api/strex/validity?recipient=" + Util.safeEncode(recipient) + ((merchantId != null && !merchantId.isEmpty()) ? "&merchantId=" + Util.safeEncode(merchantId) : ""),
+            ImmutableList.of(Status.OK, Status.NOT_FOUND))
+                .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response))
+                .thenApplyAsync(string -> objectMappingService.toObject(string, UserValidity.class));
     }
 
     @Override

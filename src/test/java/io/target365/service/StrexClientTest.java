@@ -6,6 +6,7 @@ import io.target365.dto.OneClickConfig;
 import io.target365.dto.StrexMerchantId;
 import io.target365.dto.StrexOneTimePassword;
 import io.target365.dto.StrexTransaction;
+import io.target365.dto.enums.UserValidity;
 import io.target365.exception.InvalidInputException;
 import org.assertj.core.data.Percentage;
 import org.junit.Before;
@@ -90,6 +91,13 @@ public class StrexClientTest extends ClientTest {
         assertThat(reversedStrexTransaction.getPrice()).isCloseTo(-1 * strexTransaction.getPrice(), Percentage.withPercentage(1));
         assertThat(reversedStrexTransaction.getServiceCode()).isEqualTo(strexTransaction.getServiceCode());
         assertThat(reversedStrexTransaction.getInvoiceText()).isEqualTo(strexTransaction.getInvoiceText());
+    }
+
+    @Test
+    public void testUserValidity() throws Exception {
+        // Get user validity
+        final UserValidity userValidity = strexClient.getStrexUserValidity("+4799031520", "JavaSdkTest").get();
+        assertThat(userValidity).isEqualTo(UserValidity.Full);
     }
 
     @Test
