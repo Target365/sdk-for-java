@@ -64,6 +64,7 @@ public interface OutMessageClient {
      * Gets out-message export in CSV format.
      *
      * @param from From datetime.
+     * @param to To datetime.
      * @return Stream containing CSV export.
      */
     Future<String> getOutMessageExport(@NotNull final ZonedDateTime from, @NotNull final ZonedDateTime to);

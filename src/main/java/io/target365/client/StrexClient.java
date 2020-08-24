@@ -73,8 +73,8 @@ public interface StrexClient {
     /**
      * Gets strex user validity.
      *
-     * @param recipient.
-     * @param merchantId.
+     * @param transactionId Transaction id.
+     * @param merchantId Merchant id.
      * @return A strex transaction.
      */
     Future<UserValidity> getStrexUserValidity(@NotNull final String transactionId, @Nullable final String merchantId);
