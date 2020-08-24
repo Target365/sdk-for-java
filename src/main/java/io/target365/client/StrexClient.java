@@ -4,7 +4,9 @@ import io.target365.dto.OneClickConfig;
 import io.target365.dto.StrexMerchantId;
 import io.target365.dto.StrexOneTimePassword;
 import io.target365.dto.StrexTransaction;
+import io.target365.dto.enums.UserValidity;
 
+import javax.annotation.Nullable;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -67,6 +69,15 @@ public interface StrexClient {
      * @return Resource uri of reversed transaction.
      */
     Future<String> reverseStrexTransaction(@NotNull final String transactionId);
+
+    /**
+     * Gets strex user validity.
+     *
+     * @param recipient.
+     * @param merchantId.
+     * @return A strex transaction.
+     */
+    Future<UserValidity> getStrexUserValidity(@NotNull final String transactionId, @Nullable final String merchantId);
 
     /**
      * Saves or updates a one-click config.

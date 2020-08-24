@@ -93,6 +93,7 @@ serviceClient.deleteOutMessage(transactionId).get();
 ```
 
 ## Payment transactions
+If your service requires a minimum age of the End User, each payment transaction should be defined with minimum age. Both StrexTransaction and OutMessage have a property named “Age”. If not set or present in the request, there is no age limit.
 
 ### Create a Strex payment transaction
 This example creates a 1 NOK Strex payment transaction that the end user will confirm by replying "OK" to an SMS from Strex.
@@ -154,6 +155,14 @@ final String reversalTransactionId = serviceClient.reverseStrexTransaction(trans
 ```
 
 ## One-click
+
+Please note:
+
+* The OneClick service will not stop same MSISDN to order several times as long as transactionID is unique. If end users order or subscribe several time to same service it is merchants responsibility to refund end user.
+
+* Recurring billing is initiated by merchants, see section Create Strextransaction for more info.
+
+* Since the one-click flow ends by redirecting the end user to an external merchant-controlled URL we recommend that merchants implement a mechanism to check status on all started transactions. If there’s any issue for the end user on their way to the last page they might have finished the payment, but not been able to get their product.
 
 ### One-click config
 This example sets up a one-click config which makes it easier to handle campaigns in one-click where most properties like merchantId, price et cetera are known in advance. You can redirect the end-user to the one-click campaign page by redirecting to http://betal.strex.no/{YOUR-CONFIG-ID} for PROD and http://test-strex.target365.io/{YOUR-CONFIG-ID} for TEST-environment. You can also set the TransactionId by adding ?id={YOUR-TRANSACTION-ID} to the URL.
