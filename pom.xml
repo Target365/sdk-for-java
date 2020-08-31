@@ -4,7 +4,7 @@
 
   <groupId>com.github.target365</groupId>
   <artifactId>target-365-sdk</artifactId>
-  <version>1.5.1</version>
+  <version>1.5.2</version>
 
   <name>Target365 SDK</name>
   <description>Enables integration with Target365 online services.</description>
@@ -55,7 +55,7 @@
     <jackson.version>2.10.1</jackson.version>
 
     <validation-api.version>2.0.1.Final</validation-api.version>
-    <hibernate-validator.version>5.2.4.Final</hibernate-validator.version>
+    <hibernate-validator.version>5.3.6.Final</hibernate-validator.version>
 
     <javax.el-api.version>3.0.0</javax.el-api.version>
     <javax.el.version>3.0.0</javax.el.version>

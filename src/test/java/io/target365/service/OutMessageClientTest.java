@@ -154,7 +154,7 @@ public class OutMessageClientTest extends ClientTest {
                 .containsExactlyInAnyOrder("outMessageBatch.items may not be null");
 
         assertThat(catchThrowableOfType(() -> outMessageClient.postOutMessageBatch(outMessageBatchWithNullAndInvalidOutMessages), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("outMessageBatch.items[0] may not be null", "outMessageBatch.items[1].content may not be null",
+                .containsExactlyInAnyOrder("outMessageBatch.items[0].<collection element> may not be null", "outMessageBatch.items[1].content may not be null",
                         "outMessageBatch.items[1].recipient may not be null", "outMessageBatch.items[1].sender may not be null",
                         "outMessageBatch.items[1].timeToLive must be less than or equal to 1440");
 

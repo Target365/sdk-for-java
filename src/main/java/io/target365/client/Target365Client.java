@@ -288,6 +288,14 @@ public class Target365Client implements Client {
     }
 
     @Override
+    public Future<Void> sendStrexRegistrationSms(final StrexRegistrationSms registrationSms) {
+        validationService.validate(NotNullValidator.of("registrationSms", registrationSms));
+
+        return doPost("api/strex/registrationsms", objectMappingService.toString(registrationSms), Status.CREATED)
+                .thenApplyAsync(response -> VOID);
+    }
+
+    @Override
     public Future<String> reverseStrexTransaction(final String transactionId) {
         validationService.validate(NotBlankValidator.of("transactionId", transactionId));
 
