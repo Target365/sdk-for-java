@@ -9,6 +9,7 @@
     * [Schedule an SMS for later sending](#schedule-an-sms-for-later-sending)
     * [Edit a scheduled SMS](#edit-a-scheduled-sms)
     * [Delete a scheduled SMS](#delete-a-scheduled-sms)
+    * [Send a payment SMS](#send-a-payment-sms)
 * [Payment transactions](#payment-transactions)
     * [Create a Strex payment transaction](#create-a-strex-payment-transaction)
     * [Create a Strex payment transaction with one-time password](#create-a-strex-payment-transaction-with-one-time-password)
@@ -59,7 +60,7 @@ This example sends an SMS to 98079008 (+47 for Norway) from "Target365" with the
 final OutMessage outMessage = new OutMessage()
     .setSender("Target365")
     .setRecipient("+4798079008")
-    .setContent("Hello World from SMS!"));
+    .setContent("Hello World from SMS!");
     
 final String transactionId = serviceClient.postOutMessage(outMessage).get();
 ```
@@ -71,18 +72,19 @@ final OutMessage outMessage = new OutMessage()
     .setSender("Target365")
     .setRecipient("+4798079008")
     .setContent("Hello World from SMS!")
-    .setSendTime(ZonedDateTime.now().plus(1, ChronoUnit.DAYS)));
+    .setSendTime(ZonedDateTime.now().plus(1, ChronoUnit.DAYS));
     
 final String transactionId = serviceClient.postOutMessage(outMessage).get();
 ```
 
 ### Edit a scheduled SMS
-This example updates a previously created scheduled SMS.
+This example updates a previously created scheduled SMS. Note that only messages with a send time still in the future can be updated.
 ```Java
-final OutMessage outMessage = serviceClient.getOutMessage(transactionId).get()
-  .setSendTime(outMessage.getSendTime().plus(1, ChronoUnit.HOURS)))
-  .setContent(outMessage.getContent() + " An hour later! :)";
-  
+outMessage = serviceClient.getOutMessage(transactionId).get();
+
+outMessage.setSendTime(outMessage.getSendTime().plus(1, ChronoUnit.HOURS));
+outMessage.setContent(outMessage.getContent() + " An hour later! :)");
+
 serviceClient.putOutMessage(outMessage).get();
 ```
 
@@ -90,6 +92,25 @@ serviceClient.putOutMessage(outMessage).get();
 This example deletes a previously created scheduled SMS.
 ```Java
 serviceClient.deleteOutMessage(transactionId).get();
+```
+
+### Send a payment SMS
+This example sends an SMS to 98079008 (+47 for Norway) from "Target365" with the text "Hello world from SMS!" priced at 10 NOK.
+```Java
+final StrexData strexData = new StrexData()
+    .setMerchantId("JavaSdkTest")
+    .setPrice(10d)
+    .setTimeout(10)
+    .setServiceCode("10001")
+    .setInvoiceText("Test Invoice Text");
+
+final OutMessage outMessage = new OutMessage()
+    .setSender("9999")
+    .setRecipient("+4798079008")
+    .setContent("Hello World from SMS!")
+    .setStrex(strexData);
+    
+final String transactionId = serviceClient.postOutMessage(outMessage).get();
 ```
 
 ## Payment transactions
@@ -114,7 +135,7 @@ final StrexTransaction transaction = new StrexTransaction()
     .setSmsConfirmation(true)
     .setProperties(properties);
 
-strexClient.postStrexTransaction(transaction).get();
+serviceClient.postStrexTransaction(transaction).get();
 ```
 
 ### Create a Strex payment transaction with one-time password
