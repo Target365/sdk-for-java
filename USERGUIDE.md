@@ -95,19 +95,18 @@ serviceClient.deleteOutMessage(transactionId).get();
 ```
 
 ### Send a payment SMS
-This example sends an SMS to 98079008 (+47 for Norway) from "Target365" with the text "Hello world from SMS!" priced at 10 NOK.
+This example sends an SMS to 98079008 (+47 for Norway) for short number "9999" with the text "This costs 10 NOK" priced at 10 NOK.
 ```Java
 final StrexData strexData = new StrexData()
     .setMerchantId("JavaSdkTest")
-    .setPrice(10d)
-    .setTimeout(10)
+    .setPrice(10)
     .setServiceCode("10001")
     .setInvoiceText("Test Invoice Text");
 
 final OutMessage outMessage = new OutMessage()
     .setSender("9999")
     .setRecipient("+4798079008")
-    .setContent("Hello World from SMS!")
+    .setContent("This costs 10 NOK.")
     .setStrex(strexData);
     
 final String transactionId = serviceClient.postOutMessage(outMessage).get();
