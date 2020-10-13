@@ -63,7 +63,7 @@
     <guava.version>27.0-jre</guava.version>
     <lombok.version>1.18.2</lombok.version>
 
-    <junit.version>4.12</junit.version>
+    <junit.version>4.13.1</junit.version>
     <mockito-all.version>1.10.19</mockito-all.version>
     <assertj-core.version>3.11.1</assertj-core.version>
   </properties>
