@@ -40,6 +40,8 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import java.net.URLEncoder;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -194,6 +196,18 @@ public class Target365Client implements Client {
     }
 
     @Override
+    public Future<String> getOutMessageExport(final ZonedDateTime from, final ZonedDateTime to) {
+        validationService.validate(NotNullValidator.of("from", from), NotNullValidator.of("to", to));
+
+        String path = "api/export/out-messages"
+                + "?from=" + Util.safeEncode(from.format(DateTimeFormatter.ISO_INSTANT))
+                + "&to=" + Util.safeEncode(to.format(DateTimeFormatter.ISO_INSTANT));
+
+        return doGet(path, ImmutableList.of(Status.OK))
+                .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response));
+    }
+
+    @Override
     public Future<InMessage> getInMessage(final String shortNumberId, final String transactionId) {
         validationService.validate(NotBlankValidator.of("shortNumberId", shortNumberId), NotBlankValidator.of("transactionId", transactionId));
 
@@ -271,6 +285,14 @@ public class Target365Client implements Client {
         return doGet("api/one-click/configs/" + Util.safeEncode(configId), ImmutableList.of(Status.OK, Status.NOT_FOUND))
                 .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response))
                 .thenApplyAsync(string -> objectMappingService.toObject(string, OneClickConfig.class));
+    }
+
+    @Override
+    public Future<Void> sendStrexRegistrationSms(final StrexRegistrationSms registrationSms) {
+        validationService.validate(NotNullValidator.of("registrationSms", registrationSms));
+
+        return doPost("api/strex/registrationsms", objectMappingService.toString(registrationSms), Status.CREATED)
+                .thenApplyAsync(response -> VOID);
     }
 
     @Override

@@ -9,12 +9,14 @@ import io.target365.dto.StrexData;
 import io.target365.dto.enums.DeliveryMode;
 import io.target365.dto.enums.Priority;
 import io.target365.exception.InvalidInputException;
+import okio.BufferedSource;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import javax.validation.ValidationException;
+import java.io.InputStream;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -105,6 +107,10 @@ public class OutMessageClientTest extends ClientTest {
         // Delete out message and verify that it has been deleted
         outMessageClient.deleteOutMessage(outMessageTransactionId).get();
         assertThat(outMessageClient.getOutMessage(outMessageTransactionId).get()).isNull();
+
+        // Out-message export
+        String csv = outMessageClient.getOutMessageExport(ZonedDateTime.now().minusDays(3), ZonedDateTime.now().minusDays(2)).get();
+        assertThat(csv).isNotNull();
     }
 
     @Test
@@ -148,7 +154,7 @@ public class OutMessageClientTest extends ClientTest {
                 .containsExactlyInAnyOrder("outMessageBatch.items may not be null");
 
         assertThat(catchThrowableOfType(() -> outMessageClient.postOutMessageBatch(outMessageBatchWithNullAndInvalidOutMessages), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("outMessageBatch.items[0] may not be null", "outMessageBatch.items[1].content may not be null",
+                .containsExactlyInAnyOrder("outMessageBatch.items[0].<collection element> may not be null", "outMessageBatch.items[1].content may not be null",
                         "outMessageBatch.items[1].recipient may not be null", "outMessageBatch.items[1].sender may not be null",
                         "outMessageBatch.items[1].timeToLive must be less than or equal to 1440");
 

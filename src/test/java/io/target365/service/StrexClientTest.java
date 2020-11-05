@@ -2,10 +2,7 @@ package io.target365.service;
 
 import io.target365.client.StrexClient;
 import io.target365.client.Target365Client;
-import io.target365.dto.OneClickConfig;
-import io.target365.dto.StrexMerchantId;
-import io.target365.dto.StrexOneTimePassword;
-import io.target365.dto.StrexTransaction;
+import io.target365.dto.*;
 import io.target365.dto.enums.UserValidity;
 import io.target365.exception.InvalidInputException;
 import org.assertj.core.data.Percentage;
@@ -144,6 +141,17 @@ public class StrexClientTest extends ClientTest {
         assertThat(createdConfig.isRecurring()).isEqualTo(config.isRecurring());
         assertThat(createdConfig.isRestricted()).isEqualTo(config.isRestricted());
         assertThat(createdConfig.getAge()).isEqualTo(config.getAge());
+    }
+
+    @Test
+    public void testSendStrexRegistrationSms() throws Exception {
+        final StrexRegistrationSms registrationSms = new StrexRegistrationSms()
+                .setTransactionId(UUID.randomUUID().toString())
+                .setMerchantId("JavaSdkTest")
+                .setRecipient("+4798079008")
+                .setSmsText("Complete strex registration to continue.");
+
+        strexClient.sendStrexRegistrationSms(registrationSms).get();
     }
 
     @Test

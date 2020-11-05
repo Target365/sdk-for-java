@@ -1,9 +1,6 @@
 package io.target365.client;
 
-import io.target365.dto.OneClickConfig;
-import io.target365.dto.StrexMerchantId;
-import io.target365.dto.StrexOneTimePassword;
-import io.target365.dto.StrexTransaction;
+import io.target365.dto.*;
 import io.target365.dto.enums.UserValidity;
 
 import javax.annotation.Nullable;
@@ -73,8 +70,8 @@ public interface StrexClient {
     /**
      * Gets strex user validity.
      *
-     * @param recipient.
-     * @param merchantId.
+     * @param transactionId Transaction id.
+     * @param merchantId Merchant id.
      * @return A strex transaction.
      */
     Future<UserValidity> getStrexUserValidity(@NotNull final String transactionId, @Nullable final String merchantId);
@@ -94,4 +91,12 @@ public interface StrexClient {
      * @return One-click config.
      */
     Future<OneClickConfig> getOneClickConfig(@NotNull final String configId);
+
+    /**
+     * Initiates Strex-registation by SMS.
+     *
+     * @param registrationSms Strex registration sms.
+     * @return Void
+     */
+    Future<Void> sendStrexRegistrationSms(@NotNull final StrexRegistrationSms registrationSms);
 }

@@ -4,9 +4,9 @@ import io.target365.dto.OutMessage;
 import io.target365.dto.OutMessageBatch;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.concurrent.Future;
 
@@ -59,5 +59,14 @@ public interface OutMessageClient {
      * @return Void
      */
     Future<Void> deleteOutMessage(@NotNull final String transactionId);
+
+    /**
+     * Gets out-message export in CSV format.
+     *
+     * @param from From datetime.
+     * @param to To datetime.
+     * @return Stream containing CSV export.
+     */
+    Future<String> getOutMessageExport(@NotNull final ZonedDateTime from, @NotNull final ZonedDateTime to);
 
 }

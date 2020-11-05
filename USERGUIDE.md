@@ -9,6 +9,7 @@
     * [Schedule an SMS for later sending](#schedule-an-sms-for-later-sending)
     * [Edit a scheduled SMS](#edit-a-scheduled-sms)
     * [Delete a scheduled SMS](#delete-a-scheduled-sms)
+    * [Send a payment SMS](#send-a-payment-sms)
 * [Payment transactions](#payment-transactions)
     * [Create a Strex payment transaction](#create-a-strex-payment-transaction)
     * [Create a Strex payment transaction with one-time password](#create-a-strex-payment-transaction-with-one-time-password)
@@ -59,7 +60,7 @@ This example sends an SMS to 98079008 (+47 for Norway) from "Target365" with the
 final OutMessage outMessage = new OutMessage()
     .setSender("Target365")
     .setRecipient("+4798079008")
-    .setContent("Hello World from SMS!"));
+    .setContent("Hello World from SMS!");
     
 final String transactionId = serviceClient.postOutMessage(outMessage).get();
 ```
@@ -71,18 +72,19 @@ final OutMessage outMessage = new OutMessage()
     .setSender("Target365")
     .setRecipient("+4798079008")
     .setContent("Hello World from SMS!")
-    .setSendTime(ZonedDateTime.now().plus(1, ChronoUnit.DAYS)));
+    .setSendTime(ZonedDateTime.now().plus(1, ChronoUnit.DAYS));
     
 final String transactionId = serviceClient.postOutMessage(outMessage).get();
 ```
 
 ### Edit a scheduled SMS
-This example updates a previously created scheduled SMS.
+This example updates a previously created scheduled SMS. Note that only messages with a send time still in the future can be updated.
 ```Java
-final OutMessage outMessage = serviceClient.getOutMessage(transactionId).get()
-  .setSendTime(outMessage.getSendTime().plus(1, ChronoUnit.HOURS)))
-  .setContent(outMessage.getContent() + " An hour later! :)";
-  
+outMessage = serviceClient.getOutMessage(transactionId).get();
+
+outMessage.setSendTime(outMessage.getSendTime().plus(1, ChronoUnit.HOURS));
+outMessage.setContent(outMessage.getContent() + " An hour later! :)");
+
 serviceClient.putOutMessage(outMessage).get();
 ```
 
@@ -90,6 +92,24 @@ serviceClient.putOutMessage(outMessage).get();
 This example deletes a previously created scheduled SMS.
 ```Java
 serviceClient.deleteOutMessage(transactionId).get();
+```
+
+### Send a payment SMS
+This example sends an SMS to 98079008 (+47 for Norway) for short number "9999" with the text "This costs 10 NOK" priced at 10 NOK.
+```Java
+final StrexData strexData = new StrexData()
+    .setMerchantId("JavaSdkTest")
+    .setPrice(10)
+    .setServiceCode("10001")
+    .setInvoiceText("Test Invoice Text");
+
+final OutMessage outMessage = new OutMessage()
+    .setSender("9999")
+    .setRecipient("+4798079008")
+    .setContent("This costs 10 NOK.")
+    .setStrex(strexData);
+    
+final String transactionId = serviceClient.postOutMessage(outMessage).get();
 ```
 
 ## Payment transactions
@@ -114,7 +134,7 @@ final StrexTransaction transaction = new StrexTransaction()
     .setSmsConfirmation(true)
     .setProperties(properties);
 
-strexClient.postStrexTransaction(transaction).get();
+serviceClient.postStrexTransaction(transaction).get();
 ```
 
 ### Create a Strex payment transaction with one-time password
@@ -155,6 +175,14 @@ final String reversalTransactionId = serviceClient.reverseStrexTransaction(trans
 ```
 
 ## One-click
+
+Please note:
+
+* The OneClick service will not stop same MSISDN to order several times as long as transactionID is unique. If end users order or subscribe several times to same service it's the merchants responsibility to refund the end user.
+
+* Recurring billing is initiated by merchants, see section [Payment transactions](#payment-transactions) for more info.
+
+* Since the one-click flow ends by redirecting the end user to an external merchant-controlled URL we recommend that merchants implement a mechanism to check status on all started transactions. If there’s any issue for the end user on their way to the last page they might have finished the payment, but not been able to get their product.
 
 ### One-click config
 This example sets up a one-click config which makes it easier to handle campaigns in one-click where most properties like merchantId, price et cetera are known in advance. You can redirect the end-user to the one-click campaign page by redirecting to http://betal.strex.no/{YOUR-CONFIG-ID} for PROD and http://test-strex.target365.io/{YOUR-CONFIG-ID} for TEST-environment. You can also set the TransactionId by adding ?id={YOUR-TRANSACTION-ID} to the URL.
