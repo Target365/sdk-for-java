@@ -34,7 +34,7 @@ public class StrexClientTest extends ClientTest {
     public void testOneTimePassword() throws Exception {
         final StrexOneTimePassword strexOneTimePassword = new StrexOneTimePassword()
                 .setTransactionId(UUID.randomUUID().toString())
-                .setMerchantId("10000002")
+                .setMerchantId("JavaSdkTest")
                 .setRecipient("+4798079008")
                 .setRecurring(Boolean.FALSE);
 
@@ -114,7 +114,10 @@ public class StrexClientTest extends ClientTest {
                 .setOnlineText("Buy directly")
                 .setOfflineText("Buy with SMS pin-code")
                 .setRedirectUrl("https://tempuri.org/java")
-                .setRecurring(false)
+                .setSubscriptionPrice(99d)
+                .setSubscriptionInterval("monthly")
+                .setSubscriptionStartSms("Thanks for donating 99kr each month.")
+                .setRecurring(true)
                 .setRestricted(false)
                 .setAge(0);
 
@@ -134,6 +137,9 @@ public class StrexClientTest extends ClientTest {
         assertThat(createdConfig.getInvoiceText()).isEqualTo(config.getInvoiceText());
         assertThat(createdConfig.getOnlineText()).isEqualTo(config.getOnlineText());
         assertThat(createdConfig.getOfflineText()).isEqualTo(config.getOfflineText());
+        assertThat(createdConfig.getSubscriptionPrice()).isEqualTo(config.getSubscriptionPrice());
+        assertThat(createdConfig.getSubscriptionInterval()).isEqualTo(config.getSubscriptionInterval());
+        assertThat(createdConfig.getSubscriptionStartSms()).isEqualTo(config.getSubscriptionStartSms());
         assertThat(createdConfig.getRedirectUrl()).isEqualTo(config.getRedirectUrl());
         assertThat(createdConfig.isRecurring()).isEqualTo(config.isRecurring());
         assertThat(createdConfig.isRestricted()).isEqualTo(config.isRestricted());

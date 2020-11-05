@@ -109,4 +109,22 @@ public class OneClickConfig {
      * One-click text to use when oneclick msisdn detection is offline and PIN-code is used.
      */
     private String offlineText;
+
+    /**
+     * SubscriptionPrice - information to the user how much will be charged each interval (below).
+     */
+    @NotNull
+    private Double subscriptionPrice;
+
+    /**
+     * SubscriptionInterval - information to the user how often charging will happen. Possible values: weekly, monthly, yearly.
+     */
+    @NotNull
+    private String subscriptionInterval;
+
+    /**
+     * SubscriptionStartSms - sent when recurring transaction started.
+     */
+    @NotNull
+    private String subscriptionStartSms;
 }
