@@ -113,18 +113,15 @@ public class OneClickConfig {
     /**
      * SubscriptionPrice - information to the user how much will be charged each interval (below).
      */
-    @NotNull
     private Double subscriptionPrice;
 
     /**
      * SubscriptionInterval - information to the user how often charging will happen. Possible values: weekly, monthly, yearly.
      */
-    @NotNull
     private String subscriptionInterval;
 
     /**
      * SubscriptionStartSms - sent when recurring transaction started.
      */
-    @NotNull
     private String subscriptionStartSms;
 }
