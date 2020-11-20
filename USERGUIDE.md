@@ -251,6 +251,8 @@ final String transactionId = UUID.randomUUID().toString();
 final Map<String, Object> properties = new HashMap<String, Object>();
 properties.put("RedirectUrl", "https://your-return-url.com?id=" + transactionId);
 properties.put("Recurring", true);
+properties.put("SubscriptionInterval", "monthly");
+properties.put("SubscriptionPrice", 99d);
 
 final StrexTransaction transaction = new StrexTransaction()
     .setTransactionId(transactionId)
