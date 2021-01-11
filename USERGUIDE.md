@@ -14,10 +14,9 @@
     * [Create a Strex payment transaction](#create-a-strex-payment-transaction)
     * [Create a Strex payment transaction with one-time password](#create-a-strex-payment-transaction-with-one-time-password)
     * [Reverse a Strex payment transaction](#reverse-a-strex-payment-transaction)
+    * [Check status on Strex payment transaction](#check-status-on-strex-payment-transaction)
 * [One-click](#one-click)
     * [One-click config](#one-click-config)
-    * [One-time transaction](#one-time-transaction)
-    * [Setup subscription transaction](#setup-subscription-transaction)
     * [Recurring transaction](#recurring-transaction)
 * [Lookup](#lookup)
     * [Address lookup for mobile number](#address-lookup-for-mobile-number)
@@ -174,6 +173,14 @@ This example reverses a previously billed Strex payment transaction. The origina
 final String reversalTransactionId = serviceClient.reverseStrexTransaction(transactionId).get();
 ```
 
+### Check status on Strex payment transaction
+This example gets a previously created Strex transaction to check its status. This method will block up to 20 seconds if the transaction is still being processed.
+```Java
+StrexTransaction transaction = serviceClient.getStrexTransaction(transactionId).get();
+String statusCode = transaction.StatusCode;
+Boolean isBilled = transaction.Billed;
+```
+
 ## One-click
 
 Please note:
@@ -218,55 +225,6 @@ This parameter is optional:
 
 * SubscriptionStartSms - SMS that will be sent to the user when subscription starts.
 
-### One-time transaction
-This example sets up a simple one-time transaction for one-click. After creation you can redirect the end-user to the one-click landing page by redirecting to http://betal.strex.no/{YOUR-ACCOUNT-ID}/{YOUR-TRANSACTION-ID} for PROD and http://test-strex.target365.io/{YOUR-ACCOUNT-ID}/{YOUR-TRANSACTION-ID} for TEST-environment.
-
-If the MSISDN can't be determined automatically on the landing page the end user will have to enter the MSISDN and will receice an SMS with a pin-code that must be entered. Entering the pin-code can be attempted only 3 times before the transaction is abandoned and the end user is redirected back to the redirectUrl.
-
-![one-time sequence](https://github.com/Target365/sdk-for-java/raw/master/oneclick-simple-transaction-flow.png "One-time sequence diagram")
-
-```Java
-final String transactionId = UUID.randomUUID().toString();
-final Map<String, Object> properties = new HashMap<String, Object>();
-properties.put("RedirectUrl", "https://your-return-url.com?id=" + transactionId);
-
-final StrexTransaction transaction = new StrexTransaction()
-    .setTransactionId(transactionId)
-    .setMerchantId("YOUR_MERCHANT_ID")
-    .setShortNumber("2002")
-    .setPrice(1d)
-    .setServiceCode("10001")
-    .setInvoiceText("Dontaion test")
-    .setProperties(properties);
-
-serviceClient.postStrexTransaction(transaction).get();
-
-// TODO: Redirect end-user to one-click landing page
-```
-### Setup subscription transaction
-This example sets up a subscription transaction for one-click. After creation you can redirect the end-user to the one-click landing page by redirecting to http://betal.strex.no/{YOUR-ACCOUNT-ID}/{YOUR-TRANSACTION-ID} for PROD and http://strex-test.target365.io/{YOUR-ACCOUNT-ID}/{YOUR-TRANSACTION-ID} for TEST-environment.
-![subscription sequence](https://github.com/Target365/sdk-for-java/raw/master/oneclick-subscription-flow.png "Subscription sequence diagram")
-```Java
-final String transactionId = UUID.randomUUID().toString();
-final Map<String, Object> properties = new HashMap<String, Object>();
-properties.put("RedirectUrl", "https://your-return-url.com?id=" + transactionId);
-properties.put("Recurring", true);
-properties.put("SubscriptionInterval", "monthly");
-properties.put("SubscriptionPrice", 99d);
-
-final StrexTransaction transaction = new StrexTransaction()
-    .setTransactionId(transactionId)
-    .setMerchantId("YOUR_MERCHANT_ID")
-    .setShortNumber("2002")
-    .setPrice(1d)
-    .setServiceCode("10001")
-    .setInvoiceText("Dontaion test")
-    .setProperties(properties);
-
-serviceClient.postStrexTransaction(transaction).get();
-
-// TODO: Redirect end-user to one-click landing page
-```
 ### Recurring transaction
 This example sets up a recurring transaction for one-click. After creation you can immediately get the transaction to get the status code - the server will wait up to 20 seconds for the async transaction to complete.
 ![Recurring sequence](https://github.com/Target365/sdk-for-java/raw/master/oneclick-recurring-flow.png "Recurring sequence diagram")
