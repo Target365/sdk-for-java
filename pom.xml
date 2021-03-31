@@ -60,7 +60,7 @@
     <javax.el-api.version>3.0.0</javax.el-api.version>
     <javax.el.version>3.0.0</javax.el.version>
 
-    <guava.version>27.0-jre</guava.version>
+    <guava.version>29.0-jre</guava.version>
     <lombok.version>1.18.2</lombok.version>
 
     <junit.version>4.12</junit.version>
