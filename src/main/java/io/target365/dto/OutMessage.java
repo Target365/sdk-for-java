@@ -88,7 +88,12 @@ public class OutMessage implements Serializable {
     private String transactionId;
 
     /**
-     * Correlation id. This can be used as the clients correlation id for tracking messages and delivery reports.
+     * Session id. This can be used as the clients to get all out-messages associated to a specific session.
+     */
+    private String sessionId;
+
+    /**
+     * Correlation id. This can be used as the clients' correlation id for tracking messages and delivery reports.
      */
     private String correlationId;
 
@@ -181,6 +186,11 @@ public class OutMessage implements Serializable {
      * Whether message was delivered. Null if status is unknown. Read-only property.
      */
     private Boolean delivered;
+
+    /**
+     *  Operator id (from delivery report).
+     */
+    private Boolean operatorId;
 
     /**
      * External SMSC transaction id.

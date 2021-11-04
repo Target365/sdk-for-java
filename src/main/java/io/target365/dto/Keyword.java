@@ -82,6 +82,11 @@ public class Keyword implements Serializable {
     private List<String> tags;
 
     /**
+    * Alias keywords associated with keyword.
+    */
+    private List<String> aliases;
+
+    /**
      * Keyword mode
      */
     public enum Mode {
