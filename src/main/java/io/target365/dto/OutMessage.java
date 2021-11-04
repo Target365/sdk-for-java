@@ -40,7 +40,7 @@ public class OutMessage implements Serializable {
         }
 
         final char[] extendedChars = new char[] { '\f', '^', '{', '}', '\\', '[', '~', ']', '|', '€' };
-        HashSet<Character> extendedCharSet = new HashSet<Character>();
+        HashSet<Character> extendedCharSet = new HashSet<>();
 
         for (char c : extendedChars) {
             extendedCharSet.add((c));
