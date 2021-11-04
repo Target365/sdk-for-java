@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 
 /**
  * Delivery report
@@ -26,7 +27,12 @@ public class DeliveryReport implements Serializable {
     */
     private String correlationId;
 
-   /**
+    /**
+     * Session id associated with the message.
+     */
+    private String sessionId;
+
+    /**
     * Transaction id associated with the message.
     */
     private String transactionId;
@@ -47,9 +53,9 @@ public class DeliveryReport implements Serializable {
     private String recipient;
 
    /**
-    * Operator associated with the message. Can be 'no.telenor', 'no.telia', 'no.ice' etc.
+    * OperatorId associated with the message. Can be 'no.telenor', 'no.telia', 'no.ice' etc.
     */
-    private String operator;
+    private String operatorId;
 
    /**
     * Delivery status code.
@@ -75,4 +81,14 @@ public class DeliveryReport implements Serializable {
     * SMSC message parts.
     */
     private int smscMessageParts;
+
+    /**
+     * SMSC transaction id.
+     */
+    private int smscTransactionId;
+
+    /**
+     * Timestamp for when the message was received at the handset (resolution to whole minute, not second).
+     */
+    private ZonedDateTime received;
 }
