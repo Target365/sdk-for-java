@@ -32,6 +32,9 @@ public class OutMessage implements Serializable {
 
     /**
      * Gets the number of sms message parts are required for a given text and encoding
+     * @param text Text to evaluate
+     * @param unicode Whether text is unicode or not
+     * @return number of sms message parts
      */
     public static int getSmsPartsForText(String text, boolean unicode)
     {
