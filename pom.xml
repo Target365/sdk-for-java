@@ -4,7 +4,7 @@
 
   <groupId>com.github.target365</groupId>
   <artifactId>target-365-sdk</artifactId>
-  <version>1.7.0</version>
+  <version>1.7.1</version>
 
   <name>Target365 SDK</name>
   <description>Enables integration with Target365 online services.</description>
