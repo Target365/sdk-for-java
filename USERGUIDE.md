@@ -6,8 +6,8 @@
     * [Target365Client](#target365client)
 * [Text messages](#text-messages)
     * [Send an SMS](#send-an-sms)
-    * [Schedule an SMS for later sending](#schedule-an-sms-for-later-sending)
     * [Set DeliveryReport URL for an SMS](#set-deliveryreport-url-for-an-sms)
+    * [Schedule an SMS for later sending](#schedule-an-sms-for-later-sending)
     * [Edit a scheduled SMS](#edit-a-scheduled-sms)
     * [Delete a scheduled SMS](#delete-a-scheduled-sms)
     * [Send a payment SMS](#send-a-payment-sms)
@@ -65,18 +65,6 @@ final OutMessage outMessage = new OutMessage()
     
 final String transactionId = serviceClient.postOutMessage(outMessage).get();
 ```
-
-### Schedule an SMS for later sending
-This example sets up a scheduled SMS. Scheduled messages can be updated or deleted before the time of sending.
-```Java
-final OutMessage outMessage = new OutMessage()
-    .setSender("Target365")
-    .setRecipient("+4798079008")
-    .setContent("Hello World from SMS!")
-    .setSendTime(ZonedDateTime.now().plus(1, ChronoUnit.DAYS));
-    
-final String transactionId = serviceClient.postOutMessage(outMessage).get();
-```
 ### Set DeliveryReport URL for an SMS
 This example sends an SMS and later a DeliveryReport will be posted at the url specified below.
 ```Java
@@ -85,6 +73,17 @@ final OutMessage outMessage = new OutMessage()
     .setRecipient("+4798079008")
     .setContent("Hello World from SMS!")
     .setDeliveryReportUrl = "https://your.site.com/sms/dlr";
+    
+final String transactionId = serviceClient.postOutMessage(outMessage).get();
+```
+### Schedule an SMS for later sending
+This example sets up a scheduled SMS. Scheduled messages can be updated or deleted before the time of sending.
+```Java
+final OutMessage outMessage = new OutMessage()
+    .setSender("Target365")
+    .setRecipient("+4798079008")
+    .setContent("Hello World from SMS!")
+    .setSendTime(ZonedDateTime.now().plus(1, ChronoUnit.DAYS));
     
 final String transactionId = serviceClient.postOutMessage(outMessage).get();
 ```
