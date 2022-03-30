@@ -66,7 +66,7 @@ final OutMessage outMessage = new OutMessage()
 final String transactionId = serviceClient.postOutMessage(outMessage).get();
 ```
 ### Set DeliveryReport URL for an SMS
-This example sends an SMS and later a DeliveryReport will be posted at the url specified below.
+This example sends an SMS and later a [DeliveryReport](#dlr-forward) will be posted at the url specified below.
 ```Java
 final OutMessage outMessage = new OutMessage()
     .setSender("Target365")
