@@ -7,6 +7,7 @@
 * [Text messages](#text-messages)
     * [Send an SMS](#send-an-sms)
     * [Schedule an SMS for later sending](#schedule-an-sms-for-later-sending)
+    * [Set DeliveryReport URL for an SMS](#set-deliveryreport-url-for-an-sms)
     * [Edit a scheduled SMS](#edit-a-scheduled-sms)
     * [Delete a scheduled SMS](#delete-a-scheduled-sms)
     * [Send a payment SMS](#send-a-payment-sms)
@@ -76,7 +77,17 @@ final OutMessage outMessage = new OutMessage()
     
 final String transactionId = serviceClient.postOutMessage(outMessage).get();
 ```
-
+### Set DeliveryReport URL for an SMS
+This example sends an SMS and later a DeliveryReport will be posted at the url specified below.
+```Java
+final OutMessage outMessage = new OutMessage()
+    .setSender("Target365")
+    .setRecipient("+4798079008")
+    .setContent("Hello World from SMS!")
+    .setDeliveryReportUrl = "https://your.site.com/sms/dlr";
+    
+final String transactionId = serviceClient.postOutMessage(outMessage).get();
+```
 ### Edit a scheduled SMS
 This example updates a previously created scheduled SMS. Note that only messages with a send time still in the future can be updated.
 ```Java
