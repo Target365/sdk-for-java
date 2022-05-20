@@ -68,6 +68,11 @@ public class OneClickConfig {
     private String preAuthServiceId;
 
     /**
+     * Service description used for pre-authorizations and recurring billing.
+     */
+    private String preAuthServiceDescription;
+
+    /**
      * Age requirements - typically 18 for subscriptions and adult content.
      */
     private int age;
