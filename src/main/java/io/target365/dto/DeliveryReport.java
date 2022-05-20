@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import java.io.Serializable;
+import java.util.*;
 
 /**
  * Delivery report
@@ -75,4 +76,9 @@ public class DeliveryReport implements Serializable {
     * SMSC message parts.
     */
     private int smscMessageParts;
+
+    /**
+     * Associated custom properties.
+     */
+    private Map<String, Object> properties;
 }
