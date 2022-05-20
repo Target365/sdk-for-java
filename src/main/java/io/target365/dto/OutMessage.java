@@ -32,6 +32,9 @@ public class OutMessage implements Serializable {
 
     /**
      * Gets the number of sms message parts are required for a given text and encoding
+     * @param text Text to evaluate
+     * @param unicode Whether text is unicode or not
+     * @return number of sms message parts
      */
     public static int getSmsPartsForText(String text, boolean unicode)
     {
@@ -40,7 +43,7 @@ public class OutMessage implements Serializable {
         }
 
         final char[] extendedChars = new char[] { '\f', '^', '{', '}', '\\', '[', '~', ']', '|', '€' };
-        HashSet<Character> extendedCharSet = new HashSet<Character>();
+        HashSet<Character> extendedCharSet = new HashSet<>();
 
         for (char c : extendedChars) {
             extendedCharSet.add((c));
@@ -88,7 +91,12 @@ public class OutMessage implements Serializable {
     private String transactionId;
 
     /**
-     * Correlation id. This can be used as the clients correlation id for tracking messages and delivery reports.
+     * Session id. This can be used as the clients to get all out-messages associated to a specific session.
+     */
+    private String sessionId;
+
+    /**
+     * Correlation id. This can be used as the clients' correlation id for tracking messages and delivery reports.
      */
     private String correlationId;
 
@@ -181,6 +189,11 @@ public class OutMessage implements Serializable {
      * Whether message was delivered. Null if status is unknown. Read-only property.
      */
     private Boolean delivered;
+
+    /**
+     *  Operator id (from delivery report).
+     */
+    private Boolean operatorId;
 
     /**
      * External SMSC transaction id.

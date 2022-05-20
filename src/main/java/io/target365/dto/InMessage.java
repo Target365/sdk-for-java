@@ -60,6 +60,16 @@ public class InMessage implements Serializable {
     private Boolean isStopMessage;
 
     /**
+     * Process attempts.
+     */
+    private int processAttempts;
+
+    /**
+     * Whether message has been processed.
+     */
+    private boolean processed;
+
+    /**
      * Created time. Read-only property.
      */
     private ZonedDateTime created;

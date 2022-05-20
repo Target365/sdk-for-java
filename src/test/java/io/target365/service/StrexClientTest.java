@@ -106,6 +106,7 @@ public class StrexClientTest extends ClientTest {
                 .setPrice(99d)
                 .setTimeout(10)
                 .setBusinessModel("STREX-PAYMENT")
+                .setPreAuthServiceId("MyProduct")
                 .setServiceCode("14002")
                 .setInvoiceText("Donation test")
                 .setOnlineText("Buy directly")
@@ -130,6 +131,7 @@ public class StrexClientTest extends ClientTest {
         assertThat(createdConfig.getPrice()).isCloseTo(config.getPrice(), Percentage.withPercentage(1));
         assertThat(createdConfig.getTimeout()).isEqualTo(config.getTimeout());
         assertThat(createdConfig.getBusinessModel()).isEqualTo(config.getBusinessModel());
+        assertThat(createdConfig.getPreAuthServiceId()).isEqualTo(config.getPreAuthServiceId());
         assertThat(createdConfig.getServiceCode()).isEqualTo(config.getServiceCode());
         assertThat(createdConfig.getInvoiceText()).isEqualTo(config.getInvoiceText());
         assertThat(createdConfig.getOnlineText()).isEqualTo(config.getOnlineText());

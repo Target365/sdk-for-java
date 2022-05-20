@@ -69,6 +69,11 @@ public class StrexOneTimePassword implements Serializable {
     private String message;
 
     /**
+     * Time-To-Live (TTL) in minutes. Must be between 1 and 1440. Default value is 2.
+     */
+    private int timeToLive;
+
+    /**
      * Whether one-time password sms has been delivered. Null means unknown.
      */
     private Boolean delivered;

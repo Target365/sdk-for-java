@@ -94,12 +94,17 @@ public class LookupResult implements Serializable {
     private Gender gender;
 
     /**
+    * Date of birth, in format 'yyyy-dd-MM'.
+    */
+    private String dateOfBirth;
+
+    /**
      * Age. Can be null for 'Unknown'.
      */
     private Integer age;
 
     /**
-     * Deceased date. Null if not deceased. Format is 'dd.MM.yyyy'.
+     * Deceased date. Null if not deceased. Format is 'yyyy-dd-MM'.
      */
     private String deceasedDate;
 
