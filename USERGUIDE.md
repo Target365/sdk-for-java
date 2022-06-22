@@ -11,6 +11,7 @@
     * [Edit a scheduled SMS](#edit-a-scheduled-sms)
     * [Delete a scheduled SMS](#delete-a-scheduled-sms)
     * [Send a payment SMS](#send-a-payment-sms)
+    * [Send batch](#send-batch)
 * [Payment transactions](#payment-transactions)
     * [Create a Strex payment transaction](#create-a-strex-payment-transaction)
     * [Create a Strex payment transaction with one-time password](#create-a-strex-payment-transaction-with-one-time-password)
@@ -120,6 +121,30 @@ final OutMessage outMessage = new OutMessage()
     .setStrex(strexData);
     
 final String transactionId = serviceClient.postOutMessage(outMessage).get();
+```
+
+### Send batch
+This example sends a batch of messages in one operation.
+Batches behave logically the same way as if you would send each message by itself and is offered only for performance reasons. Here are the limitations and restrictions when it comes to using batches:
+* You can have up to 10 000 messages per batch operation.
+* Each message in the batch must have a unique TransactionId, otherwise the operation will fail.
+* If one or more messages have errors (like invalid recipient etc.) only those messages will fail, the rest will be processed normally.
+* If you want a status per message you have to set the DeliveryReportUrl on each message.
+```Java
+final OutMessage outMessage1 = new OutMessage()
+    .setSender("Target365")
+    .setRecipient("+4798079008")
+    .setContent("OutMessageBatch 0001")
+    .setTransactionId(UUID.randomUUID().toString());
+
+final OutMessage outMessage2 = new OutMessage()
+    .setSender("Target365")
+    .setRecipient("+4798079008")
+    .setContent("OutMessageBatch 0002")
+    .setTransactionId(UUID.randomUUID().toString());
+
+final OutMessageBatch outMessageBatch = new OutMessageBatch().setItems(ImmutableList.of(outMessage1, outMessage2));
+serviceClient.postOutMessageBatch(outMessage).get();
 ```
 
 ## Payment transactions
