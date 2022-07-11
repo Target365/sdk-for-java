@@ -181,6 +181,11 @@ public class OutMessage implements Serializable {
     private String detailedStatusCode;
 
     /**
+     * Status description. Read-only property.
+     */
+    private String statusDescription;
+
+    /**
      * Set to true to allow unicode SMS, false to fail if content is unicode, null to replace unicode chars to '?'.
      */
     private Boolean allowUnicode;

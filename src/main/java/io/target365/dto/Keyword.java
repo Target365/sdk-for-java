@@ -56,6 +56,11 @@ public class Keyword implements Serializable {
     private String forwardUrl;
 
     /**
+     * Preauth settings
+     */
+    private PreAuthSettings preAuthSettings;
+
+    /**
      * Whether keyword is enabled.
      */
     @NotNull

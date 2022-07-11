@@ -152,6 +152,11 @@ public class StrexTransaction implements Serializable {
     private String detailedStatusCode;
 
     /**
+     * Status description. Read-only property.
+     */
+    private String statusDescription;
+
+    /**
      * Read-only: Whether billing has been performed. Null means unknown status.
      */
     private Boolean billed;
