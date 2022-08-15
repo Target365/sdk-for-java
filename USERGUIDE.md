@@ -8,6 +8,7 @@
     * [Send an SMS](#send-an-sms)
     * [Set DeliveryReport URL for an SMS](#set-deliveryreport-url-for-an-sms)
     * [Schedule an SMS for later sending](#schedule-an-sms-for-later-sending)
+    * [Add tags to message](#add-tags-to-message)
     * [Edit a scheduled SMS](#edit-a-scheduled-sms)
     * [Delete a scheduled SMS](#delete-a-scheduled-sms)
     * [Send a payment SMS](#send-a-payment-sms)
@@ -87,6 +88,16 @@ final OutMessage outMessage = new OutMessage()
     .setSendTime(ZonedDateTime.now().plus(1, ChronoUnit.DAYS));
     
 final String transactionId = serviceClient.postOutMessage(outMessage).get();
+```
+### Add tags to message
+This example show how to add tags to a message that can be used for statistics and grouping. Hierachies can be created with /. In the future, tags may only contain a-z0-9. Urls are allowed as an exception, so that '//' doesn't make hierarchy.
+```Java
+final OutMessage outMessage = new OutMessage()
+    .setSender("Target365")
+    .setRecipient("+4798079008")
+    .setContent("Hello World from SMS!")
+    .setSendTime(ZonedDateTime.now().plus(1, ChronoUnit.DAYS))
+    .setTags({"tag1", "group/subgroup/tag2"});
 ```
 ### Edit a scheduled SMS
 This example updates a previously created scheduled SMS. Note that only messages with a send time still in the future can be updated.
