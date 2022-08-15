@@ -98,6 +98,8 @@ final OutMessage outMessage = new OutMessage()
     .setContent("Hello World from SMS!")
     .setSendTime(ZonedDateTime.now().plus(1, ChronoUnit.DAYS))
     .setTags({"tag1", "group/subgroup/tag2"});
+
+final String transactionId = serviceClient.postOutMessage(outMessage).get();
 ```
 ### Edit a scheduled SMS
 This example updates a previously created scheduled SMS. Note that only messages with a send time still in the future can be updated.
