@@ -370,6 +370,25 @@ public class Target365Client implements Client {
                 .thenApplyAsync(response -> VOID);
     }
 
+    @Override
+    public Future<Void> postPincode(final Pincode pincode) {
+        validationService.validate(NotNullValidator.of("pincode", pincode),
+                ValidValidator.of("pincode", pincode));
+
+        return doPost("api/pincodes", objectMappingService.toString(pincode), Status.NO_CONTENT)
+                .thenApplyAsync(response -> VOID);
+    }
+
+    @Override
+    public Future<Boolean> getPincodeVerification(final String transactionId, final String pincode) {
+        validationService.validate(NotBlankValidator.of("transactionId", transactionId));
+        validationService.validate(NotBlankValidator.of("pincode", pincode));
+
+        return doGet("api/pincodes/verification?transactionId=" + Util.safeEncode(transactionId) + "&pincode=" + Util.safeEncode(pincode), ImmutableList.of(Status.OK, Status.NOT_FOUND))
+                .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response))
+                .thenApplyAsync(string -> objectMappingService.toObject(string, Boolean.TYPE));
+    }
+
     /**
      * Performs standard GET call to the server
      *
