@@ -431,7 +431,9 @@ This example shows how to send pincodes to users and verify their input to valid
 final Pincode pincode = new Pincode()
    .setTransactionId(UUID.randomUUID().toString())
    .setRecipient("+4798079008")
-   .setSender("Target365");
+   .setSender("Target365")
+   .setPrefixText("Your pin code is ")
+   .setSuffixText(" to log on to acme.inc");
 
 pincodeClient.postPincode(pincode).get();
 ```
