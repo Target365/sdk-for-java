@@ -58,6 +58,8 @@ public class Target365Client implements Client {
      * In order to simulate {@link Void} response, we need to return <code>null</code>
      * This variable should be used for that
      */
+    private static final String sdkName = "Java";
+    private static final String sdkVersion = "1.8.1";
     private static final Void VOID = null;
 
     private final Parameters parameters;
@@ -205,6 +207,13 @@ public class Target365Client implements Client {
 
         return doGet(path, ImmutableList.of(Status.OK))
                 .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response));
+    }
+
+    @Override
+    public Future<Void> sendPincode(final Pincode pincode)
+    {
+        return doPost("api/pincodes", objectMappingService.toString(pincode), Status.NO_CONTENT)
+                .thenApplyAsync(response -> VOID);
     }
 
     @Override
@@ -422,7 +431,10 @@ public class Target365Client implements Client {
         final String authorization = authorizationService.signHeader(signer, parameters.getKeyName(), Method.GET, uri, "");
 
         final Request request = new Request.Builder().url(uri).get()
-                .header(Header.AUTHORIZATION, authorization).build();
+                .header(Header.AUTHORIZATION, authorization)
+                .header("X-Sdk", sdkName)
+                .header("X-Sdk-Version", sdkVersion)
+                .build();
 
         final Call call = okHttpClient.newCall(request);
 
@@ -456,7 +468,10 @@ public class Target365Client implements Client {
 
         final Request request = new Request.Builder()
                 .url(uri).post(RequestBody.create(MediaType.APPLICATION_JSON, content))
-                .header(Header.AUTHORIZATION, authorization).build();
+                .header(Header.AUTHORIZATION, authorization)
+                .header("X-Sdk", sdkName)
+                .header("X-Sdk-Version", sdkVersion)
+                .build();
 
         final Call call = okHttpClient.newCall(request);
 
@@ -490,7 +505,10 @@ public class Target365Client implements Client {
 
         final Request request = new Request.Builder()
                 .url(uri).put(RequestBody.create(MediaType.APPLICATION_JSON, content))
-                .header(Header.AUTHORIZATION, authorization).build();
+                .header(Header.AUTHORIZATION, authorization)
+                .header("X-Sdk", sdkName)
+                .header("X-Sdk-Version", sdkVersion)
+                .build();
 
         final Call call = okHttpClient.newCall(request);
 
@@ -521,7 +539,10 @@ public class Target365Client implements Client {
         final String authorization = authorizationService.signHeader(signer, parameters.getKeyName(), Method.DELETE, uri, "");
 
         final Request request = new Request.Builder().url(uri).delete()
-                .header(Header.AUTHORIZATION, authorization).build();
+                .header(Header.AUTHORIZATION, authorization)
+                .header("X-Sdk", sdkName)
+                .header("X-Sdk-Version", sdkVersion)
+                .build();
 
         final Call call = okHttpClient.newCall(request);
 

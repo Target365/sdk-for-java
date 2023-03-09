@@ -2,6 +2,7 @@ package io.target365.client;
 
 import io.target365.dto.OutMessage;
 import io.target365.dto.OutMessageBatch;
+import io.target365.dto.Pincode;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
@@ -69,4 +70,11 @@ public interface OutMessageClient {
      */
     Future<String> getOutMessageExport(@NotNull final ZonedDateTime from, @NotNull final ZonedDateTime to);
 
+    /**
+     * Sends pin code to user for verification.
+     *
+     * @param pincode Pin code object.
+     * @return Void
+     */
+    Future<Void> sendPincode(@NotNull final Pincode pincode);
 }

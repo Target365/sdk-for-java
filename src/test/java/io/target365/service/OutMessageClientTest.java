@@ -5,6 +5,7 @@ import io.target365.client.OutMessageClient;
 import io.target365.client.Target365Client;
 import io.target365.dto.OutMessage;
 import io.target365.dto.OutMessageBatch;
+import io.target365.dto.Pincode;
 import io.target365.dto.StrexData;
 import io.target365.dto.enums.DeliveryMode;
 import io.target365.dto.enums.Priority;
@@ -43,13 +44,19 @@ public class OutMessageClientTest extends ClientTest {
     public void test() throws Exception {
         final String msisdn = "+4798079008";
 
-        final OutMessage outMessageForBatch = new OutMessage().setSender("Target365")
-                .setRecipient("+4798079008").setContent("OutMessageBatch 0001")
-                .setSendTime(ZonedDateTime.now().plus(1, ChronoUnit.DAYS)).setTransactionId(UUID.randomUUID().toString());
+        final OutMessage outMessageForBatch = new OutMessage()
+                .setSender("Target365")
+                .setRecipient("+4798079008")
+                .setContent("OutMessageBatch 0001")
+                .setSendTime(ZonedDateTime.now().plus(1, ChronoUnit.DAYS))
+                .setTransactionId(UUID.randomUUID().toString());
+
         final OutMessageBatch outMessageBatch = new OutMessageBatch().setItems(ImmutableList.of(outMessageForBatch));
 
-        final OutMessage outMessage = new OutMessage().setSender("Target365")
-                .setRecipient("+4798079008").setContent("OutMessage 0001")
+        final OutMessage outMessage = new OutMessage()
+                .setSender("Target365")
+                .setRecipient("+4798079008")
+                .setContent("OutMessage 0001")
                 .setSendTime(ZonedDateTime.now().plus(1, ChronoUnit.DAYS));
 
         assertThat(outMessage.getPriority()).isEqualTo(Priority.Normal.name());
@@ -111,6 +118,15 @@ public class OutMessageClientTest extends ClientTest {
         // Out-message export
         String csv = outMessageClient.getOutMessageExport(ZonedDateTime.now().minusDays(3), ZonedDateTime.now().minusDays(2)).get();
         assertThat(csv).isNotNull();
+
+        final Pincode pincode = new Pincode()
+                .setTransactionId(UUID.randomUUID().toString())
+                .setSender("Target365")
+                .setRecipient("+4798079008")
+                .setPrefixText("Your code is: ")
+                .setSuffixText(". Don't share this with anyone!");
+
+        outMessageClient.sendPincode(pincode).get();
     }
 
     @Test
