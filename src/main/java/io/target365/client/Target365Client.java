@@ -59,7 +59,7 @@ public class Target365Client implements Client {
      * This variable should be used for that
      */
     private static final String sdkName = "Java";
-    private static final String sdkVersion = "1.8.1";
+    private static final String sdkVersion = "1.8.2";
     private static final Void VOID = null;
 
     private final Parameters parameters;
@@ -207,13 +207,6 @@ public class Target365Client implements Client {
 
         return doGet(path, ImmutableList.of(Status.OK))
                 .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response));
-    }
-
-    @Override
-    public Future<Void> sendPincode(final Pincode pincode)
-    {
-        return doPost("api/pincodes", objectMappingService.toString(pincode), Status.NO_CONTENT)
-                .thenApplyAsync(response -> VOID);
     }
 
     @Override

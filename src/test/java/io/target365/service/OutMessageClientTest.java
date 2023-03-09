@@ -118,15 +118,6 @@ public class OutMessageClientTest extends ClientTest {
         // Out-message export
         String csv = outMessageClient.getOutMessageExport(ZonedDateTime.now().minusDays(3), ZonedDateTime.now().minusDays(2)).get();
         assertThat(csv).isNotNull();
-
-        final Pincode pincode = new Pincode()
-                .setTransactionId(UUID.randomUUID().toString())
-                .setSender("Target365")
-                .setRecipient("+4798079008")
-                .setPrefixText("Your code is: ")
-                .setSuffixText(". Don't share this with anyone!");
-
-        outMessageClient.sendPincode(pincode).get();
     }
 
     @Test

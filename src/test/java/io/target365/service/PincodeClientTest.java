@@ -47,9 +47,5 @@ public class PincodeClientTest extends ClientTest {
         final OutMessage createdOutMessage = outMessageClient.getOutMessage(pincode.getTransactionId()).get();
         assertThat(createdOutMessage).isNotNull();
         assertThat(createdOutMessage.getTransactionId()).isEqualTo(pincode.getTransactionId());
-
-        // Verify pin code
-        final Boolean pincodeVerified = pincodeClient.getPincodeVerification(pincode.getTransactionId(), createdOutMessage.getContent()).get();
-        assertThat(pincodeVerified);
     }
 }

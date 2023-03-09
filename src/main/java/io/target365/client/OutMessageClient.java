@@ -69,12 +69,4 @@ public interface OutMessageClient {
      * @return Stream containing CSV export.
      */
     Future<String> getOutMessageExport(@NotNull final ZonedDateTime from, @NotNull final ZonedDateTime to);
-
-    /**
-     * Sends pin code to user for verification.
-     *
-     * @param pincode Pin code object.
-     * @return Void
-     */
-    Future<Void> sendPincode(@NotNull final Pincode pincode);
 }
