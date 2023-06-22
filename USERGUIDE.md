@@ -35,6 +35,10 @@
     * [Verify pincode](#verify-pincode)
 * [Encoding and SMS length](#encoding-and-sms-length)
     * [Automatic character replacements](#automatic-character-replacements)
+* [Pre-authorization](#pre-authorization)
+   * [Pre-authorization via keyword](#pre-authorization-via-keyword)
+   * [Pre-authorization via API](#pre-authorization-via-api)
+   * [Rebilling with pre-authorization](#rebilling-with-pre-authorization)
 * [Testing](#testing)
     * [Fake numbers](#fake-numbers)
 
@@ -499,6 +503,114 @@ Unless you spesifically set the AllowUnicode property to true, we will automatic
 |\uFEFF|(regular space)|
 
 *Please note that we might remove or add Unicode characters that are automatically replaced. This is an "best effort" to save on SMS costs!*
+
+## Pre-authorization
+Some Strex service codes require recurring billing to be authorized by the user via a confirmation sms or sms pincode.
+This can be achieved either via direct API calls or setting it up to be handled automatically via a keyword.
+
+### Pre-authorization via keyword
+Automatic pre-authorization can be activated on a keyword by either activating it in the
+PreAuth section of the keyword in Strex Connect or via the SDK
+
+```Java
+final PreAuthSettings preAuth = new PreAuthSettings()
+        .setActive(true)
+        .setInfoText("Info message sent before preauth message")
+        .setInfoSender("2002")
+        .setPrefixMessage("Text inserted before preauth text")
+        .setPostfixMessage("Text inserted after preauth text")
+        .setDelay(delayMins)
+        .setMerchantId("Your merchant id")
+        .setServiceDescription("Service description");
+
+final Keyword keyword = new Keyword()
+        .setShortNumberId("NO-2002")
+        .setKeywordText("HELLO")
+        .setMode(Keyword.Mode.Text)
+        .setForwardUrl("https://your-site.net/api/receive-sms")
+        .setEnabled(true)
+        .setPreAuthSettings(preAuth);
+
+final String keywordId = keywordClient.postKeyword(keyword).get();
+```
+
+In-messages forwarded to you will then look like this:
+```http
+POST https://your-site.net/api/receive-sms HTTP/1.1
+Content-Type: application/json
+
+{
+  "transactionId":"00568c6b-7baf-4869-b083-d22afc163059",
+  "created": "2021-12-06T09:50:00+00:00",
+  "keywordId": "12345678",
+  "sender":"+4798079008",
+  "recipient":"2002",
+  "content": "HELLO",
+  "properties": {
+    "ServiceId": "1234",
+    "preAuthorization": true
+  }
+}
+```
+If PreAuthorization was not successfully performed, "preAuthorization" will be "false".
+
+The new properties are ServiceId and preAuthorization. ServiceId must be added to the outmessage/transaction when doing rebilling in the "preAuthServiceId" field. 
+The ServiceId is always the same for one keyword. Incoming messages forwarded with "preAuthorization" set as "false" are not possible
+to bill via Strex Payment.
+
+### Pre-authorization via API
+Pre-authorization via API can be used with either SMS confirmation or OTP (one-time-passord). SMS confirmation is used by default if OneTimePassword isn't used.
+PreAuthServiceId is an id chosen by you and must be used for all subsequent rebilling. PreAuthServiceDescription is optional, but should be set as this text will be visible for the end user on the Strex "My Page" web page.
+
+Example using OTP-flow:
+```Java
+final String transactionId = "your-unique-id";
+
+final StrexOneTimePassword oneTimePassword = new StrexOneTimePassword()
+        .setTransactionId(transactionId)
+        .setMerchantId("your-merchant-id")
+        .setRecipient("+4798079008")
+        .setMessagePrefix("Dear customer...")
+        .setMessageSuffix("Best Regards...")
+        .setRecurring(true);
+
+serviceClient.postStrexOneTimePassword(oneTimePassword).get();
+
+// *** Get input from end user (eg. via web site) ***
+
+final StrexTransaction strexTransaction = new StrexTransaction()
+        .setTransactionId(transactionId)
+        .setShortNumber("2002")
+        .setRecipient("+4798079008")
+        .setMerchantId("your-merchant-id")
+        .setAge(18)
+        .setPrice(10.0)
+        .setServiceCode("10001")
+        .setPreAuthServiceId("your-service-id")
+        .setPreAuthServiceDescription("your-subscription-description")
+        .setInvoiceText("Donation test")
+        .setOneTimePassword("code_from_end_user");
+
+strexClient.postStrexTransaction(strexTransaction).get();
+```
+
+### Rebilling with pre-authorization:
+```Java
+final StrexTransaction strexTransaction = new StrexTransaction()
+        .setTransactionId("your-unique-id")
+        .setShortNumber("2002")
+        .setRecipient("+4798079008")
+        .setContent("your-sms-text-to-end-user")
+        .setMerchantId("your-merchant-id")
+        .setAge(18)
+        .setPrice(10.0)
+        .setServiceCode("10001")
+        .setPreAuthServiceId("your-service-id")
+        .setPreAuthServiceDescription("your-subscription-description")
+        .setInvoiceText("Donation test");
+
+strexClient.postStrexTransaction(strexTransaction).get();
+```
 
 ## Testing
 
