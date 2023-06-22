@@ -90,7 +90,17 @@ public class StrexTransaction implements Serializable {
     /**
      * Timeout in minutes for transactions which trigger end user registration. Default value is 5.
      */
-    private Integer timeout = new Integer(5);
+    private Integer timeout = 5;
+
+    /**
+     * Service id used for pre-authorizations and recurring billing.
+     */
+    private String preAuthServiceId;
+
+    /**
+     * Service description used for pre-authorizations and recurring billing.
+     */
+    private String preAuthServiceDescription;
 
     /**
      * Short number.
