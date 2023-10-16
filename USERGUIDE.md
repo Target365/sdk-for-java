@@ -96,7 +96,7 @@ final OutMessage outMessage = new OutMessage()
     .setRecipient("+4798079008")
     .setContent("Hello World from SMS!")
     .setSendTime(ZonedDateTime.now().plus(1, ChronoUnit.DAYS))
-    .setTags({"tag1", "group/subgroup/tag2"});
+    .setTags({"tag1", "grouping:group/subgroup/tag2"});
 
 final String transactionId = serviceClient.postOutMessage(outMessage).get();
 ```
