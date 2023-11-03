@@ -24,7 +24,7 @@ public class LookupClientTest extends ClientTest {
     }
 
     @Test
-    public void test() throws Exception {
+    public void testAddressLookup() throws Exception {
         final String msisdn = "+4798079008";
 
         // Lookup client
@@ -35,6 +35,22 @@ public class LookupClientTest extends ClientTest {
         assertThat(lookupResult.getMiddleName()).isEqualTo("Olav");
         assertThat(lookupResult.getLastName()).isEqualTo("Stjernholm");
         assertThat(lookupResult.getGender()).isEqualTo(LookupResult.Gender.M);
+    }
+
+    @Test
+    public void testFreetextLookup() throws Exception {
+        final String freetext = "+4798079008";
+
+        // Lookup client
+        final LookupResult[] lookupResults = lookupClient.freetextLookup(freetext).get();
+        assertThat(lookupResults).isNotEmpty();
+        final LookupResult first = lookupResults[0];
+        assertThat(first).isNotNull();
+        assertThat(first.getMsisdn()).isEqualTo(freetext);
+        assertThat(first.getFirstName()).isEqualTo("Hans");
+        assertThat(first.getMiddleName()).isEqualTo("Olav");
+        assertThat(first.getLastName()).isEqualTo("Stjernholm");
+        assertThat(first.getGender()).isEqualTo(LookupResult.Gender.M);
     }
 
     @Test

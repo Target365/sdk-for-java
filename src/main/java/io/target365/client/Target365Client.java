@@ -144,6 +144,15 @@ public class Target365Client implements Client {
     }
 
     @Override
+    public Future<LookupResult[]> freetextLookup(final String freetext) {
+        validationService.validate(NotBlankValidator.of("freetext", freetext));
+
+        return doGet("api/lookup/freetext", ImmutableList.of(new Param("input", freetext)), Status.OK)
+                .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response))
+                .thenApplyAsync(string -> objectMappingService.toObject(string, LookupResult[].class));
+    }
+
+    @Override
     public Future<Void> prepareMsisdns(final List<String> msisdns) {
         validationService.validate(NotEmptyValidator.of("msisdns", msisdns), NoBlanksValidator.of("msisdns", msisdns));
 

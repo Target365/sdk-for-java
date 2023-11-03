@@ -58,6 +58,7 @@ public class StrexClientTest extends ClientTest {
                 .setTimeout(10)
                 .setContent("Java SDK Test")
                 .setServiceCode("10001")
+                .setBusinessModel("STREX-PAYMENT")
                 .setInvoiceText("Test Invoice Text");
 
         // Create strex transaction
@@ -109,6 +110,7 @@ public class StrexClientTest extends ClientTest {
                 .setPreAuthServiceId("MyProduct")
                 .setPreAuthServiceDescription("My Product")
                 .setServiceCode("14002")
+                .setBusinessModel("STREX-PAYMENT")
                 .setInvoiceText("Donation test")
                 .setOnlineText("Buy directly")
                 .setOfflineText("Buy with SMS pin-code")
