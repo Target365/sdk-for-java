@@ -55,4 +55,9 @@ public class Pincode implements Serializable {
      * Length of pincode, 4-6 digits (optional).
      */
     private Integer pincodeLength;
+
+    /**
+     * Max attempts, 1-5 (3 is default).
+     */
+    private Integer maxAttempts;
 }

@@ -17,8 +17,8 @@ import static org.assertj.core.api.Assertions.catchThrowableOfType;
 @RunWith(JUnit4.class)
 public class PublicKeyClientTest extends ClientTest {
 
-    private static final String PUBLIC_KEY_NAME = "JavaSdkTest";
-    private static final String PUBLIC_KEY_STRING = "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEH3kH4OdPQCeApKQOBNxQurzRmBGKIIYDPxcXs+UBpbcnV42Om6Rgr2QgStT0r2icb+7iuLUIvhXQYz4elBz6OQ==";
+    private static final String PUBLIC_KEY_NAME = "JavaSdkTest2024";
+    private static final String PUBLIC_KEY_STRING = "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAESYVYv1nzWz/Kljo/+g5FK1tC5wkMItmYkWHiM++FDsDYszl07Fb2aXJe8/0iXgYShJZ6pMZN0HoOz0OqZDliyQ==";
     private static final String PUBLIC_KEY_SIGN_ALGO = "ECDsaP256";
     private static final String PUBLIC_KEY_HASH_ALGO = "SHA256";
 
@@ -27,7 +27,7 @@ public class PublicKeyClientTest extends ClientTest {
     @Before
     public void before() throws Exception {
         this.publicKeysClient = Target365Client.getInstance(getPrivateKeyAsString(),
-                new Target365Client.Parameters("https://test.target365.io/", "JavaSdkTest"));
+                new Target365Client.Parameters("https://test.target365.io/", "JavaSdkTest2024"));
     }
 
     @Test

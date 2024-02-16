@@ -20,7 +20,7 @@ public class InMessageClientTest extends ClientTest {
     @Before
     public void before() throws Exception {
         this.inMessageClient = Target365Client.getInstance(getPrivateKeyAsString(),
-                new Target365Client.Parameters("https://test.target365.io/", "JavaSdkTest"));
+                new Target365Client.Parameters("https://test.target365.io/", "JavaSdkTest2024"));
     }
 
     @Test
