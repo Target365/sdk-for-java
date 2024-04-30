@@ -68,6 +68,11 @@ public class DeliveryReport implements Serializable {
     */
     private String detailedStatusCode;
 
+    /**
+     * Status description.
+     */
+    private String statusDescription;
+
    /**
     * Whether message was delivered. Null if status is unknown.
     */
@@ -78,15 +83,20 @@ public class DeliveryReport implements Serializable {
     */
     private Boolean billed;
 
+    /**
+     * SMSC transaction id.
+     */
+    private String smscTransactionId;
+
+    /**
+     * SMSC status.
+     */
+    private String smscStatus;
+
    /**
     * SMSC message parts.
     */
     private int smscMessageParts;
-
-    /**
-     * SMSC transaction id.
-     */
-    private int smscTransactionId;
 
     /**
      * Timestamp for when the message was received at the handset (resolution to whole minute, not second).
