@@ -44,7 +44,7 @@ public class EcdsaVerifier implements Verifier {
             asn1EncodableVector.add(new ASN1Integer(new BigInteger(y, RADIX)));
 
             final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            final ASN1OutputStream asn1OutputStream = new ASN1OutputStream(byteArrayOutputStream);
+            final ASN1OutputStream asn1OutputStream = ASN1OutputStream.create(byteArrayOutputStream);
             asn1OutputStream.writeObject(new DLSequence(asn1EncodableVector));
 
             final byte[] bytes = byteArrayOutputStream.toByteArray();
