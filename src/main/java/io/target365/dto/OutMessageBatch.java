@@ -27,7 +27,7 @@ public class OutMessageBatch implements Serializable {
     private static final long serialVersionUID = -1233114385121231531L;
 
     @NotNull
-    @Size(min = 1, max = 100)
+    @Size(min = 1)
     @Valid
     private List<@NotNull @Valid OutMessage> items;
 }
