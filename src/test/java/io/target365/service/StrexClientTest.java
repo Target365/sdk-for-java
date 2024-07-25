@@ -24,7 +24,7 @@ public class StrexClientTest extends ClientTest {
     @Before
     public void before() throws Exception {
         this.strexClient = Target365Client.getInstance(getPrivateKeyAsString(),
-                new Target365Client.Parameters("https://test.target365.io/", "JavaSdkTest"));
+                new Target365Client.Parameters("https://test.target365.io/", "JavaSdkTest2024"));
     }
 
     @Test
@@ -58,6 +58,7 @@ public class StrexClientTest extends ClientTest {
                 .setTimeout(10)
                 .setContent("Java SDK Test")
                 .setServiceCode("10001")
+                .setBusinessModel("STREX-PAYMENT")
                 .setInvoiceText("Test Invoice Text");
 
         // Create strex transaction
@@ -109,6 +110,7 @@ public class StrexClientTest extends ClientTest {
                 .setPreAuthServiceId("MyProduct")
                 .setPreAuthServiceDescription("My Product")
                 .setServiceCode("14002")
+                .setBusinessModel("STREX-PAYMENT")
                 .setInvoiceText("Donation test")
                 .setOnlineText("Buy directly")
                 .setOfflineText("Buy with SMS pin-code")

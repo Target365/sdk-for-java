@@ -59,7 +59,7 @@ public class Target365Client implements Client {
      * This variable should be used for that
      */
     private static final String sdkName = "Java";
-    private static final String sdkVersion = "1.8.2";
+    private static final String sdkVersion = "1.8.8";
     private static final Void VOID = null;
 
     private final Parameters parameters;
@@ -141,6 +141,15 @@ public class Target365Client implements Client {
         return doGet("api/lookup", ImmutableList.of(new Param("msisdn", msisdn)), Status.OK)
                 .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response))
                 .thenApplyAsync(string -> objectMappingService.toObject(string, LookupResult.class));
+    }
+
+    @Override
+    public Future<LookupResult[]> freetextLookup(final String freetext) {
+        validationService.validate(NotBlankValidator.of("freetext", freetext));
+
+        return doGet("api/lookup/freetext", ImmutableList.of(new Param("input", freetext)), Status.OK)
+                .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response))
+                .thenApplyAsync(string -> objectMappingService.toObject(string, LookupResult[].class));
     }
 
     @Override

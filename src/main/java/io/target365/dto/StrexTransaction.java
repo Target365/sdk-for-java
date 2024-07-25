@@ -44,6 +44,11 @@ public class StrexTransaction implements Serializable {
     private String correlationId;
 
     /**
+     * Keyword id associated with transaction. Can be null.
+     */
+    private String keywordId;
+
+    /**
      * Merchant id - provided by Strex.
      */
     @NotNull

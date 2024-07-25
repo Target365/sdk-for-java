@@ -13,6 +13,7 @@
     * [Delete a scheduled SMS](#delete-a-scheduled-sms)
     * [Send a payment SMS](#send-a-payment-sms)
     * [Send batch](#send-batch)
+    * [Delivery mode](#delivery-mode)
 * [Payment transactions](#payment-transactions)
     * [Create a Strex payment transaction](#create-a-strex-payment-transaction)
     * [Create a Strex payment transaction with one-time password](#create-a-strex-payment-transaction-with-one-time-password)
@@ -96,7 +97,7 @@ final OutMessage outMessage = new OutMessage()
     .setRecipient("+4798079008")
     .setContent("Hello World from SMS!")
     .setSendTime(ZonedDateTime.now().plus(1, ChronoUnit.DAYS))
-    .setTags({"tag1", "group/subgroup/tag2"});
+    .setTags({"tag1", "grouping:group/subgroup/tag2"});
 
 final String transactionId = serviceClient.postOutMessage(outMessage).get();
 ```
@@ -170,6 +171,13 @@ final OutMessageBatch outMessageBatch = new OutMessageBatch().setItems(Immutable
 serviceClient.postOutMessageBatch(outMessage).get();
 ```
 
+### Delivery mode
+We support explicitly specifying delivery mode AtMostOnce or AtLeastOnce via the setDeliveryMode method.
+* AtMostOnce delivery mode means that for a message processed by our platform, that message is delivered once or not at all. In more casual terms it means that the message may be lost.
+* AtLeastOnce delivery mode means that for a message processed by our platform, potentially multiple attempts are made at delivering it, such that at least one succeeds. In more casual terms this means that the message may be duplicated but not lost.
+
+AtMostOnce and AtLeastOnce delivery mode is only in effect in extreme edge cases where we've lost connection to an operator with a request mid-flight and have no way of knowing whether the message was delivered or not.
+
 ## Payment transactions
 If your service requires a minimum age of the End User, each payment transaction should be defined with minimum age. Both StrexTransaction and OutMessage have a property named “Age”. If not set or present in the request, there is no age limit.
 
@@ -197,7 +205,7 @@ serviceClient.postStrexTransaction(transaction).get();
 
 ### Create a Strex payment transaction with one-time password
 This example creates a Strex one-time password sent to the end user and get completes the payment by using the one-time password.
-You can use MessagePrefix and MessageSuffix to influence the start and end of the SMS sent by Strex.
+You can use MessagePrefix and MessageSuffix to influence the start and end of the SMS sent by Strex. In the Test Environment - with endpoint https://test.target365.io - the OTP is always 1234.
 ```Java
 final String transactionId = UUID.randomUUID().toString();
 
@@ -360,7 +368,7 @@ Content-Length: 0
 ```
 
 ### DLR forward
-This example shows how delivery reports (DLR) are forwarded to the outmessage DeliveryReportUrl. All DLR forwards expect a response with status code 200 (OK). If the request times out or response status code differs the forward will be retried 10 times with exponentially longer intervals for about 15 hours.
+This example shows how delivery reports (DLR) are forwarded to the outmessage DeliveryReportUrl. All DLR forwards expect a response with status code 200 (OK). If the request times out or response status code differs, the forward will be retried 19 times with exponentially longer intervals, for approximately 48 hours.
 #### Request
 ```
 POST https://your-site.net/api/receive-dlr HTTP/1.1
@@ -482,6 +490,7 @@ Unless you spesifically set the AllowUnicode property to true, we will automatic
 |« (Word/Outlook quote)|" (regular quote)|
 |» (Word/Outlook quote)|" (regular quote)|
 |” (Word/Outlook quote)|" (regular quote)|
+|’ (Word/Outlook apostrophe)|' (regular apostrophe)|
 |\u00A0|(regular space)|
 |\u1680|(regular space)|
 |\u180E|(regular space)|
