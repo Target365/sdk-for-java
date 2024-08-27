@@ -59,7 +59,7 @@ public class Target365Client implements Client {
      * This variable should be used for that
      */
     private static final String sdkName = "Java";
-    private static final String sdkVersion = "1.8.8";
+    private static final String sdkVersion = "1.8.9";
     private static final Void VOID = null;
 
     private final Parameters parameters;

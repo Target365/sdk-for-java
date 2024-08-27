@@ -198,7 +198,7 @@ public class OutMessage implements Serializable {
     /**
      *  Operator id (from delivery report).
      */
-    private Boolean operatorId;
+    private String operatorId;
 
     /**
      * External SMSC transaction id.
