@@ -38,7 +38,8 @@
     * [Automatic character replacements](#automatic-character-replacements)
 * [Pre-authorization](#pre-authorization)
    * [Pre-authorization via keyword](#pre-authorization-via-keyword)
-   * [Pre-authorization via API](#pre-authorization-via-api)
+   * [Pre-authorization via API with SMS](#pre-authorization-via-api-with-sms)
+   * [Pre-authorization via API with OTP](#pre-authorization-via-api-with-otp)
    * [Rebilling with pre-authorization](#rebilling-with-pre-authorization)
 * [Testing](#testing)
     * [Fake numbers](#fake-numbers)
@@ -567,11 +568,33 @@ The new properties are ServiceId and preAuthorization. ServiceId must be added t
 The ServiceId is always the same for one keyword. Incoming messages forwarded with "preAuthorization" set as "false" are not possible
 to bill via Strex Payment.
 
-### Pre-authorization via API
-Pre-authorization via API can be used with either SMS confirmation or OTP (one-time-passord). SMS confirmation is used by default if OneTimePassword isn't used.
-PreAuthServiceId is an id chosen by you and must be used for all subsequent rebilling. PreAuthServiceDescription is optional, but should be set as this text will be visible for the end user on the Strex "My Page" web page.
+### Pre-authorization via API with SMS
+Pre-authorization via API can be used with SMS confirmation.
+PreAuthServiceId is an id chosen by you and must be used for all subsequent rebilling. PreAuthServiceDescription is optional, but should be set as this text will be visible for the end user on the Strex "My Page" web page. Here's an example:
 
-Example using OTP-flow:
+```Java
+final String transactionId = "your-unique-id";
+
+final StrexTransaction strexTransaction = new StrexTransaction()
+        .setTransactionId(transactionId)
+        .setShortNumber("2002")
+        .setRecipient("+4798079008")
+        .setMerchantId("your-merchant-id")
+        .setAge(18)
+        .setPrice(10.0)
+        .setServiceCode("10001")
+        .setPreAuthServiceId("your-service-id")
+        .setPreAuthServiceDescription("your-subscription-description")
+        .setInvoiceText("Donation test")
+        .setOneTimePassword("code_from_end_user");
+
+strexClient.postStrexTransaction(strexTransaction).get();
+```
+
+### Pre-authorization via API with OTP
+Pre-authorization via API can be used with OTP (one-time-passord).
+PreAuthServiceId is an id chosen by you and must be used for all subsequent rebilling. PreAuthServiceDescription is optional, but should be set as this text will be visible for the end user on the Strex "My Page" web page. Here's an example:
+
 ```Java
 final String transactionId = "your-unique-id";
 
@@ -604,6 +627,8 @@ strexClient.postStrexTransaction(strexTransaction).get();
 ```
 
 ### Rebilling with pre-authorization:
+After you've established an end-user agreement you can then bill further for your service with regular strex transaction requests. Here's an example:
+
 ```Java
 final StrexTransaction strexTransaction = new StrexTransaction()
         .setTransactionId("your-unique-id")
