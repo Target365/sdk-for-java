@@ -29,7 +29,7 @@ public class KeywordClientTest extends ClientTest {
         final Keyword keyword = new Keyword()
                 .setShortNumberId("NO-0000")
                 .setKeywordText("java-sdk-test-keyword-text-0001")
-                .setMode(Keyword.Mode.Text)
+                .setMode(Keyword.Mode.Startswith)
                 .setForwardUrl("https://www.java-sdk-test-keyword-text-0001.com")
                 .setEnabled(Boolean.TRUE);
 

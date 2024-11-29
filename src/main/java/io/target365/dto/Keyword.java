@@ -95,6 +95,14 @@ public class Keyword implements Serializable {
      * Keyword mode
      */
     public enum Mode {
-        Text, Wildcard, Regex
+        Startswith,
+        Exact,
+        /**
+         * @deprecated Use Startswith instead.
+         */
+        @Deprecated
+        Text,
+        Wildcard,
+        Regex
     }
 }
