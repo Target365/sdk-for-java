@@ -10,7 +10,11 @@ import java.util.Optional;
 public class OkResponseParser implements ResponseParser {
 
     public String parse(final Response response) {
-        return Optional.of(response).map(r -> Util.wrap(r::body)).map(b -> Util.wrap(b::string)).orElse("");
+        try {
+            return Optional.of(response).map(r -> Util.wrap(r::body)).map(b -> Util.wrap(b::string)).orElse("");
+        } finally {
+            response.close();
+        }
     }
 
 }

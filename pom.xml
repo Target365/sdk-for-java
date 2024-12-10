@@ -4,7 +4,7 @@
 
   <groupId>com.github.target365</groupId>
   <artifactId>target-365-sdk</artifactId>
-  <version>1.8.11</version>
+  <version>1.8.13</version>
 
   <name>Target365 SDK</name>
   <description>Enables integration with Target365 online services.</description>
@@ -49,23 +49,6 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
 
-    <bcprov-jdk18on.version>1.78.1</bcprov-jdk18on.version>
-    <okhttp.version>4.12.0</okhttp.version>
-
-    <jackson.version>2.13.3</jackson.version>
-    <jackson.databind.version>2.13.4.2</jackson.databind.version>
-
-    <validation-api.version>2.0.1.Final</validation-api.version>
-    <hibernate-validator.version>5.3.6.Final</hibernate-validator.version>
-
-    <javax.el-api.version>3.0.0</javax.el-api.version>
-    <javax.el.version>3.0.0</javax.el.version>
-
-    <guava.version>32.0.0-jre</guava.version>
-    <lombok.version>1.18.2</lombok.version>
-
-    <junit.version>4.13.1</junit.version>
-    <mockito-all.version>1.10.19</mockito-all.version>
     <assertj-core.version>3.11.1</assertj-core.version>
   </properties>
 
@@ -74,80 +57,80 @@
     <dependency>
       <groupId>org.bouncycastle</groupId>
       <artifactId>bcprov-jdk18on</artifactId>
-      <version>${bcprov-jdk18on.version}</version>
+      <version>1.78.1</version>
     </dependency>
 
     <!-- HTTP client -->
     <dependency>
       <groupId>com.squareup.okhttp3</groupId>
       <artifactId>okhttp</artifactId>
-      <version>${okhttp.version}</version>
+      <version>4.12.0</version>
     </dependency>
 
     <!-- Mapper -->
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>${jackson.databind.version}</version>
+      <version>2.13.4.2</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-core</artifactId>
-      <version>${jackson.version}</version>
+      <version>2.13.3</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-annotations</artifactId>
-      <version>${jackson.version}</version>
+      <version>2.13.3</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.datatype</groupId>
       <artifactId>jackson-datatype-jdk8</artifactId>
-      <version>${jackson.version}</version>
+      <version>2.13.3</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.datatype</groupId>
       <artifactId>jackson-datatype-jsr310</artifactId>
-      <version>${jackson.version}</version>
+      <version>2.13.3</version>
     </dependency>
 
     <!-- Validation -->
     <dependency>
       <groupId>javax.validation</groupId>
       <artifactId>validation-api</artifactId>
-      <version>${validation-api.version}</version>
+      <version>2.0.1.Final</version>
     </dependency>
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-validator</artifactId>
-      <version>${hibernate-validator.version}</version>
+      <version>5.3.6.Final</version>
     </dependency>
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-validator-annotation-processor</artifactId>
-      <version>${hibernate-validator.version}</version>
+      <version>5.3.6.Final</version>
     </dependency>
     <dependency>
       <groupId>javax.el</groupId>
       <artifactId>javax.el-api</artifactId>
-      <version>${javax.el-api.version}</version>
+      <version>3.0.0</version>
     </dependency>
     <dependency>
       <groupId>org.glassfish</groupId>
       <artifactId>javax.el</artifactId>
-      <version>${javax.el.version}</version>
+      <version>3.0.0</version>
     </dependency>
 
     <!-- Utils -->
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>${guava.version}</version>
+      <version>32.0.0-jre</version>
     </dependency>
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <version>${lombok.version}</version>
+      <version>1.18.2</version>
       <scope>provided</scope>
     </dependency>
 
@@ -155,19 +138,19 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>${junit.version}</version>
+      <version>4.13.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-all</artifactId>
-      <version>${mockito-all.version}</version>
+      <version>1.10.19</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
-      <version>${assertj-core.version}</version>
+      <version>3.11.1</version>
       <scope>test</scope>
     </dependency>
 

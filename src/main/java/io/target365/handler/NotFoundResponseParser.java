@@ -7,6 +7,7 @@ import okhttp3.Response;
 public class NotFoundResponseParser implements ResponseParser {
 
     public String parse(final Response response) {
+        response.close();
         return null;
     }
 
