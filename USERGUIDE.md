@@ -198,6 +198,7 @@ final StrexTransaction transaction = new StrexTransaction()
     .setPrice(1d)
     .setServiceCode("10001")
     .setInvoiceText("Donation test")
+    .setContent("SMS_TEXT_TO_ENDUSER")
     .setSmsConfirmation(true)
     .setProperties(properties);
 
@@ -230,6 +231,7 @@ final StrexTransaction transaction = new StrexTransaction()
     .setPrice(1d)
     .setServiceCode("10001")
     .setInvoiceText("Dontaion test")
+    .setContent("SMS_TEXT_TO_ENDUSER")
     .setOneTimePassword("ONE_TIME_PASSWORD_FROM_USER");
 
 serviceClient.postStrexTransaction(transaction).get();
