@@ -531,6 +531,7 @@ PreAuth section of the keyword in Strex Connect or via the SDK
 ```Java
 final PreAuthSettings preAuth = new PreAuthSettings()
         .setActive(true)
+        .setAge(18)
         .setInfoText("Info message sent before preauth message")
         .setInfoSender("2002")
         .setPrefixMessage("Text inserted before preauth text")
