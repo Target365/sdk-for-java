@@ -4,6 +4,7 @@ import io.target365.client.InMessageClient;
 import io.target365.client.Target365Client;
 import io.target365.dto.InMessage;
 import io.target365.exception.InvalidInputException;
+import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +21,7 @@ public class InMessageClientTest extends ClientTest {
     @Before
     public void before() throws Exception {
         this.inMessageClient = Target365Client.getInstance(getPrivateKeyAsString(),
-                new Target365Client.Parameters("https://test.target365.io/", "JavaSdkTest2024"));
+                new Target365Client.Parameters("https://test.target365.io/", ClientTest.PRIVATE_KEY_NAME));
     }
 
     @Test
@@ -38,10 +39,10 @@ public class InMessageClientTest extends ClientTest {
 
     @Test
     public void validation() {
-        assertThat(catchThrowableOfType(() -> inMessageClient.getInMessage(null, null), InvalidInputException.class).getViolations())
+        assertThat(Assertions.catchThrowableOfType(() -> inMessageClient.getInMessage(null, null), InvalidInputException.class).getViolations())
                 .containsExactlyInAnyOrder("shortNumberId may not be null", "transactionId may not be null");
 
-        assertThat(catchThrowableOfType(() -> inMessageClient.getInMessage("", ""), InvalidInputException.class).getViolations())
+        assertThat(Assertions.catchThrowableOfType(() -> inMessageClient.getInMessage("", ""), InvalidInputException.class).getViolations())
                 .containsExactlyInAnyOrder("shortNumberId may not be null", "transactionId may not be null");
     }
 }

@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 
 public abstract class ClientTest {
 
+    public static final String PRIVATE_KEY_NAME = "JavaSdkTest2026";
     private static final String PRIVATE_KEY_FILENAME = "private.key";
     private static final String PUBLIC_KEY_FILENAME = "public.key";
 

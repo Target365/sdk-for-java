@@ -37,7 +37,7 @@ public class OutMessageClientTest extends ClientTest {
     @Before
     public void before() throws Exception {
         this.outMessageClient = Target365Client.getInstance(getPrivateKeyAsString(),
-                new Target365Client.Parameters("https://test.target365.io/", "JavaSdkTest2024"));
+                new Target365Client.Parameters("https://test.target365.io/", ClientTest.PRIVATE_KEY_NAME));
     }
 
     @Test
@@ -158,11 +158,11 @@ public class OutMessageClientTest extends ClientTest {
                 .containsExactlyInAnyOrder("outMessageBatch may not be null");
 
         assertThat(catchThrowableOfType(() -> outMessageClient.postOutMessageBatch(outMessageBatchWithNulls), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("outMessageBatch.items may not be null");
+                .containsExactlyInAnyOrder("outMessageBatch.items must not be null");
 
         assertThat(catchThrowableOfType(() -> outMessageClient.postOutMessageBatch(outMessageBatchWithNullAndInvalidOutMessages), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("outMessageBatch.items[0].<collection element> may not be null", "outMessageBatch.items[1].content may not be null",
-                        "outMessageBatch.items[1].recipient may not be null", "outMessageBatch.items[1].sender may not be null",
+                .containsExactlyInAnyOrder("outMessageBatch.items[0].<list element> must not be null", "outMessageBatch.items[1].content must not be null",
+                        "outMessageBatch.items[1].recipient must not be null", "outMessageBatch.items[1].sender must not be null",
                         "outMessageBatch.items[1].timeToLive must be less than or equal to 1440");
 
         final OutMessage outMessageWithNulls = new OutMessage();
@@ -172,12 +172,12 @@ public class OutMessageClientTest extends ClientTest {
                 .containsExactlyInAnyOrder("outMessage may not be null");
 
         assertThat(catchThrowableOfType(() -> outMessageClient.postOutMessage(outMessageWithNulls), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("outMessage.sender may not be null", "outMessage.recipient may not be null",
-                        "outMessage.content may not be null");
+                .containsExactlyInAnyOrder("outMessage.sender must not be null", "outMessage.recipient must not be null",
+                        "outMessage.content must not be null");
 
         assertThat(catchThrowableOfType(() -> outMessageClient.postOutMessage(outMessageWithZeroTimeToLive), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("outMessage.sender may not be null", "outMessage.recipient may not be null",
-                        "outMessage.content may not be null", "outMessage.timeToLive must be greater than or equal to 5");
+                .containsExactlyInAnyOrder("outMessage.sender must not be null", "outMessage.recipient must not be null",
+                        "outMessage.content must not be null", "outMessage.timeToLive must be greater than or equal to 5");
 
         assertThat(catchThrowableOfType(() -> outMessageClient.getOutMessage(null), InvalidInputException.class).getViolations())
                 .containsExactlyInAnyOrder("transactionId may not be null");
@@ -189,12 +189,12 @@ public class OutMessageClientTest extends ClientTest {
                 .containsExactlyInAnyOrder("outMessage.transactionId may not be null", "outMessage may not be null");
 
         assertThat(catchThrowableOfType(() -> outMessageClient.putOutMessage(outMessageWithNulls), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("outMessage.transactionId may not be null", "outMessage.sender may not be null", "outMessage.recipient may not be null",
-                        "outMessage.content may not be null");
+                .containsExactlyInAnyOrder("outMessage.transactionId may not be null", "outMessage.sender must not be null", "outMessage.recipient must not be null",
+                        "outMessage.content must not be null");
 
         assertThat(catchThrowableOfType(() -> outMessageClient.putOutMessage(outMessageWithZeroTimeToLive), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("outMessage.transactionId may not be null", "outMessage.sender may not be null", "outMessage.recipient may not be null",
-                        "outMessage.content may not be null", "outMessage.timeToLive must be greater than or equal to 5");
+                .containsExactlyInAnyOrder("outMessage.transactionId may not be null", "outMessage.sender must not be null", "outMessage.recipient must not be null",
+                        "outMessage.content must not be null", "outMessage.timeToLive must be greater than or equal to 5");
 
         assertThat(catchThrowableOfType(() -> outMessageClient.deleteOutMessage(null), InvalidInputException.class).getViolations())
                 .containsExactlyInAnyOrder("transactionId may not be null");
@@ -206,7 +206,7 @@ public class OutMessageClientTest extends ClientTest {
                 .setRecipient("Recipient").setStrex(new StrexData());
 
         assertThat(catchThrowableOfType(() -> outMessageClient.postOutMessage(outMessageWithStrexDataWithNulls), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("outMessage.strex.merchantId may not be null", "outMessage.strex.serviceCode may not be null",
-                        "outMessage.strex.invoiceText may not be null", "outMessage.strex.price may not be null");
+                .containsExactlyInAnyOrder("outMessage.strex.merchantId must not be null", "outMessage.strex.serviceCode must not be null",
+                        "outMessage.strex.invoiceText must not be null", "outMessage.strex.price must not be null");
     }
 }

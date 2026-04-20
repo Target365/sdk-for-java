@@ -24,7 +24,7 @@ public class StrexClientTest extends ClientTest {
     @Before
     public void before() throws Exception {
         this.strexClient = Target365Client.getInstance(getPrivateKeyAsString(),
-                new Target365Client.Parameters("https://test.target365.io/", "JavaSdkTest2024"));
+                new Target365Client.Parameters("https://test.target365.io/", ClientTest.PRIVATE_KEY_NAME));
     }
 
     @Test
@@ -162,9 +162,6 @@ public class StrexClientTest extends ClientTest {
 
     @Test
     public void validationMerchantId() {
-        final StrexMerchantId strexMerchantIdWithNulls = new StrexMerchantId();
-        final StrexMerchantId strexMerchantIdWithBlanks = new StrexMerchantId().setMerchantId("").setShortNumberIds(null);
-
         assertThat(catchThrowableOfType(() -> strexClient.getMerchantId(null), InvalidInputException.class).getViolations())
                 .containsExactlyInAnyOrder("merchantId may not be null");
 
@@ -180,8 +177,8 @@ public class StrexClientTest extends ClientTest {
                 .containsExactlyInAnyOrder("oneTimePassword may not be null");
 
         assertThat(catchThrowableOfType(() -> strexClient.postStrexOneTimePassword(strexOneTimePasswordWithNulls), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("oneTimePassword.transactionId may not be null", "oneTimePassword.merchantId may not be null",
-                        "oneTimePassword.recipient may not be null", "oneTimePassword.recurring may not be null");
+                .containsExactlyInAnyOrder("oneTimePassword.transactionId must not be null", "oneTimePassword.merchantId must not be null",
+                        "oneTimePassword.recipient must not be null", "oneTimePassword.recurring must not be null");
 
         assertThat(catchThrowableOfType(() -> strexClient.getStrexOneTimePassword(null), InvalidInputException.class).getViolations())
                 .containsExactlyInAnyOrder("transactionId may not be null");
@@ -198,9 +195,9 @@ public class StrexClientTest extends ClientTest {
                 .containsExactlyInAnyOrder("transaction may not be null");
 
         assertThat(catchThrowableOfType(() -> strexClient.postStrexTransaction(strexTransactionWithNulls), InvalidInputException.class).getViolations())
-                .containsExactlyInAnyOrder("transaction.transactionId may not be null", "transaction.merchantId may not be null",
-                        "transaction.shortNumber may not be null", "transaction.price may not be null",
-                        "transaction.serviceCode may not be null", "transaction.invoiceText may not be null");
+                .containsExactlyInAnyOrder("transaction.transactionId must not be null", "transaction.merchantId must not be null",
+                        "transaction.shortNumber must not be null", "transaction.price must not be null",
+                        "transaction.serviceCode must not be null", "transaction.invoiceText must not be null");
 
         assertThat(catchThrowableOfType(() -> strexClient.getStrexTransaction(null), InvalidInputException.class).getViolations())
                 .containsExactlyInAnyOrder("transactionId may not be null");

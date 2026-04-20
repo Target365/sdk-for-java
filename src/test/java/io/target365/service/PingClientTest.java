@@ -17,7 +17,7 @@ public class PingClientTest extends ClientTest {
     @Before
     public void before() throws Exception {
         this.pingClient = Target365Client.getInstance(getPrivateKeyAsString(),
-                new Target365Client.Parameters("https://test.target365.io/", "JavaSdkTest2024"));
+                new Target365Client.Parameters("https://test.target365.io/", ClientTest.PRIVATE_KEY_NAME));
     }
 
     @Test
