@@ -95,4 +95,9 @@ public class StrexData {
      * Read-only: Strex payment gateway result description.
      */
     private String resultDescription;
+
+    /**
+     * Teletorg settings.
+     */
+    private Teletorg teletorg;
 }
