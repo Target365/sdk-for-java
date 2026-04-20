@@ -99,4 +99,22 @@ public interface StrexClient {
      * @return Void
      */
     Future<Void> sendStrexRegistrationSms(@NotNull final StrexRegistrationSms registrationSms);
+
+    /**
+     * Gets a Strex preauthorization token.
+     * @param merchantId Strex merchant id.
+     * @param serviceId Service id.
+     * @param msisdn Msisdn.
+     * @return String
+     */
+    Future<String> getPreauthToken(final String merchantId, final String serviceId, final String msisdn);
+
+    /**
+     * Deletes a Strex preauthorization token.
+     * @param merchantId Strex merchant id.
+     * @param serviceId Service id.
+     * @param msisdn Msisdn.
+     * @return Void
+     */
+    Future<Void> deletePreauthToken(final String merchantId, final String serviceId, final String msisdn);
 }

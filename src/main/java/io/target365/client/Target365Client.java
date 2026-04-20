@@ -59,7 +59,7 @@ public class Target365Client implements Client {
      * This variable should be used for that
      */
     private static final String sdkName = "Java";
-    private static final String sdkVersion = "1.8.10";
+    private static final String sdkVersion = "1.8.15";
     private static final Void VOID = null;
 
     private final Parameters parameters;
@@ -325,6 +325,26 @@ public class Target365Client implements Client {
     }
 
     @Override
+    public Future<String> getPreauthToken(final String merchantId, final String serviceId, final String msisdn) {
+        validationService.validate(NotBlankValidator.of("merchantId", merchantId),
+                NotBlankValidator.of("serviceId", serviceId), NotBlankValidator.of("msisdn", msisdn));
+
+        return doGet("api/strex/token/" + merchantId + "/?serviceId=" + Util.safeEncode(serviceId) + "&msisdn=" + Util.safeEncode(msisdn),
+                ImmutableList.of(Status.OK, Status.NOT_FOUND))
+                .thenApplyAsync(response -> responseParsers.get(response.code()).parse(response));
+    }
+
+    @Override
+    public Future<Void> deletePreauthToken(final String merchantId, final String serviceId, final String msisdn) {
+        validationService.validate(NotBlankValidator.of("merchantId", merchantId),
+                NotBlankValidator.of("serviceId", serviceId), NotBlankValidator.of("msisdn", msisdn));
+
+        return doDelete("api/strex/token/" + merchantId + "/?serviceId=" + Util.safeEncode(serviceId) + "&msisdn=" + Util.safeEncode(msisdn),
+                Status.NO_CONTENT)
+                .thenApplyAsync(response -> VOID);
+    }
+
+    @Override
     public Future<Boolean> verifySignature(
             final String method, final String uri, final String content, final String xEcdsaSignatureString
     ) {
@@ -488,7 +508,7 @@ public class Target365Client implements Client {
         final String authorization = authorizationService.signHeader(signer, parameters.getKeyName(), Method.POST, uri, content);
 
         final Request request = new Request.Builder()
-                .url(uri).post(RequestBody.create(MediaType.APPLICATION_JSON, content))
+                .url(uri).post(RequestBody.create(content, MediaType.APPLICATION_JSON))
                 .header(Header.AUTHORIZATION, authorization)
                 .header("X-Sdk", sdkName)
                 .header("X-Sdk-Version", sdkVersion)
@@ -525,7 +545,7 @@ public class Target365Client implements Client {
         final String authorization = authorizationService.signHeader(signer, parameters.getKeyName(), Method.PUT, uri, content);
 
         final Request request = new Request.Builder()
-                .url(uri).put(RequestBody.create(MediaType.APPLICATION_JSON, content))
+                .url(uri).put(RequestBody.create(content, MediaType.APPLICATION_JSON))
                 .header(Header.AUTHORIZATION, authorization)
                 .header("X-Sdk", sdkName)
                 .header("X-Sdk-Version", sdkVersion)
@@ -633,7 +653,7 @@ public class Target365Client implements Client {
          *
          * @return query param representation of the current param
          */
-        public String toQueryParam() {
+        private String toQueryParam() {
             return name + "=" + Util.safeEncode(value);
         }
     }
@@ -652,7 +672,7 @@ public class Target365Client implements Client {
      * Method
      */
     @UtilityClass
-    public static final class Method {
+    private static final class Method {
 
         private static final String GET = "GET";
         private static final String POST = "POST";
