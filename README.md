@@ -57,7 +57,7 @@ For more details on using the SDK we strongly suggest you check out our [Java Us
 ```
 implementation 'com.github.target365:target-365-sdk:1.5.2'
 ```
-[![Maven Central](https://img.shields.io/maven-central/v/com.github.target365/target-365-sdk.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.target365%22%20AND%20a:%22target-365-sdk%22)
+[![Maven Central Version](https://img.shields.io/maven-central/v/com.github.target365/target-365-sdk)](https://central.sonatype.com/artifact/com.github.target365/target-365-sdk)
 
 ### Test Environment
 Our test-environment acts as a sandbox that simulates the real API as closely as possible. This can be used to get familiar with the service before going to production. Please be ware that the simulation isn't perfect and must not be taken to have 100% fidelity.
