@@ -1,8 +1,8 @@
 package io.target365.client;
 
 import io.target365.dto.LookupResult;
+import jakarta.validation.constraints.NotNull;
 
-import javax.validation.constraints.NotNull;
 import java.util.concurrent.Future;
 
 public interface LookupClient {

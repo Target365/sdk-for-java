@@ -2,11 +2,10 @@ package io.target365.client;
 
 import io.target365.dto.OutMessage;
 import io.target365.dto.OutMessageBatch;
-import io.target365.dto.Pincode;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.concurrent.Future;

@@ -7,7 +7,9 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
+
+import java.io.Serializable;
 
 /**
  * Strex data.
@@ -18,7 +20,7 @@ import javax.validation.constraints.NotNull;
 @Accessors(chain = true)
 @EqualsAndHashCode
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class StrexData {
+public class StrexData implements Serializable {
 
     private static final long serialVersionUID = -4215212257234662326L;
 

@@ -2,10 +2,7 @@ package io.target365.client;
 
 import io.target365.dto.Keyword;
 
-import javax.annotation.Nullable;
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.concurrent.Future;
 
@@ -27,8 +24,8 @@ public interface KeywordClient {
      * @return Lists of all keywords.
      */
     Future<List<Keyword>> getKeywords(
-            @Nullable final String shortNumberId, @Nullable final String keywordText,
-            @Nullable final Keyword.Mode mode, @Nullable final String tag
+            final String shortNumberId, final String keywordText,
+            final Keyword.Mode mode, final String tag
     );
 
     /**
@@ -37,7 +34,7 @@ public interface KeywordClient {
      * @param keyword Keyword to post.
      * @return Resource uri of created keyword.
      */
-    Future<String> postKeyword(@NotNull @Valid final Keyword keyword);
+    Future<String> postKeyword(@Valid final Keyword keyword);
 
     /**
      * Gets a keyword.
@@ -45,7 +42,7 @@ public interface KeywordClient {
      * @param keywordId Keyword id.
      * @return A keyword.
      */
-    Future<Keyword> getKeyword(@NotNull final String keywordId);
+    Future<Keyword> getKeyword(final String keywordId);
 
     /**
      * Updates a keyword.
@@ -53,7 +50,7 @@ public interface KeywordClient {
      * @param keyword Keyword.
      * @return Void
      */
-    Future<Void> putKeyword(@NotNull @Valid final Keyword keyword);
+    Future<Void> putKeyword(@Valid final Keyword keyword);
 
     /**
      * Deletes a keyword.
@@ -61,5 +58,5 @@ public interface KeywordClient {
      * @param keywordId Keyword id.
      * @return Void
      */
-    Future<Void> deleteKeyword(@NotNull final String keywordId);
+    Future<Void> deleteKeyword(final String keywordId);
 }

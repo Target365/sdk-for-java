@@ -3,7 +3,7 @@ package io.target365.service;
 import io.target365.util.Util;
 import lombok.AllArgsConstructor;
 
-import javax.xml.bind.DatatypeConverter;
+import jakarta.xml.bind.DatatypeConverter;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.time.ZonedDateTime;

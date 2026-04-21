@@ -4,7 +4,6 @@ import io.target365.client.Target365Client;
 import io.target365.client.VerificationClient;
 import io.target365.exception.InvalidInputException;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -24,14 +23,6 @@ public class VerificationClientTest extends ClientTest {
     public void before() throws Exception {
         this.verificationClient = Target365Client.getInstance(getPrivateKeyAsString(),
                 new Target365Client.Parameters("https://test.target365.io/", ClientTest.PRIVATE_KEY_NAME));
-    }
-
-    @Test
-    @Ignore("Need to have a message encrypted with a private key, which could be verified by a server public key")
-    public void test() throws Exception {
-        // Reverse payment
-        final Boolean verify = verificationClient.verifySignature(null, null, null, null).get();
-        assertThat(verify).isNotNull();
     }
 
     @Test

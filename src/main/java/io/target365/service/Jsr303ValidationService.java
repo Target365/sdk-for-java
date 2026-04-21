@@ -6,7 +6,7 @@ import io.target365.exception.InvalidInputException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
-import javax.validation.Validation;
+import jakarta.validation.Validation;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -165,14 +165,14 @@ public class Jsr303ValidationService implements ValidationService {
     }
 
     /**
-     * Checks that {@link Object} is valid by calling {@link javax.validation.Validator}
+     * Checks that {@link Object} is valid by calling {@link jakarta.validation.Validator}
      */
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public static final class ValidValidator implements Validator {
 
         private final String field;
         private final Object object;
-        private final javax.validation.Validator validator;
+        private final jakarta.validation.Validator validator;
 
         @Override
         public List<String> valid() {
