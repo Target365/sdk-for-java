@@ -29,60 +29,117 @@ import java.util.*;
 public class OutMessage implements Serializable {
 
     private static final long serialVersionUID = 2311238557213312531L;
+    private static final Set<Character> gsm7Chars = new HashSet<>(Arrays.asList('@', '£', '$', '¥', 'è', 'é', 'ù', 'ì', 'ò', 'Ç', '\n', 'Ø', 'ø', '\r', 'Å', 'å', 'Δ', '_', 'Φ', 'Γ', 'Λ', 'Ω', 'Π', 'Ψ', 'Σ', 'Θ', 'Ξ', 'Æ', 'æ', 'ß', 'É', ' ', '!', '"', '#', '¤', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ':', ';', '<', '=', '>', '?', '¡', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'Ä', 'Ö', 'Ñ', 'Ü', '§', '¿', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'ä', 'ö', 'ñ', 'ü', 'à'));
+    private static final Set<Character> gsm7ExtendedChars = new HashSet<>(Arrays.asList('\f', '^', '{', '}', '\\', '[', '~', ']', '|', '€' ));
 
     /**
-     * Gets the number of sms message parts are required for a given text and encoding
+     * Gets the number of sms message parts are required for the given text.
      * @param text Text to evaluate
-     * @param unicode Whether text is unicode or not
      * @return number of sms message parts
      */
-    public static int getSmsPartsForText(String text, boolean unicode)
+    public static int getSmsPartsForText(String text)
     {
-        if (unicode) {
-            return (text.length() <= 70) ? 1 : (int)Math.ceil(text.length() / 67.0);
-        }
+        return requiresUnicode(text) ? getUcs2SmsParts(text) : getGsm7SmsParts(text);
+    }
 
-        final char[] extendedChars = new char[] { '\f', '^', '{', '}', '\\', '[', '~', ']', '|', '€' };
-        HashSet<Character> extendedCharSet = new HashSet<>();
+    /**
+     * Gets whether the given text requires Unicode (UCS2 SMS encoding).
+     * @param text Text to evaluate
+     * @return whether the text requires Unicode (UCS2 SMS encoding)
+     */
+    public static boolean requiresUnicode(String text)
+    {
+        if (text == null || text.isEmpty())
+            return false;
 
-        for (char c : extendedChars) {
-            extendedCharSet.add((c));
-        }
-
-        int totalCharCount = 0;
-
-        for (char c : text.toCharArray()) {
-            totalCharCount++;
-
-            if (extendedCharSet.contains(c)) {
-                totalCharCount++;
-            }
-        }
-
-        if (totalCharCount <= 160) {
-            return 1;
-        }
-
-        final int maxSeptetsPerPart = 153;
-        int parts = 1;
-        int septets = 0;
-
-        for (char c : text.toCharArray())
+        for (int i = 0; i < text.length(); i++)
         {
-            if (septets == maxSeptetsPerPart || (septets == (maxSeptetsPerPart - 1) && extendedCharSet.contains(c)))
+            if (!gsm7Chars.contains(text.charAt(i)) && !gsm7ExtendedChars.contains(text.charAt(i)))
+                return true;
+        }
+
+        return false;
+    }
+
+    private static int getUcs2SmsParts(String text)
+    {
+        final int maxCharsPerPart = 67;
+
+        if (text.length() <= 70)
+            return 1;
+
+        var count = 1;
+        var chars = 0;
+
+        for (var i = 0; i < text.length(); i++)
+        {
+            if (chars == maxCharsPerPart
+                    || (chars == (maxCharsPerPart - 1) && text.charAt(i) >= '\ud800' && text.charAt(i) <= '\udbff'))
             {
-                parts++;
+                count++;
+                chars = 0;
+            }
+
+            chars++;
+        }
+
+        return count;
+    }
+
+    private static int getGsm7SmsParts(String text)
+    {
+			final int maxBytesPerMessage = 140;
+			final int maxSeptetsPerPart = 153;
+
+        if (getGsm7CharByteCount(text) <= maxBytesPerMessage)
+            return 1;
+
+        var count = 1;
+        var septets = 0;
+
+        for (var i = 0; i < text.length(); i++)
+        {
+            if (septets == maxSeptetsPerPart || (septets == (maxSeptetsPerPart - 1) && gsm7ExtendedChars.contains(text.charAt(i))))
+            {
+                count++;
                 septets = 0;
             }
 
-            if (extendedCharSet.contains(c)) {
-                septets += 2;
-            } else {
-                septets += 1;
+            if (gsm7ExtendedChars.contains(text.charAt(i)))
+                septets++;
+
+            septets++;
+        }
+
+        return count;
+    }
+
+    private static int getGsm7CharByteCount(String text)
+    {
+        int septets = 0;
+
+        for (var i = 0; i < text.length(); i++)
+        {
+            if (gsm7Chars.contains(text.charAt(i)))
+            {
+                septets++;
+            }
+            else
+            {
+                if (gsm7ExtendedChars.contains(text.charAt(i)))
+                {
+                    septets += 2;
+                }
+                else
+                {
+                    septets++;
+                }
             }
         }
 
-        return parts;
+        var bytes = septets * 7 / 8;
+        var remainder = septets * 7 % 8 > 0 ? 1 : 0;
+        return bytes + remainder;
     }
 
     /**

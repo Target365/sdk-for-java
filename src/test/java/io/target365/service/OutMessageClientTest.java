@@ -121,10 +121,10 @@ public class OutMessageClientTest extends ClientTest {
         // getSmsPartsForText
         String singleSmsText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
         String doubleSmsText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus at velit eget nisl facilisis tempus. Pellentesque consectetur mi in libero maximus tristique. Quisque non nisi volutpat, egestas dui quis, varius nunc. Maecenas turpis libero, tincidunt vitae erat at, accumsan euismod purus.";
-        assertThat(OutMessage.getSmsPartsForText(singleSmsText, false)).isEqualTo(1);
-        assertThat(OutMessage.getSmsPartsForText(doubleSmsText, false)).isEqualTo(2);
-        assertThat(OutMessage.getSmsPartsForText(singleSmsText, true)).isEqualTo(1);
-        assertThat(OutMessage.getSmsPartsForText(doubleSmsText, true)).isEqualTo(5);
+        String emojiSmsText = "Message with lots of hot emojis \uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42\uD83D\uDE42";
+        assertThat(OutMessage.getSmsPartsForText(singleSmsText)).isEqualTo(1);
+        assertThat(OutMessage.getSmsPartsForText(doubleSmsText)).isEqualTo(2);
+        assertThat(OutMessage.getSmsPartsForText(emojiSmsText)).isEqualTo(3);
 
         assertThat(catchThrowableOfType(() -> outMessageClient.prepareMsisdns(null), InvalidInputException.class).getViolations())
                 .containsExactlyInAnyOrder("msisdns must not be empty");

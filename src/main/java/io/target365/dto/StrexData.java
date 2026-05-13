@@ -81,7 +81,7 @@ public class StrexData implements Serializable {
     /**
      * Timeout in minutes for transactions which trigger end user registration. Default value is 5.
      */
-    private Integer timeout = new Integer(5);
+    private Integer timeout = 5;
 
     /**
      * Read-only: Whether billing has been performed. Null means unknown status.
